@@ -1,1 +1,0 @@
-# [FU-OJT-FE PROJECT]
