@@ -46,9 +46,9 @@ const AccountProfileDetails = (props) => {
     name: user.account.name,
     email: user.account.email,
     phone: user.account.phone,
-    address: user.account.student.address,
-    studentCode: user.account.student.studentCode,
-    major: user.account.student.major.name,
+    address: user.account.student ? user.account.student.address : null,
+    studentCode: user.account.student ? user.account.student.studentCode : null,
+    major: user.account.student ? user.account.student.major.name : null,
     role: getRole(user.account.role)
   });
 
