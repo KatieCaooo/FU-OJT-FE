@@ -9,7 +9,7 @@ import routes from './routes';
 const App = () => {
   const account = useSelector((state) => state.account);
   const { isLoggedIn } = account;
-  const content = useRoutes(routes(isLoggedIn));
+  const content = useRoutes(routes(isLoggedIn, account.role === 'SYS_ADMIN'));
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>

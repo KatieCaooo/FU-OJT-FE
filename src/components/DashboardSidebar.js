@@ -24,53 +24,65 @@ import {
 import { useSelector } from 'react-redux';
 import NavItem from './NavItem';
 
-const items = [
-  {
-    href: '/app/dashboard',
-    icon: BarChartIcon,
-    title: 'Dashboard'
-  },
-  {
-    href: '/app/customers',
-    icon: UsersIcon,
-    title: 'Customers'
-  },
-  {
-    href: '/app/products',
-    icon: ShoppingBagIcon,
-    title: 'Products'
-  },
-  {
-    href: '/app/account',
-    icon: UserIcon,
-    title: 'Account'
-  },
-  {
-    href: '/app/settings',
-    icon: SettingsIcon,
-    title: 'Settings'
-  },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
-  }
-];
-
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
 
   const account = useSelector((state) => state.account);
+
+  let items = [
+    {
+      href: '/app/dashboard',
+      icon: BarChartIcon,
+      title: 'Dashboard',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/app/customers',
+      icon: UsersIcon,
+      title: 'Customers',
+      roles: ['SYS_ADMIN']
+    },
+    {
+      href: '/app/products',
+      icon: ShoppingBagIcon,
+      title: 'Products',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/app/account',
+      icon: UserIcon,
+      title: 'Account',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/app/settings',
+      icon: SettingsIcon,
+      title: 'Settings',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/login',
+      icon: LockIcon,
+      title: 'Login',
+      roles: []
+    },
+    {
+      href: '/register',
+      icon: UserPlusIcon,
+      title: 'Register',
+      roles: []
+    },
+    {
+      href: '/404',
+      icon: AlertCircleIcon,
+      title: 'Error',
+      roles: []
+    }
+  ];
+
+  items = items.filter(
+    (item) => !item.roles || item.roles.length === 0 || item.roles.includes(account.role)
+  );
 
   const getRole = (role) => {
     switch (role) {
@@ -123,16 +135,10 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           }}
           to="/app/account"
         />
-        <Typography
-          color="textPrimary"
-          variant="h5"
-        >
+        <Typography color="textPrimary" variant="h5">
           {user.name}
         </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
+        <Typography color="textSecondary" variant="body2">
           {user.jobTitle}
         </Typography>
       </Box>
@@ -157,17 +163,10 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           p: 2
         }}
       >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
+        <Typography align="center" gutterBottom variant="h4">
           Need more?
         </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
+        <Typography align="center" variant="body2">
           Upgrade to PRO version and access 20 more screens
         </Typography>
         <Box
@@ -233,8 +232,7 @@ DashboardSidebar.propTypes = {
 };
 
 DashboardSidebar.defaultProps = {
-  onMobileClose: () => {
-  },
+  onMobileClose: () => {},
   openMobile: false
 };
 

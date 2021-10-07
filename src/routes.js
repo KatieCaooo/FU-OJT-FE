@@ -10,13 +10,13 @@ import ProductList from './pages/ProductList';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 
-const routes = (isLoggedIn) => [
+const routes = (isLoggedIn, isAdmin) => [
   {
     path: 'app',
     element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/login" />,
     children: [
       { path: 'account', element: <Account /> },
-      { path: 'customers', element: <CustomerList /> },
+      { path: 'customers', element: isAdmin ? <CustomerList /> : <Navigate to="/" /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
