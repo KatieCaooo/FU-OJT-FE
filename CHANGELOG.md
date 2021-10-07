@@ -1,110 +1,65 @@
 # Change Log
 
-## [3.0.1] 2021-08-24
-### Update and Improvements
-- Fix broken links
-- Fix Documentation links
-- Fix old Documentation styling
-- Fix sidebar logo color on dark-version
-- Update background-color
-- Update pricing
+## V1.0.0
 
-## [3.0.0] 2021-08-16
-### Update and Improvements
-- Update Bootstrap to v5.1.0
-- Update to Material Design 2
-- Add more example pages
-- Add Light/Dark feature
-- New Documentation version
+###### Aug 7, 2020
 
-## [2.1.2] 2020-03-13
-### BugFixing
-- Fixed the perfectScrollbar plugin issue
-- Change name color variables from `$brand-*color` to `$*color`
+- Add `eslint`
+- Add `Feather Icons`
+- Add `Formik` for login/register pages
+- Implement `react-router` v6 routing method
+- Remove extra views
+- Remove `node-sass` dependency
+- Update all components to match the PRO version style
+- Update dependencies
+- Update folder structure to remove folder depth
+- Update theme configuration
 
-## [2.1.1] 2020-02-21
-### Improvements, BugFixing
-- Fixed the broken links
+## V0.4.0
 
-## [2.1.0] 2018-11-13
-### Improvements, BugFixing
-- Changes for responsive devices
-- Improvements and BugFixing for documentation
-- Change versions on CSS and JS files
-- DataTable responsive fixes
-- Example Pages small establishments
-- Pro Documentation integrated in Free Version
-- New page - Error Page 404
-- Eliminated extra CSS and JS
+###### Jul 24, 2019
 
-## [2.0.2] 2018-06-21
-### BugFixing
-- Multilevel dropdown integration
-- Small changes for responsive devices
-- Fixed-plugin in user archive integration
-- Speed optimizations
-- Documentation errors fixed
-- Gulp compiling of the SASS files
-- Change versions on CSS and JS files
-- Small changes for components
+- Adjust theme colors
+- Implement `useStyle` hook instead of `withStyles` HOC
+- Implement a custom Route component to wrap views in layouts
+- Remove `services` and `data` folders, each component has its own data
+- Remove unused `.scss` files from `assets` folder
+- Replace `.jsx` with `.js`
+- Replace Class Components with Function Components
+- Replace custom cumponents (Portlet) with Material-UI built-in components
+- Replace dependency `classnames` with `clsx`
+- Update dependencies
+- Update the layout to match the PRO version
 
-## [2.0.1] 2018-03-21
-### BugFixing
-- Fixed validation inputs
-- Fixed SweetAlert
-- Navbar dropdown fixed on mobile responsive
+## V0.3.0
 
-## [2.0.0] 2018-03-15
-### Bootstrap 4 update
-- Core base code on Bootstrap 4
-- Documentation code base written from scratch
-- Speed optimizations
-- Class changes :
-      .card-block to .card-body
-      .navbar-toggleable-* to .navbar-expand-*
-      .hidden-*-down to .d-none .d-*-block
-      .hidden-*-up to .d-*-none
-      .checkbox to .form-check
-      .radio to .form-check
-- more class changes here: https://getbootstrap.com/docs/4.0/migration/
-- Bug fixes for responsive devices
-- Small changes for components
+###### May 13, 2019
 
-## [1.2.1] 2017-11-17
-### RTL Support
-- added new page with `RTL Support`
+- Implement `jsconfig.json` file and removed `.env` to match React v16.8.6 absolute paths
+- Update chart styles and options
+- Update Dashboard view top widgets styles and structure
+- Update few icons to match @material-ui v4 updates
+- Update React version to 16.8.6 to support React Hooks
+- Update to @material-ui to 4.0.0-beta
 
-### BugFixing
-- SweetAlert fixed on IE and browser console fixed error
-- Replaced `es6-promise-auto.min.js` library with `core.js` (CDN script)
-- `Chartist.js` fixed error from browser console
-- `PerfectScrollbar` fixed on IE
+## V0.2.0
 
+###### May 11, 2019
 
-## [1.2.0] 2017-09-05
-### BugFixing, Plugin Change
-- Added a new Sidebar-menu ( the old one was replaced ) and a new color for the Sidebar-menu `red` with `white` the active color
-- Plugins that were updated to the latest versions:
-  - jquery.min.js `3.2.1`
-  - es6-promise-auto.min.js `4.1.1`
-  - noUiSlider.min.js `10.0.0`
-  - chartist.min.js `0.11.0`
-  - fullcalendar.min.js `3.5.0`
-  - jquery.bootstrap-wizard.js `1.4.2`
-  - jquery.select-bootstrap.js `1.12.2`
-- Added `Arrive.js` library for elements that are inserted dinamically
-- Removed `jquery.mobile-1.4.5.min.js` library because this it's not compatible with jquery 3+
-- Added version in CSS and JS links
-- Bug Fixes
+- Add docs for IE11 polyfill
+- Fix `DisplayMode` component size, when used as a flex child it could grow/shrink
+- Fix `ProductCard` component description height
+- Fix `Typography` view responsiveness for small devices
+- Fix charts responsiveness
+- Remove "status" from `ProductCard` component since it was not part of released design
+- Remove `auth` service folder since it won't be implemented for this version
+- Remove `authGuard` since it won't be used in this version
+- Remove unused components from shared components
+- Remove unused scss from assets
+- Update README.md
 
-## [1.1.0] 2016-11-17
-### BugFixing, Plugin Change
-- Fix bug on main panel > content while you use the Sidebar Mini
-- Replaced select plugin with a more complex select `bootstrap-select`
-- Added File Input library by Jasny
-- change filter colors for example pages
-- fix Charts responsive issue when switching from Desktop to Mobile
-- added `PerfectScrollbar` just for Windows, fix problem in MacOs and Ubuntu
+## V0.1.0
 
-## [1.0.0] 2016-11-03
-### Initial Release
+###### May 2, 2019
+
+### Initial commit
