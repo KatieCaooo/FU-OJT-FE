@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
 import MainLayout from './components/MainLayout';
 import Account from './pages/Account';
-import StudentList from './pages/CustomerList';
+import StudentList from './pages/StudentList';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
