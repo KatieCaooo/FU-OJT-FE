@@ -13,8 +13,8 @@ import {
   Typography
 } from '@material-ui/core';
 import { login } from '../store/account-actions';
-import FacebookIcon from '../icons/Facebook';
-import GoogleIcon from '../icons/Google';
+// import FacebookIcon from '../icons/Facebook';
+// import GoogleIcon from '../icons/Google';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const Login = () => {
                   </Typography>
                 </Box>
                 <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <Button
                       color="primary"
                       fullWidth
@@ -88,8 +88,8 @@ const Login = () => {
                     >
                       Login with Facebook
                     </Button>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <Button
                       fullWidth
                       startIcon={<GoogleIcon />}
@@ -99,7 +99,7 @@ const Login = () => {
                     >
                       Login with Google
                     </Button>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
                 <Box
                   sx={{
@@ -107,13 +107,13 @@ const Login = () => {
                     pt: 3
                   }}
                 >
-                  <Typography
+                  {/* <Typography
                     align="center"
                     color="textSecondary"
                     variant="body1"
                   >
                     or login with email address
-                  </Typography>
+                  </Typography> */}
                 </Box>
                 <TextField
                   error={Boolean(touched.email && errors.email)}
@@ -154,7 +154,7 @@ const Login = () => {
                   </Button>
                 </Box>
                 <Typography color="textSecondary" variant="body1">
-                  Don&apos;t have an account ?
+                  Don&apos;t remember password ?
                   {' '}
                   <Link
                     component={RouterLink}
@@ -162,7 +162,7 @@ const Login = () => {
                     variant="h6"
                     underline="hover"
                   >
-                    Sign up
+                    Request new password
                   </Link>
                 </Typography>
               </form>
