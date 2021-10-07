@@ -60,18 +60,18 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       title: 'Settings',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
-    {
-      href: '/login',
-      icon: LockIcon,
-      title: 'Login',
-      roles: []
-    },
-    {
-      href: '/register',
-      icon: UserPlusIcon,
-      title: 'Register',
-      roles: []
-    },
+    // {
+    //   href: '/login',
+    //   icon: LockIcon,
+    //   title: 'Login',
+    //   roles: []
+    // },
+    // {
+    //   href: '/register',
+    //   icon: UserPlusIcon,
+    //   title: 'Register',
+    //   roles: []
+    // },
     {
       href: '/404',
       icon: AlertCircleIcon,
