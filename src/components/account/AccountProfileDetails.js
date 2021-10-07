@@ -9,30 +9,47 @@ import {
   Grid,
   TextField
 } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
+// const states = [
+//   {
+//     value: 'alabama',
+//     label: 'Alabama'
+//   },
+//   {
+//     value: 'new-york',
+//     label: 'New York'
+//   },
+//   {
+//     value: 'san-francisco',
+//     label: 'San Francisco'
+//   }
+// ];
 
 const AccountProfileDetails = (props) => {
+  const user = useSelector((state) => state.account);
+
+  const getRole = (role) => {
+    switch (role) {
+      case 'SYS_ADMIN':
+        return 'Admin';
+      case 'STUDENT':
+        return 'Student';
+      case 'COMPANY_REPRESENTATIVE':
+        return 'Company Representative';
+      default:
+        return 'None';
+    }
+  };
+
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+    name: user.account.name,
+    email: user.account.email,
+    phone: user.account.phone,
+    address: user.account.student.address,
+    studentCode: user.account.student.studentCode,
+    major: user.account.student.major.name,
+    role: getRole(user.account.role)
   });
 
   const handleChange = (event) => {
@@ -61,38 +78,22 @@ const AccountProfileDetails = (props) => {
           >
             <Grid
               item
-              md={6}
+              md={12}
               xs={12}
             >
               <TextField
                 fullWidth
-                helperText="Please specify the first name"
-                label="First name"
-                name="firstName"
+                label="Full name"
+                name="name"
                 onChange={handleChange}
                 required
-                value={values.firstName}
+                value={values.name}
                 variant="outlined"
               />
             </Grid>
             <Grid
               item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Last name"
-                name="lastName"
-                onChange={handleChange}
-                required
-                value={values.lastName}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
+              md={12}
               xs={12}
             >
               <TextField
@@ -121,6 +122,70 @@ const AccountProfileDetails = (props) => {
               />
             </Grid>
             <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Role"
+                name="role"
+                onChange={handleChange}
+                value={values.role}
+                disabled
+                variant="outlined"
+              />
+            </Grid>
+            {values.role === 'Student' && (
+              <>
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <TextField
+                    fullWidth
+                    label="Student code"
+                    name="studentCode"
+                    onChange={handleChange}
+                    value={values.studentCode}
+                    disabled
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <TextField
+                    fullWidth
+                    label="Major"
+                    name="major"
+                    onChange={handleChange}
+                    value={values.major}
+                    disabled
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid
+                  item
+                  md={12}
+                  xs={12}
+                >
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    name="address"
+                    onChange={handleChange}
+                    value={values.address}
+                    variant="outlined"
+                  />
+                </Grid>
+
+              </>
+            )}
+            {/* <Grid
               item
               md={6}
               xs={12}
@@ -160,7 +225,7 @@ const AccountProfileDetails = (props) => {
                   </option>
                 ))}
               </TextField>
-            </Grid>
+            </Grid> */}
           </Grid>
         </CardContent>
         <Divider />
