@@ -44,8 +44,8 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit" size="large">
-            <InputIcon onClick={logoutHandler} />
+          <IconButton color="inherit" size="large" onClick={logoutHandler}>
+            <InputIcon />
           </IconButton>
         </Hidden>
         <Hidden lgUp>

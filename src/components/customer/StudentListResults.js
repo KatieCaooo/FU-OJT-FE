@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
   Avatar,
@@ -18,6 +17,7 @@ import {
 import getInitials from '../../utils/getInitials';
 
 const StudentListResults = ({ students, ...rest }) => {
+  console.log(students);
   const [selectedStudentIds, setSelectedStudentIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -88,10 +88,11 @@ const StudentListResults = ({ students, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>Name</TableCell>
+                <TableCell>Student Code</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Location</TableCell>
                 <TableCell>Phone</TableCell>
-                <TableCell>Registration date</TableCell>
+                <TableCell>Major</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -123,13 +124,14 @@ const StudentListResults = ({ students, ...rest }) => {
                       </Typography>
                     </Box>
                   </TableCell>
+                  <TableCell>{student.student.studentCode}</TableCell>
                   <TableCell>{student.email}</TableCell>
                   <TableCell>
-                    {`${student.address.city}, ${student.address.state}, ${student.address.country}`}
+                    {`${student.student.address}`}
                   </TableCell>
                   <TableCell>{student.phone}</TableCell>
                   <TableCell>
-                    {moment(student.createdAt).format('DD/MM/YYYY')}
+                    {student.student.major.name}
                   </TableCell>
                 </TableRow>
               ))}
