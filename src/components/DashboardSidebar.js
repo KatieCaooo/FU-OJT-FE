@@ -37,9 +37,9 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
-      href: '/app/customers',
+      href: '/app/students',
       icon: UsersIcon,
-      title: 'Customers',
+      title: 'students',
       roles: ['SYS_ADMIN']
     },
     {
