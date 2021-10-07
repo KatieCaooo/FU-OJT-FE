@@ -102,6 +102,7 @@ const AccountProfileDetails = (props) => {
                 name="email"
                 onChange={handleChange}
                 required
+                disabled
                 value={values.email}
                 variant="outlined"
               />
