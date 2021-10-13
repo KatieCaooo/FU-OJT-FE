@@ -1,30 +1,29 @@
 const { BASE_URL, getRequiredAuthenHeader } = require('src/api/config');
+const axios = require('axios');
 const { studentActions } = require('./student-slice');
 
-export const fetchStudentsData = (token) => async (dispatch) => {
+export const fetchStudentsData = (token, pageNo, pageSize) => async (dispatch) => {
   const url = `${BASE_URL}/users`;
   const fetchData = async () => {
-    const response = await fetch(url, {
-      method: 'GET',
+    const response = await axios.get(url, {
+      params: { search: 'student.id > 0', pageSize, pageNo },
       headers: getRequiredAuthenHeader(token)
     });
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Could not fetch data');
     }
 
-    const data = await response.json();
-    return data;
+    return response.data;
   };
 
   try {
-    const users = await fetchData();
-    const students = users.filter((user) => user.role === 'STUDENT');
-
+    const response = await fetchData();
+    const students = response.data;
     dispatch(
       studentActions.replaceStudentList({
         students: students || [],
-        totalQuantity: students.length
+        totalQuantity: response.totalElements
       })
     );
   } catch (error) {

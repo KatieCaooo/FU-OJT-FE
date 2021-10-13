@@ -32,7 +32,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
     <AppBar elevation={0} {...rest}>
       <Toolbar>
         <RouterLink to="/">
-          <Logo width="52px" height="52px" />
+          <Logo width="52px" height="52px" hidden={false} />
         </RouterLink>
         <RouterLink to="/">
           <Typography color="white" variant="h2" fontFamily="Times New Roman">

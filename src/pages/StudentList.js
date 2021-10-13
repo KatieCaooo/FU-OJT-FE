@@ -4,17 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchStudentsData } from 'src/store/student-actions';
 import StudentListResults from '../components/customer/StudentListResults';
-import StudentListToolbar from '../components/customer/StudentListToolbar';
+// import StudentListToolbar from '../components/customer/StudentListToolbar';
 // import { useEffect } from 'react';
 // import customers from '../__mocks__/customers';
 
 const StudentList = () => {
-  const students = useSelector((state) => state.students.students);
+  const studentData = useSelector((state) => state.students);
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchStudentsData(token));
+    dispatch(fetchStudentsData(token, 0, 10));
   }, [dispatch]);
   return (
     <>
@@ -29,9 +29,9 @@ const StudentList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <StudentListToolbar />
+          {/* <StudentListToolbar /> */}
           <Box sx={{ pt: 3 }}>
-            <StudentListResults students={students} />
+            <StudentListResults students={studentData.students} totalElements={studentData.totalQuantity} />
           </Box>
         </Container>
       </Box>
