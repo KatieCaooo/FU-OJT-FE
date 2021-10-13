@@ -17,7 +17,7 @@ const Logo = (props) => {
 Logo.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
-  hidden: PropTypes.string,
+  hidden: PropTypes.bool,
 };
 
 export default Logo;

@@ -6,12 +6,11 @@ import Logo from './Logo';
 const MainNavbar = (props) => {
   const account = useSelector((state) => state.account);
   const { isLoggedIn } = account;
-  console.log(isLoggedIn);
   return (
     <AppBar elevation={0} {...props}>
       <Toolbar sx={{ height: 64 }}>
         <RouterLink to="/">
-          <Logo width="52px" height="52px" hidden={isLoggedIn ? 'false' : 'true'} />
+          <Logo width="52px" height="52px" hidden={!isLoggedIn} />
         </RouterLink>
       </Toolbar>
     </AppBar>
