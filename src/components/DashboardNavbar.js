@@ -7,7 +7,8 @@ import {
   Box,
   Hidden,
   IconButton,
-  Toolbar
+  Toolbar,
+  Typography
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
@@ -31,7 +32,12 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
     <AppBar elevation={0} {...rest}>
       <Toolbar>
         <RouterLink to="/">
-          <Logo />
+          <Logo width="52px" height="52px" />
+        </RouterLink>
+        <RouterLink to="/">
+          <Typography color="white" variant="h2" fontFamily="Times New Roman">
+            OJT Management
+          </Typography>
         </RouterLink>
         <Box sx={{ flexGrow: 1 }} />
         <Hidden xlDown>

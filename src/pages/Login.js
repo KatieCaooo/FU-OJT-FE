@@ -12,6 +12,7 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import Logo from 'src/components/Logo';
 import { login } from '../store/account-actions';
 // import FacebookIcon from '../icons/Facebook';
 // import GoogleIcon from '../icons/Google';
@@ -27,7 +28,7 @@ const Login = () => {
       </Helmet>
       <Box
         sx={{
-          backgroundColor: 'background.default',
+          backgroundColor: '#b97962',
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
@@ -35,6 +36,31 @@ const Login = () => {
         }}
       >
         <Container maxWidth="sm">
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Grid
+              item
+              sx={{
+                width: {
+                  xs: 180,
+                  sm: 220,
+                  md: 300
+                },
+                height: {
+                  xs: 180,
+                  sm: 220,
+                  md: 300,
+                }
+              }}
+            >
+              <Logo />
+            </Grid>
+          </Grid>
           <Formik
             initialValues={{
               email: 'thanhthu0321@gmail.com',
@@ -63,8 +89,19 @@ const Login = () => {
               touched,
               values
             }) => (
-              <form onSubmit={handleSubmit}>
-                <Box sx={{ mb: 3 }}>
+              <form
+                onSubmit={handleSubmit}
+                style={{
+                  backgroundColor: 'white',
+                  padding: '24px',
+                  borderRadius: '5px'
+                }}
+              >
+                <Box
+                  sx={{
+                    mb: 2
+                  }}
+                >
                   <Typography color="textPrimary" variant="h2">
                     Sign in
                   </Typography>
@@ -76,7 +113,7 @@ const Login = () => {
                     Sign in on the internal platform
                   </Typography>
                 </Box>
-                <Grid container spacing={3}>
+                <Grid container spacing={2}>
                   {/* <Grid item xs={12} md={6}>
                     <Button
                       color="primary"

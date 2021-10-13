@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
-  Button,
+  // Button,
   Divider,
   Drawer,
   Hidden,
@@ -14,11 +14,11 @@ import {
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
-  Lock as LockIcon,
+  // Lock as LockIcon,
   Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
-  UserPlus as UserPlusIcon,
+  // UserPlus as UserPlusIcon,
   Users as UsersIcon
 } from 'react-feather';
 import { useSelector } from 'react-redux';
@@ -60,18 +60,18 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       title: 'Settings',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
-    {
-      href: '/login',
-      icon: LockIcon,
-      title: 'Login',
-      roles: []
-    },
-    {
-      href: '/register',
-      icon: UserPlusIcon,
-      title: 'Register',
-      roles: []
-    },
+    // {
+    //   href: '/login',
+    //   icon: LockIcon,
+    //   title: 'Login',
+    //   roles: []
+    // },
+    // {
+    //   href: '/register',
+    //   icon: UserPlusIcon,
+    //   title: 'Register',
+    //   roles: []
+    // },
     {
       href: '/404',
       icon: AlertCircleIcon,
@@ -156,7 +156,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
-      <Box
+      {/* <Box
         sx={{
           backgroundColor: 'background.default',
           m: 2,
@@ -185,7 +185,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
             See PRO version
           </Button>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 
