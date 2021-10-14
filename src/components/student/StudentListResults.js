@@ -4,8 +4,10 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
   Avatar,
   Box,
+  Button,
   Card,
   Checkbox,
+  Fab,
   FormControl,
   InputLabel,
   MenuItem,
@@ -19,6 +21,8 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudentsData } from 'src/store/student-actions';
 import getInitials from '../../utils/getInitials';
@@ -103,6 +107,16 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell padding="checkbox" />
+                <TableCell>Name</TableCell>
+                <TableCell>Student Code</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Address</TableCell>
+                <TableCell>Phone</TableCell>
+                <TableCell>Major</TableCell>
+                <TableCell colSpan={2} align="center">Actions</TableCell>
+              </TableRow>
+              <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
                     checked={selectedStudentIds.length === students.length}
@@ -114,16 +128,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Student Code</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Major</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell padding="checkbox" />
-                <TableCell>
+                <TableCell sx={{ maxWidth: 200 }}>
                   <TextField
                     fullWidth
                     label="Full name"
@@ -131,9 +136,10 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     onChange={handleFilterChange}
                     value={values.name}
                     variant="outlined"
+                    size="small"
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ maxWidth: 100 }}>
                   <TextField
                     fullWidth
                     label="Student code"
@@ -141,9 +147,10 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     onChange={handleFilterChange}
                     value={values.studentCode}
                     variant="outlined"
+                    size="small"
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ maxWidth: 150 }}>
                   <TextField
                     fullWidth
                     label="Email"
@@ -151,9 +158,10 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     onChange={handleFilterChange}
                     value={values.email}
                     variant="outlined"
+                    size="small"
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ maxWidth: 300 }}>
                   <TextField
                     fullWidth
                     label="Address"
@@ -161,9 +169,10 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     onChange={handleFilterChange}
                     value={values.address}
                     variant="outlined"
+                    size="small"
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ maxWidth: 120 }}>
                   <TextField
                     fullWidth
                     label="Phone"
@@ -171,17 +180,20 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     onChange={handleFilterChange}
                     value={values.phone}
                     variant="outlined"
+                    size="small"
                   />
                 </TableCell>
-                <TableCell>
-                  <FormControl variant="outlined" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="major-label">Major</InputLabel>
+                <TableCell sx={{ maxWidth: 200 }}>
+                  <FormControl variant="outlined" sx={{ minWidth: 250 }}>
+                    <InputLabel id="major-label" size="small">Major</InputLabel>
                     <Select
                       labelId="major-label"
                       id="major-dropdown"
                       value={values.major}
                       onChange={handleFilterChange}
                       label="major"
+                      name="major"
+                      size="small"
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -190,6 +202,9 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       <MenuItem value="Business Administration">Business Administration</MenuItem>
                     </Select>
                   </FormControl>
+                </TableCell>
+                <TableCell colSpan={2} align="center">
+                  <Button size="large" variant="contained">Apply Filter</Button>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -207,7 +222,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       value="true"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ maxWidth: 200 }}>
                     <Box
                       sx={{
                         alignItems: 'center',
@@ -222,14 +237,36 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>{student.student.studentCode}</TableCell>
-                  <TableCell>{student.email}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{ maxWidth: 120 }} align="center">{student.student.studentCode}</TableCell>
+                  <TableCell sx={{ maxWidth: 150 }} align="center">{student.email}</TableCell>
+                  <TableCell sx={{ maxWidth: 300 }}>
                     {`${student.student.address}`}
                   </TableCell>
-                  <TableCell>{student.phone}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{ maxWidth: 120 }} align="center">{student.phone}</TableCell>
+                  <TableCell sx={{ maxWidth: 200 }} align="center">
                     {student.student.major.name}
+                  </TableCell>
+                  <TableCell align="right">
+                    <Fab color="secondary" aria-label="edit" size="small">
+                      <EditIcon />
+                    </Fab>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Fab
+                      color="error"
+                      sx={{
+                        color: 'white',
+                        backgroundColor: 'error.main',
+                        '&:hover': {
+                          cursor: 'pointer',
+                          backgroundColor: 'error.dark',
+                        }
+                      }}
+                      arial-label="remove"
+                      size="small"
+                    >
+                      <DeleteForeverIcon />
+                    </Fab>
                   </TableCell>
                 </TableRow>
               ))}
