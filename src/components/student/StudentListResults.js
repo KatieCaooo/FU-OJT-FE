@@ -18,9 +18,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TableSortLabel,
   TextField,
   Typography
 } from '@material-ui/core';
+import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,6 +35,24 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   const [selectedStudentIds, setSelectedStudentIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('id');
+
+  console.log(orderBy, order);
+
+  const handleRequestSort = (event, property) => {
+    console.log('property', property);
+    const isSameProperty = orderBy === property;
+    const isOldAsc = order === 'asc';
+    const isAsc = isSameProperty && isOldAsc;
+    const isSetDefault = isSameProperty && !isOldAsc;
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(!isSetDefault ? property : 'id');
+  };
+
+  const onRequestSortHandler = (property) => (event) => {
+    handleRequestSort(event, property);
+  };
 
   const [values, setValues] = useState({
     name: '',
@@ -100,6 +120,51 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
     dispatch(fetchStudentsData(token, newPage, limit));
   };
 
+  const headerCells = [
+    {
+      name: 'Name',
+      label: 'Name',
+      search: 'name',
+      sort: 'name',
+      align: 'left',
+    },
+    {
+      name: 'StudentCode',
+      label: 'Student Code',
+      search: 'student.studentCode',
+      sort: 'student.studentCode',
+      align: 'center',
+    },
+    {
+      name: 'Email',
+      label: 'Email',
+      search: 'email',
+      sort: 'email',
+      align: 'center',
+    },
+    {
+      name: 'Address',
+      label: 'Address',
+      search: 'student.address',
+      sort: 'student.address',
+      align: 'left',
+    },
+    {
+      name: 'Phone',
+      label: 'Phone',
+      search: 'phone',
+      sort: 'phone',
+      align: 'center',
+    },
+    {
+      name: 'Major',
+      label: 'Major',
+      search: 'student.major.id',
+      sort: 'student.major.id',
+      align: 'center',
+    },
+  ];
+
   return (
     <Card {...rest}>
       <PerfectScrollbar>
@@ -108,13 +173,27 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox" />
-                <TableCell>Name</TableCell>
-                <TableCell>Student Code</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Major</TableCell>
-                <TableCell colSpan={2} align="center">Actions</TableCell>
+                {headerCells.map((headerCell) => (
+                  <TableCell align={headerCell.align}>
+                    <TableSortLabel
+                      active={orderBy === headerCell.name}
+                      direction={orderBy === headerCell.name ? order : 'asc'}
+                      onClick={onRequestSortHandler(headerCell.name)}
+                    >
+                      {headerCell.label}
+                      {orderBy === headerCell.name ? (
+                        <Box component="span" sx={visuallyHidden}>
+                          {order === 'desc'
+                            ? 'sorted descending'
+                            : 'sorted ascending'}
+                        </Box>
+                      ) : null}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+                <TableCell colSpan={2} align="center">
+                  Actions
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell padding="checkbox">
@@ -185,7 +264,9 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                 </TableCell>
                 <TableCell sx={{ maxWidth: 200 }}>
                   <FormControl variant="outlined" sx={{ minWidth: 250 }}>
-                    <InputLabel id="major-label" size="small">Major</InputLabel>
+                    <InputLabel id="major-label" size="small">
+                      Major
+                    </InputLabel>
                     <Select
                       labelId="major-label"
                       id="major-dropdown"
@@ -198,13 +279,19 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value="Software Engineering">Software Engineering</MenuItem>
-                      <MenuItem value="Business Administration">Business Administration</MenuItem>
+                      <MenuItem value="Software Engineering">
+                        Software Engineering
+                      </MenuItem>
+                      <MenuItem value="Business Administration">
+                        Business Administration
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>
                 <TableCell colSpan={2} align="center">
-                  <Button size="large" variant="contained">Apply Filter</Button>
+                  <Button size="large" variant="contained">
+                    Apply Filter
+                  </Button>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -237,12 +324,18 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">{student.student.studentCode}</TableCell>
-                  <TableCell sx={{ maxWidth: 150 }} align="center">{student.email}</TableCell>
+                  <TableCell sx={{ maxWidth: 120 }} align="center">
+                    {student.student.studentCode}
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 150 }} align="center">
+                    {student.email}
+                  </TableCell>
                   <TableCell sx={{ maxWidth: 300 }}>
                     {`${student.student.address}`}
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">{student.phone}</TableCell>
+                  <TableCell sx={{ maxWidth: 120 }} align="center">
+                    {student.phone}
+                  </TableCell>
                   <TableCell sx={{ maxWidth: 200 }} align="center">
                     {student.student.major.name}
                   </TableCell>
@@ -259,7 +352,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                         backgroundColor: 'error.main',
                         '&:hover': {
                           cursor: 'pointer',
-                          backgroundColor: 'error.dark',
+                          backgroundColor: 'error.dark'
                         }
                       }}
                       arial-label="remove"
