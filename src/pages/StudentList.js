@@ -3,7 +3,7 @@ import { Box, Container } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchStudentsData } from 'src/store/student-actions';
-import StudentListResults from '../components/customer/StudentListResults';
+import StudentListResults from '../components/student/StudentListResults';
 // import StudentListToolbar from '../components/customer/StudentListToolbar';
 // import { useEffect } from 'react';
 // import customers from '../__mocks__/customers';
