@@ -28,6 +28,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudentsData } from 'src/store/student-actions';
 import getInitials from '../../utils/getInitials';
+import StudentFormModal from './StudentFormModal';
 
 const StudentListResults = ({ students, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
@@ -40,7 +41,9 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   const [sortedBy, setSortedBy] = useState('id asc');
   const [search, setSearch] = useState('');
 
-  console.log(orderBy, order);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
@@ -212,6 +215,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
 
   return (
     <Card {...rest}>
+      <StudentFormModal open={open} onClose={handleClose} />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -392,7 +396,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     {student.student.major.name}
                   </TableCell>
                   <TableCell align="right">
-                    <Fab color="secondary" aria-label="edit" size="small">
+                    <Fab color="secondary" aria-label="edit" size="small" onClick={handleOpen}>
                       <EditIcon />
                     </Fab>
                   </TableCell>
