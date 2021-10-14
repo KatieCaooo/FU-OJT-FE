@@ -38,6 +38,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('id');
   const [sortedBy, setSortedBy] = useState('id asc');
+  const [search, setSearch] = useState('');
 
   console.log(orderBy, order);
 
@@ -51,7 +52,15 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
     setOrder(orderValue);
     setOrderBy(orderByValue);
     setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
-    dispatch(fetchStudentsData(token, page, limit, `${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
+    dispatch(
+      fetchStudentsData(
+        token,
+        page,
+        limit,
+        `${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`,
+        search
+      )
+    );
   };
 
   const onRequestSortHandler = (property, sortField) => (event) => {
@@ -72,6 +81,39 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
       ...values,
       [event.target.name]: event.target.value
     });
+  };
+
+  const onFilterHandler = () => {
+    const nameFilter = `name==*${values.name}*`;
+    const studentCodeFilter = `student.studentCode==*${values.studentCode}*`;
+    const emailFilter = `email==*${values.email}*`;
+    const addressFilter = `student.address==*${values.address}*`;
+    const phoneFilter = `phone==*${values.phone}*`;
+    const majorFilter = `student.major.name==${values.major}`;
+    const filter = [];
+    if (values.name !== '') {
+      filter.push(nameFilter);
+    }
+    if (values.studentCode !== '') {
+      filter.push(studentCodeFilter);
+    }
+    if (values.email !== '') {
+      filter.push(emailFilter);
+    }
+    if (values.address !== '') {
+      filter.push(addressFilter);
+    }
+    if (values.phone !== '') {
+      filter.push(phoneFilter);
+    }
+    if (values.major !== '') {
+      filter.push(majorFilter);
+    }
+    setSearch(
+      filter.join(';')
+    );
+    setPage(0);
+    dispatch(fetchStudentsData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
   const handleSelectAll = (event) => {
@@ -109,19 +151,18 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
         selectedStudentIds.slice(selectedIndex + 1)
       );
     }
-
     setSelectedStudentIds(newSelectedStudentIds);
   };
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
     setPage(0);
-    dispatch(fetchStudentsData(token, 0, event.target.value, sortedBy));
+    dispatch(fetchStudentsData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
-    dispatch(fetchStudentsData(token, newPage, limit, sortedBy));
+    dispatch(fetchStudentsData(token, newPage, limit, sortedBy, search));
   };
 
   const headerCells = [
@@ -130,43 +171,43 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
       label: 'Name',
       search: 'name',
       sort: 'name',
-      align: 'left',
+      align: 'left'
     },
     {
       name: 'StudentCode',
       label: 'Student Code',
       search: 'student.studentCode',
       sort: 'student.studentCode',
-      align: 'center',
+      align: 'center'
     },
     {
       name: 'Email',
       label: 'Email',
       search: 'email',
       sort: 'email',
-      align: 'center',
+      align: 'center'
     },
     {
       name: 'Address',
       label: 'Address',
       search: 'student.address',
       sort: 'student.address',
-      align: 'left',
+      align: 'left'
     },
     {
       name: 'Phone',
       label: 'Phone',
       search: 'phone',
       sort: 'phone',
-      align: 'center',
+      align: 'center'
     },
     {
       name: 'Major',
       label: 'Major',
       search: 'student.major.id',
       sort: 'student.major.id',
-      align: 'center',
-    },
+      align: 'center'
+    }
   ];
 
   return (
@@ -182,7 +223,10 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     <TableSortLabel
                       active={orderBy === headerCell.name}
                       direction={orderBy === headerCell.name ? order : 'asc'}
-                      onClick={onRequestSortHandler(headerCell.name, headerCell.sort)}
+                      onClick={onRequestSortHandler(
+                        headerCell.name,
+                        headerCell.sort
+                      )}
                     >
                       {headerCell.label}
                       {orderBy === headerCell.name ? (
@@ -293,7 +337,11 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                   </FormControl>
                 </TableCell>
                 <TableCell colSpan={2} align="center">
-                  <Button size="large" variant="contained">
+                  <Button
+                    size="large"
+                    variant="contained"
+                    onClick={onFilterHandler}
+                  >
                     Apply Filter
                   </Button>
                 </TableCell>

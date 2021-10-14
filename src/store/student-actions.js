@@ -2,12 +2,12 @@ const { BASE_URL, getRequiredAuthenHeader } = require('src/api/config');
 const axios = require('axios');
 const { studentActions } = require('./student-slice');
 
-export const fetchStudentsData = (token, pageNo, pageSize, sortBy) => async (dispatch) => {
+export const fetchStudentsData = (token, pageNo, pageSize, sortBy, search) => async (dispatch) => {
   const url = `${BASE_URL}/users`;
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: 'student.id > 0', pageSize, pageNo, sortBy
+        search: `student.id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
       },
       headers: getRequiredAuthenHeader(token)
     });
