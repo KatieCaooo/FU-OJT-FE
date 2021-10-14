@@ -37,21 +37,25 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('id');
+  const [sortedBy, setSortedBy] = useState('id asc');
 
   console.log(orderBy, order);
 
-  const handleRequestSort = (event, property) => {
-    console.log('property', property);
+  const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
     const isOldAsc = order === 'asc';
     const isAsc = isSameProperty && isOldAsc;
     const isSetDefault = isSameProperty && !isOldAsc;
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(!isSetDefault ? property : 'id');
+    const orderValue = isAsc ? 'desc' : 'asc';
+    const orderByValue = !isSetDefault ? property : 'id';
+    setOrder(orderValue);
+    setOrderBy(orderByValue);
+    setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
+    dispatch(fetchStudentsData(token, page, limit, `${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
   };
 
-  const onRequestSortHandler = (property) => (event) => {
-    handleRequestSort(event, property);
+  const onRequestSortHandler = (property, sortField) => (event) => {
+    handleRequestSort(event, property, sortField);
   };
 
   const [values, setValues] = useState({
@@ -112,12 +116,12 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
     setPage(0);
-    dispatch(fetchStudentsData(token, 0, event.target.value));
+    dispatch(fetchStudentsData(token, 0, event.target.value, sortedBy));
   };
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
-    dispatch(fetchStudentsData(token, newPage, limit));
+    dispatch(fetchStudentsData(token, newPage, limit, sortedBy));
   };
 
   const headerCells = [
@@ -174,11 +178,11 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox" />
                 {headerCells.map((headerCell) => (
-                  <TableCell align={headerCell.align}>
+                  <TableCell key={headerCell.name} align={headerCell.align}>
                     <TableSortLabel
                       active={orderBy === headerCell.name}
                       direction={orderBy === headerCell.name ? order : 'asc'}
-                      onClick={onRequestSortHandler(headerCell.name)}
+                      onClick={onRequestSortHandler(headerCell.name, headerCell.sort)}
                     >
                       {headerCell.label}
                       {orderBy === headerCell.name ? (
