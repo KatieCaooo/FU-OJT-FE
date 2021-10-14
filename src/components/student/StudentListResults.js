@@ -84,12 +84,12 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   };
 
   const onFilterHandler = () => {
-    const nameFilter = `name==*${values.name}*`;
-    const studentCodeFilter = `student.studentCode==*${values.studentCode}*`;
-    const emailFilter = `email==*${values.email}*`;
-    const addressFilter = `student.address==*${values.address}*`;
-    const phoneFilter = `phone==*${values.phone}*`;
-    const majorFilter = `student.major.name==${values.major}`;
+    const nameFilter = `name=='*${values.name}*'`;
+    const studentCodeFilter = `student.studentCode=='*${values.studentCode}*'`;
+    const emailFilter = `email=='*${values.email}*'`;
+    const addressFilter = `student.address=='*${values.address}*'`;
+    const phoneFilter = `phone=='*${values.phone}*'`;
+    const majorFilter = `student.major.name=='${values.major}'`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
