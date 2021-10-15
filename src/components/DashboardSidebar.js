@@ -43,9 +43,9 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN']
     },
     {
-      href: '/app/products',
+      href: '/app/companys',
       icon: ShoppingBagIcon,
-      title: 'Products',
+      title: 'Companys',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
