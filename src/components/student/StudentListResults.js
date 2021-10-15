@@ -41,8 +41,14 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   const [sortedBy, setSortedBy] = useState('id asc');
   const [search, setSearch] = useState('');
 
+  const [account, setAccount] = useState({});
+
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (event, selectedAccount) => {
+    setOpen(true);
+    setAccount(selectedAccount);
+  };
+
   const handleClose = () => setOpen(false);
 
   const handleRequestSort = (event, property, sortField) => {
@@ -215,7 +221,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
 
   return (
     <Card {...rest}>
-      <StudentFormModal open={open} onClose={handleClose} />
+      <StudentFormModal account={account} open={open} onClose={handleClose} />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -396,7 +402,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     {student.student.major.name}
                   </TableCell>
                   <TableCell align="right">
-                    <Fab color="secondary" aria-label="edit" size="small" onClick={handleOpen}>
+                    <Fab color="secondary" aria-label="edit" size="small" onClick={(e) => handleOpen(e, student)}>
                       <EditIcon />
                     </Fab>
                   </TableCell>
