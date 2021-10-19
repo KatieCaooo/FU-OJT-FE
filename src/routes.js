@@ -18,7 +18,7 @@ const routes = (isLoggedIn, isAdmin) => [
       { path: 'account', element: <Account /> },
       { path: 'students', element: isAdmin ? <StudentList /> : <Navigate to="/" /> },
       { path: 'dashboard', element: <Dashboard /> },
-      { path: 'companys', element: <ProductList /> },
+      { path: 'companies', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
