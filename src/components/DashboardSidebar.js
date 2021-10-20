@@ -14,10 +14,11 @@ import {
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
+  // Lock as LockIcon,
   Settings as SettingsIcon,
-  Compass as CompassIcon,
-  File as FileIcon,
+  ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
+  // UserPlus as UserPlusIcon,
   Users as UsersIcon
 } from 'react-feather';
 import { useSelector } from 'react-redux';
@@ -42,16 +43,10 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN']
     },
     {
-      href: '/app/applications',
-      icon: FileIcon,
-      title: 'Applications',
-      roles: ['SYS_ADMIN']
-    },
-    {
       href: '/app/companies',
-      icon: CompassIcon,
+      icon: ShoppingBagIcon,
       title: 'Companies',
-      roles: ['SYS_ADMIN']
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
       href: '/app/account',

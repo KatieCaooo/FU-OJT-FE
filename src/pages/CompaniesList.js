@@ -1,22 +1,23 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
+import { fetchCompaniesData } from 'src/store/company-actions';
 import { useEffect } from 'react';
-import { fetchStudentsData } from 'src/store/student-actions';
-import StudentListResults from '../components/student/StudentListResults';
+import CompanyListResult from '../components/company/CompanyListResult';
 
-const StudentList = () => {
-  const studentData = useSelector((state) => state.students);
+const CompanyList = () => {
+  const companyData = useSelector((state) => state.companies);
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchStudentsData(token, 0, 10));
+    dispatch(fetchCompaniesData(token, 0, 10));
   }, [dispatch]);
+
   return (
     <>
       <Helmet>
-        <title>Students | Material Kit</title>
+        <title> Companies | Material Kit </title>
       </Helmet>
       <Box
         sx={{
@@ -26,11 +27,10 @@ const StudentList = () => {
         }}
       >
         <Container maxWidth={false}>
-          {/* <StudentListToolbar /> */}
           <Box sx={{ pt: 3 }}>
-            <StudentListResults
-              students={studentData.students}
-              totalElements={studentData.totalQuantity}
+            <CompanyListResult
+              companies={companyData.companies}
+              totalElements={companyData.totalQuantity}
             />
           </Box>
         </Container>
@@ -39,4 +39,4 @@ const StudentList = () => {
   );
 };
 
-export default StudentList;
+export default CompanyList;
