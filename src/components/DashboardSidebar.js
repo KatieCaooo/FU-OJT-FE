@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
-  // Button,
   Divider,
   Drawer,
   Hidden,
@@ -14,11 +13,10 @@ import {
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
-  // Lock as LockIcon,
   Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
+  Compass as CompassIcon,
+  FileText as FileIcon,
   User as UserIcon,
-  // UserPlus as UserPlusIcon,
   Users as UsersIcon
 } from 'react-feather';
 import { useSelector } from 'react-redux';
@@ -43,8 +41,14 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN']
     },
     {
+      href: '/app/applications',
+      icon: FileIcon,
+      title: 'Applications',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
       href: '/app/companies',
-      icon: ShoppingBagIcon,
+      icon: CompassIcon,
       title: 'Companies',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
@@ -60,18 +64,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       title: 'Settings',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
-    // {
-    //   href: '/login',
-    //   icon: LockIcon,
-    //   title: 'Login',
-    //   roles: []
-    // },
-    // {
-    //   href: '/register',
-    //   icon: UserPlusIcon,
-    //   title: 'Register',
-    //   roles: []
-    // },
     {
       href: '/404',
       icon: AlertCircleIcon,
