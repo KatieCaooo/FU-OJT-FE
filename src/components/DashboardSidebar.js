@@ -15,7 +15,10 @@ import {
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
   Compass as CompassIcon,
+  Briefcase as BriefcaseIcon,
   FileText as FileIcon,
+  Calendar as CalendarIcon,
+  List as ListIcon,
   User as UserIcon,
   Users as UsersIcon
 } from 'react-feather';
@@ -35,6 +38,30 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
+      href: '/app/companies',
+      icon: CompassIcon,
+      title: 'Companies',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/app/jobs',
+      icon: BriefcaseIcon,
+      title: 'Jobs',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/app/semesters',
+      icon: CalendarIcon,
+      title: 'Semesters',
+      roles: ['SYS_ADMIN']
+    },
+    {
+      href: '/app/majors',
+      icon: ListIcon,
+      title: 'Majors',
+      roles: ['SYS_ADMIN']
+    },
+    {
       href: '/app/students',
       icon: UsersIcon,
       title: 'Students',
@@ -44,12 +71,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       href: '/app/applications',
       icon: FileIcon,
       title: 'Applications',
-      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
-    },
-    {
-      href: '/app/companies',
-      icon: CompassIcon,
-      title: 'Companies',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
