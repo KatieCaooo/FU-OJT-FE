@@ -7,7 +7,7 @@ export const fetchCompaniesData = (token, pageNo, pageSize, sortBy, search) => a
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: `companies.id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
+        search: `id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
       },
       headers: getRequiredAuthenHeader(token)
     });

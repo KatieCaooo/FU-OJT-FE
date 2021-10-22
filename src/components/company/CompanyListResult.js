@@ -8,10 +8,6 @@ import {
   Card,
   Checkbox,
   Fab,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -78,11 +74,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
 
   const [values, setValues] = useState({
     name: '',
-    studentCode: '',
-    email: '',
-    address: '',
-    phone: '',
-    major: ''
+    description: '',
   });
 
   const handleFilterChange = (event) => {
@@ -94,29 +86,13 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
 
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
-    const studentCodeFilter = `student.studentCode=='*${values.studentCode}*'`;
-    const emailFilter = `email=='*${values.email}*'`;
-    const addressFilter = `student.address=='*${values.address}*'`;
-    const phoneFilter = `phone=='*${values.phone}*'`;
-    const majorFilter = `student.major.name=='${values.major}'`;
+    const descriptionFilter = `description=='*${values.desciption}*'`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
     }
-    if (values.studentCode !== '') {
-      filter.push(studentCodeFilter);
-    }
-    if (values.email !== '') {
-      filter.push(emailFilter);
-    }
-    if (values.address !== '') {
-      filter.push(addressFilter);
-    }
-    if (values.phone !== '') {
-      filter.push(phoneFilter);
-    }
-    if (values.major !== '') {
-      filter.push(majorFilter);
+    if (values.description !== '') {
+      filter.push(descriptionFilter);
     }
     setSearch(filter.join(';'));
     setPage(0);
@@ -137,36 +113,34 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
 
   const handleSelectOne = (event, id) => {
     const selectedIndex = selectedCompanyIds.indexOf(id);
-    let newSelectedCompanyIds = [];
+    let newselectedCompanyIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedCompanyIds = newSelectedCompanyIds.concat(
+      newselectedCompanyIds = newselectedCompanyIds.concat(
         selectedCompanyIds,
         id
       );
     } else if (selectedIndex === 0) {
-      newSelectedCompanyIds = newSelectedCompanyIds.concat(
+      newselectedCompanyIds = newselectedCompanyIds.concat(
         selectedCompanyIds.slice(1)
       );
     } else if (selectedIndex === selectedCompanyIds.length - 1) {
-      newSelectedCompanyIds = newSelectedCompanyIds.concat(
+      newselectedCompanyIds = newselectedCompanyIds.concat(
         selectedCompanyIds.slice(0, -1)
       );
     } else if (selectedIndex > 0) {
-      newSelectedCompanyIds = newSelectedCompanyIds.concat(
+      newselectedCompanyIds = newselectedCompanyIds.concat(
         selectedCompanyIds.slice(0, selectedIndex),
         selectedCompanyIds.slice(selectedIndex + 1)
       );
     }
-    setSelectedCompanyIds(newSelectedCompanyIds);
+    setSelectedCompanyIds(newselectedCompanyIds);
   };
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
     setPage(0);
-    dispatch(
-      fetchCompaniesData(token, 0, event.target.value, sortedBy, search)
-    );
+    dispatch(fetchCompaniesData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
@@ -183,39 +157,18 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
       align: 'left'
     },
     {
-      name: 'StudentCode',
-      label: 'Student Code',
-      search: 'student.studentCode',
-      sort: 'student.studentCode',
-      align: 'center'
-    },
-    {
-      name: 'Email',
-      label: 'Email',
+      name: 'Description',
+      label: 'Description',
       search: 'email',
       sort: 'email',
-      align: 'center'
-    },
-    {
-      name: 'Address',
-      label: 'Address',
-      search: 'student.address',
-      sort: 'student.address',
       align: 'left'
     },
     {
-      name: 'Phone',
-      label: 'Phone',
-      search: 'phone',
-      sort: 'phone',
-      align: 'center'
-    },
-    {
-      name: 'Major',
-      label: 'Major',
-      search: 'student.major.id',
-      sort: 'student.major.id',
-      align: 'center'
+      name: 'Description',
+      label: 'Address',
+      search: 'description',
+      sort: 'description',
+      align: 'left'
     }
   ];
 
@@ -223,7 +176,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
     <Card {...rest}>
       <CompanyFormModal account={account} open={open} onClose={handleClose} />
       <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
+        <Box sx={{ minWidth: 700 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -265,10 +218,10 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell sx={{ maxWidth: 200 }}>
+                <TableCell sx={{ width: 250 }}>
                   <TextField
                     fullWidth
-                    label="Full name"
+                    label="Company Name"
                     name="name"
                     onChange={handleFilterChange}
                     value={values.name}
@@ -276,24 +229,13 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                     size="small"
                   />
                 </TableCell>
-                <TableCell sx={{ maxWidth: 100 }}>
+                <TableCell sx={{ maxWidth: 300 }}>
                   <TextField
                     fullWidth
-                    label="Student code"
-                    name="studentCode"
+                    label="Description"
+                    name="description"
                     onChange={handleFilterChange}
-                    value={values.studentCode}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 150 }}>
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    name="email"
-                    onChange={handleFilterChange}
-                    value={values.email}
+                    value={values.description}
                     variant="outlined"
                     size="small"
                   />
@@ -308,43 +250,6 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                     variant="outlined"
                     size="small"
                   />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 120 }}>
-                  <TextField
-                    fullWidth
-                    label="Phone"
-                    name="phone"
-                    onChange={handleFilterChange}
-                    value={values.phone}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 200 }}>
-                  <FormControl variant="outlined" sx={{ minWidth: 250 }}>
-                    <InputLabel id="major-label" size="small">
-                      Major
-                    </InputLabel>
-                    <Select
-                      labelId="major-label"
-                      id="major-dropdown"
-                      value={values.major}
-                      onChange={handleFilterChange}
-                      label="major"
-                      name="major"
-                      size="small"
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="Software Engineering">
-                        Software Engineering
-                      </MenuItem>
-                      <MenuItem value="Business Administration">
-                        Business Administration
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
                 </TableCell>
                 <TableCell colSpan={2} align="center">
                   <Button
@@ -378,28 +283,19 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={company.avatarUrl} sx={{ mr: 2 }}>
+                      <Avatar src={company.avatarUrl} sx={{ mr: 3 }}>
                         {getInitials(company.name)}
                       </Avatar>
-                      <Typography color="textPrimary" variant="body1">
+                      <Typography color="textPrimary">
                         {company.name}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">
-                    {company.company.companyCode}
+                  <TableCell sx={{ maxWidth: 120 }} align="left">
+                    {company.description}
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 150 }} align="center">
-                    {company.email}
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 300 }}>
-                    {`${company.company.address}`}
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">
-                    {company.phone}
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 200 }} align="center">
-                    {company.company.major.name}
+                  <TableCell sx={{ maxWidth: 120 }} align="left">
+                    {company.description}
                   </TableCell>
                   <TableCell align="right">
                     <Fab
@@ -441,7 +337,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
         onRowsPerPageChange={handleLimitChange}
         page={page}
         rowsPerPage={limit}
-        rowsPerPageOptions={[10, 20, 50]}
+        rowsPerPageOptions={[2, 20, 50]}
       />
     </Card>
   );

@@ -43,11 +43,8 @@ const CompanyFormModal = (props) => {
     if (account.name) {
       setValues({
         name: account.name,
-        description: account.company.description,
-        email: account.email,
-        address: account.student.address,
-        phone: account.phone
-        // major: account.student.major.name
+        description: account.description,
+        // address: account.student.address,
       });
     }
   }, [account]);
@@ -70,7 +67,7 @@ const CompanyFormModal = (props) => {
           <Card>
             <CardHeader
               subheader="The information can be edited"
-              title="User Profile"
+              title="Company Profile"
             />
             <Divider />
             <CardContent>
@@ -78,7 +75,7 @@ const CompanyFormModal = (props) => {
                 <Grid item md={6} xs={6}>
                   <TextField
                     fullWidth
-                    label="Full name"
+                    label="Company Name"
                     name="name"
                     onChange={handleChange}
                     required
@@ -86,26 +83,14 @@ const CompanyFormModal = (props) => {
                     variant="outlined"
                   />
                 </Grid>
-                {/* <Grid item md={6} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Student code"
-                    name="studentCode"
-                    onChange={handleChange}
-                    value={values.studentCode}
-                    disabled
-                    variant="outlined"
-                  />
-                </Grid> */}
                 <Grid item md={12} xs={12}>
                   <TextField
                     fullWidth
-                    label="Email Address"
+                    label="Description"
                     name="email"
                     onChange={handleChange}
                     required
-                    disabled
-                    value={values.email}
+                    value={values.description}
                     variant="outlined"
                   />
                 </Grid>
@@ -115,17 +100,8 @@ const CompanyFormModal = (props) => {
                     label="Address"
                     name="address"
                     onChange={handleChange}
-                    value={values.address}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Phone Number"
-                    name="phone"
-                    onChange={handleChange}
-                    value={values.phone}
+                    required
+                    value={values.description}
                     variant="outlined"
                   />
                 </Grid>
