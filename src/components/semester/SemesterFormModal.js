@@ -32,12 +32,9 @@ const SemesterFormModal = (props) => {
   const { account } = props;
   console.log(account);
   const [values, setValues] = useState({
-    companyName: '',
-    description: '',
-    email: '',
-    address: '',
-    phone: ''
-    // major: ''
+    name: '',
+    startDate: '',
+    endDate: '',
   });
   useEffect(() => {
     if (account.name) {

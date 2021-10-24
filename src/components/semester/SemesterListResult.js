@@ -29,7 +29,7 @@ import SemesterFormModal from './SemesterFormModal';
 const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
-  const [selectedCompanyIds, setSelectedCompanyIds] = useState([]);
+  const [selectedSemesterIds, setSelectedSemesterIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -105,41 +105,41 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
   };
 
   const handleSelectAll = (event) => {
-    let newSelectedCompanyIds;
+    let newSelectedSemesterIds;
 
     if (event.target.checked) {
-      newSelectedCompanyIds = semesters.map((semester) => semester.id);
+      newSelectedSemesterIds = semesters.map((semester) => semester.id);
     } else {
-      newSelectedCompanyIds = [];
+      newSelectedSemesterIds = [];
     }
 
-    setSelectedCompanyIds(newSelectedCompanyIds);
+    setSelectedSemesterIds(newSelectedSemesterIds);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCompanyIds.indexOf(id);
-    let newselectedCompanyIds = [];
+    const selectedIndex = selectedSemesterIds.indexOf(id);
+    let newSelectedSemesterIds = [];
 
     if (selectedIndex === -1) {
-      newselectedCompanyIds = newselectedCompanyIds.concat(
-        selectedCompanyIds,
+      newSelectedSemesterIds = newSelectedSemesterIds.concat(
+        selectedSemesterIds,
         id
       );
     } else if (selectedIndex === 0) {
-      newselectedCompanyIds = newselectedCompanyIds.concat(
-        selectedCompanyIds.slice(1)
+      newSelectedSemesterIds = newSelectedSemesterIds.concat(
+        selectedSemesterIds.slice(1)
       );
-    } else if (selectedIndex === selectedCompanyIds.length - 1) {
-      newselectedCompanyIds = newselectedCompanyIds.concat(
-        selectedCompanyIds.slice(0, -1)
+    } else if (selectedIndex === selectedSemesterIds.length - 1) {
+      newSelectedSemesterIds = newSelectedSemesterIds.concat(
+        selectedSemesterIds.slice(0, -1)
       );
     } else if (selectedIndex > 0) {
-      newselectedCompanyIds = newselectedCompanyIds.concat(
-        selectedCompanyIds.slice(0, selectedIndex),
-        selectedCompanyIds.slice(selectedIndex + 1)
+      newSelectedSemesterIds = newSelectedSemesterIds.concat(
+        selectedSemesterIds.slice(0, selectedIndex),
+        selectedSemesterIds.slice(selectedIndex + 1)
       );
     }
-    setSelectedCompanyIds(newselectedCompanyIds);
+    setSelectedSemesterIds(newSelectedSemesterIds);
   };
 
   const handleLimitChange = (event) => {
@@ -214,11 +214,11 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCompanyIds.length === semesters.length}
+                    checked={selectedSemesterIds.length === semesters.length}
                     color="primary"
                     indeterminate={
-                      selectedCompanyIds.length > 0
-                      && selectedCompanyIds.length < semesters.length
+                      selectedSemesterIds.length > 0
+                      && selectedSemesterIds.length < semesters.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -272,11 +272,11 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                 <TableRow
                   hover
                   key={semester.id}
-                  selected={selectedCompanyIds.indexOf(semester.id) !== -1}
+                  selected={selectedSemesterIds.indexOf(semester.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCompanyIds.indexOf(semester.id) !== -1}
+                      checked={selectedSemesterIds.indexOf(semester.id) !== -1}
                       onChange={(event) => handleSelectOne(event, semester.id)}
                       value="true"
                     />
