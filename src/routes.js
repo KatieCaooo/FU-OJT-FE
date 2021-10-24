@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import CompaniesList from './pages/CompaniesList';
+import SemestersList from './pages/SemestersList';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 
@@ -19,6 +20,7 @@ const routes = (isLoggedIn, isAdmin) => [
       { path: 'students', element: isAdmin ? <StudentList /> : <Navigate to="/" /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'companies', element: <CompaniesList /> },
+      { path: 'semesters', element: <SemestersList /> },
       { path: 'settings', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
