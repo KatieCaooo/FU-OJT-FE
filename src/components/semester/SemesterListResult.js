@@ -163,15 +163,15 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
       align: 'left'
     },
     {
-      name: 'StartDate',
-      label: 'StartDate',
+      name: 'Start Date',
+      label: 'Start Date',
       search: 'startDate',
       sort: 'startDate',
       align: 'left'
     },
     {
-      name: 'EndDate',
-      label: 'EndDate',
+      name: 'End Date',
+      label: 'End Date',
       search: 'endDate',
       sort: 'endDate',
       align: 'left'
@@ -238,7 +238,7 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                 <TableCell sx={{ maxWidth: 300 }}>
                   <TextField
                     fullWidth
-                    label="StartDate"
+                    label="Start Date"
                     name="startDate"
                     onChange={handleFilterChange}
                     value={values.startDate}
@@ -249,7 +249,7 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                 <TableCell sx={{ maxWidth: 300 }}>
                   <TextField
                     fullWidth
-                    label="EndDate"
+                    label="End Date"
                     name="endDate"
                     onChange={handleFilterChange}
                     value={values.endDate}
