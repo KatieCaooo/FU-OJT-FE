@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -296,11 +297,11 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="left">
-                    {semester.startDate}
+                  <TableCell sx={{ maxWidth: 120 }} align="center">
+                    {moment(semester.startDate).format('DD-MM-YYYY')}
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="left">
-                    {semester.endDate}
+                  <TableCell sx={{ maxWidth: 120 }} align="center">
+                    {moment(semester.endDate).format('DD-MM-YYYY')}
                   </TableCell>
                   <TableCell align="right">
                     <Fab

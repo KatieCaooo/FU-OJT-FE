@@ -235,14 +235,14 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
                       value="true"
                     />
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 200 }}>
+                  <TableCell sx={{ maxWidth: 150 }}>
                     <Box
                       sx={{
                         alignItems: 'center',
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={major.avatarUrl} sx={{ mr: 3 }}>
+                      <Avatar src={major.avatarUrl} sx={{ mr: 2 }}>
                         {getInitials(major.name)}
                       </Avatar>
                       <Typography color="textPrimary">
