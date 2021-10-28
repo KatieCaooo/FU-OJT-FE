@@ -337,7 +337,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
         onRowsPerPageChange={handleLimitChange}
         page={page}
         rowsPerPage={limit}
-        rowsPerPageOptions={[2, 20, 50]}
+        rowsPerPageOptions={[5, 10, 30]}
       />
     </Card>
   );

@@ -22,14 +22,14 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSemestersData } from 'src/store/semester-actions';
+import { fetchMajorsData } from 'src/store/major-actions';
 import getInitials from '../../utils/getInitials';
-import SemesterFormModal from './SemesterFormModal';
+import MajorFormModal from './MajorFormModal';
 
-const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
+const MajorListResult = ({ majors, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
-  const [selectedSemesterIds, setSelectedSemesterIds] = useState([]);
+  const [selectedMajorIds, setSelectedMajorIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -58,7 +58,7 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
     setOrderBy(orderByValue);
     setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
     dispatch(
-      fetchSemestersData(
+      fetchMajorsData(
         token,
         page,
         limit,
@@ -74,8 +74,6 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
 
   const [values, setValues] = useState({
     name: '',
-    startDate: '',
-    endDate: '',
   });
 
   const handleFilterChange = (event) => {
@@ -87,70 +85,62 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
 
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
-    const startDateFilter = `startDate=='*${values.startDate}*'`;
-    const endDateFilter = `endDate=='*${values.endDate}*'`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
     }
-    if (values.startDate !== '') {
-      filter.push(startDateFilter);
-    }
-    if (values.endDate !== '') {
-      filter.push(endDateFilter);
-    }
     setSearch(filter.join(';'));
     setPage(0);
-    dispatch(fetchSemestersData(token, 0, limit, sortedBy, filter.join(';')));
+    dispatch(fetchMajorsData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
   const handleSelectAll = (event) => {
-    let newSelectedSemesterIds;
+    let newSelectedMajorIds;
 
     if (event.target.checked) {
-      newSelectedSemesterIds = semesters.map((semester) => semester.id);
+      newSelectedMajorIds = majors.map((major) => major.id);
     } else {
-      newSelectedSemesterIds = [];
+      newSelectedMajorIds = [];
     }
 
-    setSelectedSemesterIds(newSelectedSemesterIds);
+    setSelectedMajorIds(newSelectedMajorIds);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedSemesterIds.indexOf(id);
-    let newSelectedSemesterIds = [];
+    const selectedIndex = selectedMajorIds.indexOf(id);
+    let newSelectedMajorIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedSemesterIds = newSelectedSemesterIds.concat(
-        selectedSemesterIds,
+      newSelectedMajorIds = newSelectedMajorIds.concat(
+        selectedMajorIds,
         id
       );
     } else if (selectedIndex === 0) {
-      newSelectedSemesterIds = newSelectedSemesterIds.concat(
-        selectedSemesterIds.slice(1)
+      newSelectedMajorIds = newSelectedMajorIds.concat(
+        selectedMajorIds.slice(1)
       );
-    } else if (selectedIndex === selectedSemesterIds.length - 1) {
-      newSelectedSemesterIds = newSelectedSemesterIds.concat(
-        selectedSemesterIds.slice(0, -1)
+    } else if (selectedIndex === selectedMajorIds.length - 1) {
+      newSelectedMajorIds = newSelectedMajorIds.concat(
+        selectedMajorIds.slice(0, -1)
       );
     } else if (selectedIndex > 0) {
-      newSelectedSemesterIds = newSelectedSemesterIds.concat(
-        selectedSemesterIds.slice(0, selectedIndex),
-        selectedSemesterIds.slice(selectedIndex + 1)
+      newSelectedMajorIds = newSelectedMajorIds.concat(
+        selectedMajorIds.slice(0, selectedIndex),
+        selectedMajorIds.slice(selectedIndex + 1)
       );
     }
-    setSelectedSemesterIds(newSelectedSemesterIds);
+    setSelectedMajorIds(newSelectedMajorIds);
   };
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
     setPage(0);
-    dispatch(fetchSemestersData(token, 0, event.target.value, sortedBy, search));
+    dispatch(fetchMajorsData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
-    dispatch(fetchSemestersData(token, newPage, limit, sortedBy, search));
+    dispatch(fetchMajorsData(token, newPage, limit, sortedBy, search));
   };
 
   const headerCells = [
@@ -161,25 +151,11 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
       sort: 'name',
       align: 'left'
     },
-    {
-      name: 'StartDate',
-      label: 'StartDate',
-      search: 'startDate',
-      sort: 'startDate',
-      align: 'left'
-    },
-    {
-      name: 'EndDate',
-      label: 'EndDate',
-      search: 'endDate',
-      sort: 'endDate',
-      align: 'left'
-    }
   ];
 
   return (
     <Card {...rest}>
-      <SemesterFormModal account={account} open={open} onClose={handleClose} />
+      <MajorFormModal account={account} open={open} onClose={handleClose} />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 700 }}>
           <Table>
@@ -214,11 +190,11 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedSemesterIds.length === semesters.length}
+                    checked={selectedMajorIds.length === majors.length}
                     color="primary"
                     indeterminate={
-                      selectedSemesterIds.length > 0
-                      && selectedSemesterIds.length < semesters.length
+                      selectedMajorIds.length > 0
+                      && selectedMajorIds.length < majors.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -226,32 +202,10 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                 <TableCell sx={{ width: 250 }}>
                   <TextField
                     fullWidth
-                    label="Semester Name"
+                    label="Major Name"
                     name="name"
                     onChange={handleFilterChange}
                     value={values.name}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 300 }}>
-                  <TextField
-                    fullWidth
-                    label="StartDate"
-                    name="startDate"
-                    onChange={handleFilterChange}
-                    value={values.startDate}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 300 }}>
-                  <TextField
-                    fullWidth
-                    label="EndDate"
-                    name="endDate"
-                    onChange={handleFilterChange}
-                    value={values.endDate}
                     variant="outlined"
                     size="small"
                   />
@@ -268,16 +222,16 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {semesters.slice(0, limit).map((semester) => (
+              {majors.slice(0, limit).map((major) => (
                 <TableRow
                   hover
-                  key={semester.id}
-                  selected={selectedSemesterIds.indexOf(semester.id) !== -1}
+                  key={major.id}
+                  selected={selectedMajorIds.indexOf(major.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedSemesterIds.indexOf(semester.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, semester.id)}
+                      checked={selectedMajorIds.indexOf(major.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, major.id)}
                       value="true"
                     />
                   </TableCell>
@@ -288,26 +242,20 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={semester.avatarUrl} sx={{ mr: 3 }}>
-                        {getInitials(semester.name)}
+                      <Avatar src={major.avatarUrl} sx={{ mr: 3 }}>
+                        {getInitials(major.name)}
                       </Avatar>
                       <Typography color="textPrimary">
-                        {semester.name}
+                        {major.name}
                       </Typography>
                     </Box>
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="left">
-                    {semester.startDate}
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="left">
-                    {semester.endDate}
                   </TableCell>
                   <TableCell align="right">
                     <Fab
                       color="secondary"
                       aria-label="edit"
                       size="small"
-                      onClick={(e) => handleOpen(e, semester)}
+                      onClick={(e) => handleOpen(e, major)}
                     >
                       <EditIcon />
                     </Fab>
@@ -348,9 +296,9 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
   );
 };
 
-SemesterListResult.propTypes = {
-  semesters: PropTypes.array.isRequired,
+MajorListResult.propTypes = {
+  majors: PropTypes.array.isRequired,
   totalElements: PropTypes.number.isRequired
 };
 
-export default SemesterListResult;
+export default MajorListResult;
