@@ -44,6 +44,9 @@ const AccountProfileDetails = (props) => {
 
   const [values, setValues] = useState({
     name: user.account.name,
+    oldPassword: user.account.password,
+    newPassword: '',
+    confirm: '',
     email: user.account.email,
     phone: user.account.phone,
     address: user.account.student ? user.account.student.address : null,
@@ -88,6 +91,51 @@ const AccountProfileDetails = (props) => {
                 onChange={handleChange}
                 required
                 value={values.name}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                onChange={handleChange}
+                required
+                value={values.oldPassword}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="New Password"
+                name="password"
+                onChange={handleChange}
+                required
+                value={values.newPassword}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Confirm"
+                name="password"
+                onChange={handleChange}
+                required
+                value={values.confirm}
                 variant="outlined"
               />
             </Grid>
@@ -182,50 +230,8 @@ const AccountProfileDetails = (props) => {
                     variant="outlined"
                   />
                 </Grid>
-
               </>
             )}
-            {/* <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid> */}
           </Grid>
         </CardContent>
         <Divider />
