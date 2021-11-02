@@ -38,9 +38,9 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
-      href: '/app/companies',
-      icon: CompassIcon,
-      title: 'Companies',
+      href: '/app/applications',
+      icon: FileIcon,
+      title: 'Applications',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
@@ -50,9 +50,15 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
-      href: '/app/semesters',
-      icon: CalendarIcon,
-      title: 'Semesters',
+      href: '/app/companies',
+      icon: CompassIcon,
+      title: 'Companies',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/app/students',
+      icon: UsersIcon,
+      title: 'Students',
       roles: ['SYS_ADMIN']
     },
     {
@@ -62,16 +68,10 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN']
     },
     {
-      href: '/app/students',
-      icon: UsersIcon,
-      title: 'Students',
+      href: '/app/semesters',
+      icon: CalendarIcon,
+      title: 'Semesters',
       roles: ['SYS_ADMIN']
-    },
-    {
-      href: '/app/applications',
-      icon: FileIcon,
-      title: 'Applications',
-      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
       href: '/app/account',
