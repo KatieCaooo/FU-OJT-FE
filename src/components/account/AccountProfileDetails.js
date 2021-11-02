@@ -81,7 +81,7 @@ const AccountProfileDetails = (props) => {
           >
             <Grid
               item
-              md={12}
+              md={6}
               xs={12}
             >
               <TextField
@@ -96,52 +96,7 @@ const AccountProfileDetails = (props) => {
             </Grid>
             <Grid
               item
-              md={12}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Password"
-                name="password"
-                onChange={handleChange}
-                required
-                value={values.oldPassword}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={12}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="New Password"
-                name="password"
-                onChange={handleChange}
-                required
-                value={values.newPassword}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={12}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Confirm"
-                name="password"
-                onChange={handleChange}
-                required
-                value={values.confirm}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={12}
+              md={6}
               xs={12}
             >
               <TextField
@@ -232,6 +187,51 @@ const AccountProfileDetails = (props) => {
                 </Grid>
               </>
             )}
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                onChange={handleChange}
+                required
+                value={values.oldPassword}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="New Password"
+                name="password"
+                onChange={handleChange}
+                required
+                value={values.newPassword}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={12}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Confirm"
+                name="password"
+                onChange={handleChange}
+                required
+                value={values.confirm}
+                variant="outlined"
+              />
+            </Grid>
           </Grid>
         </CardContent>
         <Divider />
