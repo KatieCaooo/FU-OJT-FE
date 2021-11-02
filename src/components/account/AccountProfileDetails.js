@@ -44,7 +44,6 @@ const AccountProfileDetails = (props) => {
 
   const [values, setValues] = useState({
     name: user.account.name,
-    oldPassword: user.account.password,
     newPassword: '',
     confirm: '',
     email: user.account.email,
@@ -79,6 +78,9 @@ const AccountProfileDetails = (props) => {
             container
             spacing={3}
           >
+            <Grid item xs={12}>
+              <Divider>USER INFORMATION</Divider>
+            </Grid>
             <Grid
               item
               md={6}
@@ -187,20 +189,8 @@ const AccountProfileDetails = (props) => {
                 </Grid>
               </>
             )}
-            <Grid
-              item
-              md={12}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Password"
-                name="password"
-                onChange={handleChange}
-                required
-                value={values.oldPassword}
-                variant="outlined"
-              />
+            <Grid item xs={12}>
+              <Divider>SECURITY</Divider>
             </Grid>
             <Grid
               item
