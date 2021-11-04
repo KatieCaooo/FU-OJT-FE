@@ -3,6 +3,7 @@ import { Box, Container } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCompaniesData } from 'src/store/company-actions';
 import { useEffect } from 'react';
+import CompanyListToolbar from '../components/company/CompanyListToolbar';
 import CompanyListResult from '../components/company/CompanyListResult';
 
 const CompanyList = () => {
@@ -27,7 +28,9 @@ const CompanyList = () => {
         }}
       >
         <Container maxWidth={false}>
+
           <Box sx={{ pt: 3 }}>
+            <CompanyListToolbar />
             <CompanyListResult
               companies={companyData.companies}
               totalElements={companyData.totalQuantity}

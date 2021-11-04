@@ -3,6 +3,7 @@ import { Box, Container } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSemestersData } from 'src/store/semester-actions';
 import { useEffect } from 'react';
+import SemesterListToolbar from '../components/semester/SemesterListToolbar';
 import SemesterListResult from '../components/semester/SemesterListResult';
 
 const SemesterList = () => {
@@ -27,6 +28,7 @@ const SemesterList = () => {
         }}
       >
         <Container maxWidth={false}>
+          <SemesterListToolbar />
           <Box sx={{ pt: 3 }}>
             <SemesterListResult
               semesters={semesterData.semesters}
