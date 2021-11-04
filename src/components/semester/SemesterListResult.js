@@ -19,6 +19,9 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -236,26 +239,42 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell sx={{ maxWidth: 300 }}>
-                  <TextField
-                    fullWidth
-                    label="Start Date"
-                    name="startDate"
-                    onChange={handleFilterChange}
-                    value={values.startDate}
-                    variant="outlined"
-                    size="small"
-                  />
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      label="Start Date"
+                      value={values.startDate}
+                      onChange={handleFilterChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                  {/* <TextField */}
+                  {/*  fullWidth */}
+                  {/*  label="Start Date" */}
+                  {/*  name="startDate" */}
+                  {/*  onChange={handleFilterChange} */}
+                  {/*  value={values.startDate} */}
+                  {/*  variant="outlined" */}
+                  {/*  size="small" */}
+                  {/* /> */}
                 </TableCell>
                 <TableCell sx={{ maxWidth: 300 }}>
-                  <TextField
-                    fullWidth
-                    label="End Date"
-                    name="endDate"
-                    onChange={handleFilterChange}
-                    value={values.endDate}
-                    variant="outlined"
-                    size="small"
-                  />
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      label="Start Date"
+                      value={values.endDate}
+                      onChange={handleFilterChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                  {/* <TextField */}
+                  {/*  fullWidth */}
+                  {/*  label="End Date" */}
+                  {/*  name="endDate" */}
+                  {/*  onChange={handleFilterChange} */}
+                  {/*  value={values.endDate} */}
+                  {/*  variant="outlined" */}
+                  {/*  size="small" */}
+                  {/* /> */}
                 </TableCell>
                 <TableCell colSpan={2} align="center">
                   <Button
