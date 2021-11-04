@@ -157,13 +157,13 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
     <Card {...rest}>
       <MajorFormModal account={account} open={open} onClose={handleClose} />
       <PerfectScrollbar>
-        <Box sx={{ minWidth: 700 }}>
+        <Box sx={{ maxWidth: 700 }}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox" />
                 {headerCells.map((headerCell) => (
-                  <TableCell key={headerCell.name} align={headerCell.align}>
+                  <TableCell key={headerCell.name} align={headerCell.align} margin="inherit">
                     <TableSortLabel
                       active={orderBy === headerCell.name}
                       direction={orderBy === headerCell.name ? order : 'asc'}
