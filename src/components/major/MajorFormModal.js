@@ -14,9 +14,7 @@ import {
   //   MenuItem
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { updateMajor } from 'src/store/major-actions';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -30,9 +28,7 @@ const style = {
 };
 
 const MajorFormModal = (props) => {
-  const token = useSelector((state) => state.account.token);
   const { account, type } = props;
-  const dispatch = useDispatch();
   const [values, setValues] = useState({
     name: ''
   });
@@ -54,13 +50,7 @@ const MajorFormModal = (props) => {
   };
 
   const onSaveHandler = () => {
-    if (type === 'UPDATE') {
-      dispatch(updateMajor(token, values));
-    }
-    if (type === 'CREATE') {
-      console.log('CREATE');
-    }
-    props.onClose(true);
+    props.onClose(type, values);
   };
 
   return (

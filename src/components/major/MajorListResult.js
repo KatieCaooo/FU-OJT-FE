@@ -22,7 +22,7 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMajorsData } from 'src/store/major-actions';
+import { fetchMajorsData, updateMajor } from 'src/store/major-actions';
 import getInitials from '../../utils/getInitials';
 import MajorFormModal from './MajorFormModal';
 
@@ -46,11 +46,14 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
     setAccount(selectedAccount);
   };
 
-  const handleUpdateFormClose = (isUpdated) => {
-    setUpdateFormOpen(false);
-    if (isUpdated) {
-      // dispatch(fetchMajorsData(token, page, limit, sortedBy, search));
+  const handleUpdateFormClose = (type, major) => {
+    if (type === 'UPDATE') {
+      dispatch(updateMajor(token, major, page, limit, sortedBy, search));
     }
+    if (type === 'CREATE') {
+      console.log('CREATE');
+    }
+    setUpdateFormOpen(false);
   };
 
   const handleCreateFormClose = (isUpdated) => {
