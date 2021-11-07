@@ -7,7 +7,10 @@ export const fetchMajorsData = (token, pageNo, pageSize, sortBy, search) => asyn
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: `id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
+        search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+        pageSize,
+        pageNo,
+        sortBy
       },
       headers: getRequiredAuthenHeader(token)
     });
@@ -33,4 +36,27 @@ export const fetchMajorsData = (token, pageNo, pageSize, sortBy, search) => asyn
   }
 };
 
-export const sendMajorData = () => {};
+export const updateMajor = (token, major) => async () => {
+  const url = `${BASE_URL}/majors/${major.id}`;
+  const postData = async () => {
+    const response = await axios.put(
+      url,
+      { name: major.name },
+      {
+        headers: getRequiredAuthenHeader(token)
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error('Could not update major');
+    }
+
+    return response.data;
+  };
+  try {
+    const response = await postData();
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};

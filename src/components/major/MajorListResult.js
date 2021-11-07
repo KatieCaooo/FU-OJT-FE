@@ -39,13 +39,26 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
 
   const [account, setAccount] = useState({});
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = (event, selectedAccount) => {
-    setOpen(true);
+  const [updateFormOpen, setUpdateFormOpen] = useState(false);
+  const [createFormOpen, setCreateFormOpen] = useState(false);
+  const handleUpdateFormOpen = (event, selectedAccount) => {
+    setUpdateFormOpen(true);
     setAccount(selectedAccount);
   };
 
-  const handleClose = () => setOpen(false);
+  const handleUpdateFormClose = (isUpdated) => {
+    setUpdateFormOpen(false);
+    if (isUpdated) {
+      // dispatch(fetchMajorsData(token, page, limit, sortedBy, search));
+    }
+  };
+
+  const handleCreateFormClose = (isUpdated) => {
+    setCreateFormOpen(false);
+    if (isUpdated) {
+      dispatch(fetchMajorsData(token, page, limit, sortedBy, search));
+    }
+  };
 
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
@@ -155,7 +168,8 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
 
   return (
     <Card {...rest}>
-      <MajorFormModal account={account} open={open} onClose={handleClose} />
+      <MajorFormModal account={account} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
+      <MajorFormModal account={account} open={createFormOpen} onClose={handleCreateFormClose} type="CREATE" />
       <PerfectScrollbar>
         <Box sx={{ maxWidth: 700 }}>
           <Table>
@@ -255,7 +269,7 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
                       color="secondary"
                       aria-label="edit"
                       size="small"
-                      onClick={(e) => handleOpen(e, major)}
+                      onClick={(e) => handleUpdateFormOpen(e, major)}
                     >
                       <EditIcon />
                     </Fab>

@@ -14,7 +14,9 @@ import {
   //   MenuItem
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { updateMajor } from 'src/store/major-actions';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -23,20 +25,21 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 800,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   p: 4
 };
 
 const MajorFormModal = (props) => {
-  const { account } = props;
-  console.log(account);
+  const token = useSelector((state) => state.account.token);
+  const { account, type } = props;
+  const dispatch = useDispatch();
   const [values, setValues] = useState({
     name: ''
   });
   useEffect(() => {
     if (account.name) {
       setValues({
+        id: account.id,
         name: account.name
       });
     }
@@ -49,6 +52,17 @@ const MajorFormModal = (props) => {
       [event.target.name]: event.target.value
     });
   };
+
+  const onSaveHandler = () => {
+    if (type === 'UPDATE') {
+      dispatch(updateMajor(token, values));
+    }
+    if (type === 'CREATE') {
+      console.log('CREATE');
+    }
+    props.onClose(true);
+  };
+
   return (
     <Modal
       {...props}
@@ -86,7 +100,7 @@ const MajorFormModal = (props) => {
                 p: 2
               }}
             >
-              <Button color="primary" variant="contained">
+              <Button color="primary" variant="contained" onClick={onSaveHandler}>
                 Save details
               </Button>
             </Box>
@@ -100,5 +114,7 @@ const MajorFormModal = (props) => {
 export default MajorFormModal;
 
 MajorFormModal.propTypes = {
-  account: PropTypes.object
+  account: PropTypes.object,
+  onClose: PropTypes.func,
+  type: PropTypes.string
 };
