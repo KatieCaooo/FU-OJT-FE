@@ -28,18 +28,18 @@ const style = {
 };
 
 const MajorFormModal = (props) => {
-  const { account, type } = props;
+  const { major, type } = props;
   const [values, setValues] = useState({
     name: ''
   });
   useEffect(() => {
-    if (account.name) {
+    if (major.name) {
       setValues({
-        id: account.id,
-        name: account.name
+        id: major.id,
+        name: major.name
       });
     }
-  }, [account]);
+  }, [major]);
 
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -63,13 +63,28 @@ const MajorFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
-              subheader="The information can be edited"
+              subheader={type === 'UPDATE' ? 'The information can be edited' : 'Information of major to be created.'}
               title="Major Information"
             />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                <Grid item md={6} xs={6}>
+                {type === 'UPDATE'
+                && (
+                <Grid item md={3} xs={3}>
+                  <TextField
+                    disabled
+                    fullWidth
+                    label="Id"
+                    name="id"
+                    onChange={handleChange}
+                    required
+                    value={values.id}
+                    variant="outlined"
+                  />
+                </Grid>
+                )}
+                <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
                     fullWidth
                     label="Name"
@@ -91,7 +106,7 @@ const MajorFormModal = (props) => {
               }}
             >
               <Button color="primary" variant="contained" onClick={onSaveHandler}>
-                Save details
+                {type === 'UPDATE' ? 'Save details' : 'Create'}
               </Button>
             </Box>
           </Card>
@@ -104,7 +119,7 @@ const MajorFormModal = (props) => {
 export default MajorFormModal;
 
 MajorFormModal.propTypes = {
-  account: PropTypes.object,
+  major: PropTypes.object,
   onClose: PropTypes.func,
   type: PropTypes.string
 };

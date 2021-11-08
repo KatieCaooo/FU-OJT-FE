@@ -8,6 +8,11 @@ import {
   Card,
   Checkbox,
   Fab,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -22,45 +27,44 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
+import { addWeeks, addDays } from 'date-fns';
 import { fetchMajorsData, updateMajor } from 'src/store/major-actions';
+import { DateRangePicker, LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import getInitials from '../../utils/getInitials';
 import MajorFormModal from './MajorFormModal';
 
+import { majorActions } from '../../store/major-slice';
+
 const MajorListResult = ({ majors, totalElements, ...rest }) => {
+  const getWeeksAfter = (date, amount) => (date ? addWeeks(date, amount) : undefined);
+
   const token = useSelector((state) => state.account.token);
+  const {
+    limit, page, order, orderBy, sortedBy, search
+  } = useSelector((state) => state.majors.filter);
   const dispatch = useDispatch();
   const [selectedMajorIds, setSelectedMajorIds] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
-  const [sortedBy, setSortedBy] = useState('id asc');
-  const [search, setSearch] = useState('');
+  // const [limit, setLimit] = useState(10);
+  // const [page, setPage] = useState(0);
+  // const [order, setOrder] = useState('asc');
+  // const [orderBy, setOrderBy] = useState('id');
+  // const [sortedBy, setSortedBy] = useState('id asc');
+  // const [search, setSearch] = useState('');
 
-  const [account, setAccount] = useState({});
+  const [currentMajor, setCurrentMajor] = useState({});
 
   const [updateFormOpen, setUpdateFormOpen] = useState(false);
-  const [createFormOpen, setCreateFormOpen] = useState(false);
-  const handleUpdateFormOpen = (event, selectedAccount) => {
+  const handleUpdateFormOpen = (event, selectedMajor) => {
     setUpdateFormOpen(true);
-    setAccount(selectedAccount);
+    setCurrentMajor(selectedMajor);
   };
 
   const handleUpdateFormClose = (type, major) => {
     if (type === 'UPDATE') {
       dispatch(updateMajor(token, major, page, limit, sortedBy, search));
     }
-    if (type === 'CREATE') {
-      console.log('CREATE');
-    }
     setUpdateFormOpen(false);
-  };
-
-  const handleCreateFormClose = (isUpdated) => {
-    setCreateFormOpen(false);
-    if (isUpdated) {
-      dispatch(fetchMajorsData(token, page, limit, sortedBy, search));
-    }
   };
 
   const handleRequestSort = (event, property, sortField) => {
@@ -70,9 +74,9 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
     const isSetDefault = isSameProperty && !isOldAsc;
     const orderValue = isAsc ? 'desc' : 'asc';
     const orderByValue = !isSetDefault ? property : 'id';
-    setOrder(orderValue);
-    setOrderBy(orderByValue);
-    setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
+    dispatch(majorActions.setOrder(orderValue));
+    dispatch(majorActions.setOrderBy(orderByValue));
+    dispatch(majorActions.setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
     dispatch(
       fetchMajorsData(
         token,
@@ -90,23 +94,53 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
 
   const [values, setValues] = useState({
     name: '',
+    createdAt: [null, null],
+    updatedAt: [null, null],
+    disabled: ''
   });
 
-  const handleFilterChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+  const handleFilterChange = (event, dateValues, fieldName) => {
+    if (!event) {
+      setValues({
+        ...values,
+        [fieldName]: dateValues
+      });
+    } else {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value
+      });
+    }
   };
 
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
+    const createdAtStartFilter = `createdAt>=${values.createdAt[0] ? values.createdAt[0].toISOString() : ''}`;
+    const createdAtEndFilter = `createdAt<${values.createdAt[1] ? addDays(values.createdAt[1], 1).toISOString() : ''}`;
+    const updatedAtStartFilter = `updatedAt>=${values.updatedAt[0] ? values.updatedAt[0].toISOString() : ''}`;
+    const updatedAtEndFilter = `updatedAt<${values.updatedAt[1] ? addDays(values.updatedAt[1], 1).toISOString() : ''}`;
+    const statusFilter = `disabled==${values.disabled === 'Archived' ? 'True' : 'False'}`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
     }
-    setSearch(filter.join(';'));
-    setPage(0);
+    if (values.createdAt[0]) {
+      filter.push(createdAtStartFilter);
+    }
+    if (values.createdAt[1]) {
+      filter.push(createdAtEndFilter);
+    }
+    if (values.updatedAt[0]) {
+      filter.push(updatedAtStartFilter);
+    }
+    if (values.updatedAt[1]) {
+      filter.push(updatedAtEndFilter);
+    }
+    if (values.disabled !== '') {
+      filter.push(statusFilter);
+    }
+    dispatch(majorActions.setSearch(filter.join(';')));
+    dispatch(majorActions.setPage(0));
     dispatch(fetchMajorsData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
@@ -149,13 +183,13 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
   };
 
   const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-    setPage(0);
+    dispatch(majorActions.setLimit(event.target.value));
+    dispatch(majorActions.setPage(0));
     dispatch(fetchMajorsData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+    dispatch(majorActions.setPage(newPage));
     dispatch(fetchMajorsData(token, newPage, limit, sortedBy, search));
   };
 
@@ -167,14 +201,34 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
       sort: 'name',
       align: 'left'
     },
+    {
+      name: 'CreatedAt',
+      label: 'Created At',
+      search: 'createdAt',
+      sort: 'createdAt',
+      align: 'center'
+    },
+    {
+      name: 'UpdatedAt',
+      label: 'Updated At',
+      search: 'updatedAt',
+      sort: 'updatedAt',
+      align: 'center'
+    },
+    {
+      name: 'disabled',
+      label: 'Status',
+      search: 'disabled',
+      sort: 'disabled',
+      align: 'center'
+    },
   ];
 
   return (
     <Card {...rest}>
-      <MajorFormModal account={account} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
-      <MajorFormModal account={account} open={createFormOpen} onClose={handleCreateFormClose} type="CREATE" />
+      <MajorFormModal major={currentMajor} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
       <PerfectScrollbar>
-        <Box sx={{ maxWidth: 700 }}>
+        <Box sx={{ minWidth: 1050 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -216,7 +270,7 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell sx={{ width: 250 }}>
+                <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
                     label="Major Name"
@@ -226,6 +280,96 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
                     variant="outlined"
                     size="small"
                   />
+                </TableCell>
+                <TableCell>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DateRangePicker
+                      name="createdAt"
+                      value={values.createdAt}
+                      maxDate={getWeeksAfter(values.createdAt[0], 4)}
+                      inputFormat="dd-MM-yyyy"
+                      onChange={(newValue) => { handleFilterChange(null, newValue, 'createdAt'); }}
+                      renderInput={(startProps, endProps) => (
+                        <Grid
+                          container
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <TextField
+                            sx={{ maxWidth: 125 }}
+                            variant="outlined"
+                            size="small"
+                            {...startProps}
+                          />
+                          <Box sx={{ mx: 2 }}> to </Box>
+                          <TextField
+                            sx={{ maxWidth: 125 }}
+                            variant="outlined"
+                            size="small"
+                            {...endProps}
+                          />
+                        </Grid>
+                      )}
+                    />
+                  </LocalizationProvider>
+                </TableCell>
+                <TableCell>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DateRangePicker
+                      name="updatedAt"
+                      value={values.updatedAt}
+                      maxDate={getWeeksAfter(values.updatedAt[0], 4)}
+                      inputFormat="dd-MM-yyyy"
+                      onChange={(newValue) => { handleFilterChange(null, newValue, 'updatedAt'); }}
+                      renderInput={(startProps, endProps) => (
+                        <Grid
+                          container
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <TextField
+                            sx={{ maxWidth: 125 }}
+                            variant="outlined"
+                            size="small"
+                            {...startProps}
+                          />
+                          <Box sx={{ mx: 2 }}> to </Box>
+                          <TextField
+                            sx={{ maxWidth: 125 }}
+                            variant="outlined"
+                            size="small"
+                            {...endProps}
+                          />
+                        </Grid>
+                      )}
+                    />
+                  </LocalizationProvider>
+                </TableCell>
+                <TableCell sx={{ maxWidth: 200 }} align="center">
+                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                    <InputLabel id="disabled-label" size="small">
+                      Status
+                    </InputLabel>
+                    <Select
+                      labelId="disabled-label"
+                      id="disabled-dropdown"
+                      value={values.disabled}
+                      onChange={handleFilterChange}
+                      label="Status"
+                      name="disabled"
+                      size="small"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value="Archived">
+                        Archived
+                      </MenuItem>
+                      <MenuItem value="Active">
+                        Active
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 </TableCell>
                 <TableCell colSpan={2} align="center">
                   <Button
@@ -252,7 +396,7 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
                       value="true"
                     />
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 150 }}>
+                  <TableCell sx={{ maxWidth: 405 }}>
                     <Box
                       sx={{
                         alignItems: 'center',
@@ -266,6 +410,21 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
                         {major.name}
                       </Typography>
                     </Box>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {major.createdAt}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {major.updatedAt}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color={major.disabled ? 'error.main' : 'success.main'} variant="button">
+                      {major.disabled ? 'Archived' : 'Active'}
+                    </Typography>
                   </TableCell>
                   <TableCell align="right">
                     <Fab
