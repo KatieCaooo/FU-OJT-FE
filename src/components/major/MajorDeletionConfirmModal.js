@@ -50,8 +50,8 @@ const MajorDeletionConfirmModal = (props) => {
     >
       <Card sx={style}>
         <CardHeader
-          sx={{ backgroundColor: 'error.light', color: 'white' }}
-          title="Archive confirmation"
+          sx={{ backgroundColor: operation === 'DELETE' ? 'error.light' : 'success.main', color: 'white' }}
+          title={operation === 'DELETE' ? 'Archive confirmation' : 'Recovery confirmation'}
         />
         <Divider />
         <CardContent>
@@ -63,13 +63,13 @@ const MajorDeletionConfirmModal = (props) => {
           >
             <Grid item sx={2}>
               <Fab
-                color="error"
+                color={operation === 'DELETE' ? 'error' : 'success'}
                 sx={{
                   color: 'white',
-                  backgroundColor: 'error.main',
+                  backgroundColor: operation === 'DELETE' ? 'error.main' : 'success.main',
                   '&:hover': {
                     cursor: 'default',
-                    backgroundColor: 'error.main'
+                    backgroundColor: operation === 'DELETE' ? 'error.main' : 'success.main'
                   }
                 }}
                 arial-label="remove"
@@ -80,7 +80,8 @@ const MajorDeletionConfirmModal = (props) => {
             </Grid>
             <Grid item sx={10}>
               <Typography>
-                Are you sure you want to archive this major?
+                {operation === 'DELETE' && 'Are you sure you want to archive this major?'}
+                {operation === 'RECOVER' && 'Are you sure you want to recover this major?'}
               </Typography>
             </Grid>
           </Grid>
@@ -104,7 +105,7 @@ const MajorDeletionConfirmModal = (props) => {
               </Button>
             </Grid>
             <Grid item>
-              <Button color="error" variant="contained" onClick={(e) => onSaveHandler(e, operation)}>
+              <Button color={operation === 'DELETE' ? 'error' : 'success'} variant="contained" onClick={(e) => onSaveHandler(e, operation)}>
                 Confirm
               </Button>
             </Grid>
