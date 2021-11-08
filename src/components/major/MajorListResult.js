@@ -26,15 +26,19 @@ import {
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import RestorePageIcon from '@mui/icons-material/RestorePage';
 import { useDispatch, useSelector } from 'react-redux';
 import { addWeeks, addDays } from 'date-fns';
-import { fetchMajorsData, updateMajor } from 'src/store/major-actions';
+import {
+  deleteMajor, fetchMajorsData, recoverMajor, updateMajor
+} from 'src/store/major-actions';
 import { DateRangePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import getInitials from '../../utils/getInitials';
 import MajorFormModal from './MajorFormModal';
 
 import { majorActions } from '../../store/major-slice';
+import MajorDeletionConfirmModal from './MajorDeletionConfirmModal';
 
 const MajorListResult = ({ majors, totalElements, ...rest }) => {
   const getWeeksAfter = (date, amount) => (date ? addWeeks(date, amount) : undefined);
@@ -65,6 +69,32 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
       dispatch(updateMajor(token, major, page, limit, sortedBy, search));
     }
     setUpdateFormOpen(false);
+  };
+
+  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
+  const handleDeleteFormOpen = (event, selectedMajor) => {
+    setDeleteFormOpen(true);
+    setCurrentMajor(selectedMajor);
+  };
+
+  const handleDeleteFormClose = (type, major) => {
+    if (type === 'DELETE') {
+      dispatch(deleteMajor(token, major, page, limit, sortedBy, search));
+    }
+    setDeleteFormOpen(false);
+  };
+
+  const [recoverFormOpen, setRecoverFormOpen] = useState(false);
+  const handleRecoverFormOpen = (event, selectedMajor) => {
+    setRecoverFormOpen(true);
+    setCurrentMajor(selectedMajor);
+  };
+
+  const handleRecoverFormClose = (type, major) => {
+    if (type === 'RECOVER') {
+      dispatch(recoverMajor(token, major, page, limit, sortedBy, search));
+    }
+    setRecoverFormOpen(false);
   };
 
   const handleRequestSort = (event, property, sortField) => {
@@ -227,6 +257,8 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
   return (
     <Card {...rest}>
       <MajorFormModal major={currentMajor} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
+      <MajorDeletionConfirmModal major={currentMajor} open={deleteFormOpen} onClose={handleDeleteFormClose} operation="DELETE" />
+      <MajorDeletionConfirmModal major={currentMajor} open={recoverFormOpen} onClose={handleRecoverFormClose} operation="RECOVER" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -437,6 +469,7 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
                     </Fab>
                   </TableCell>
                   <TableCell align="left">
+                    {!major.disabled && (
                     <Fab
                       color="error"
                       sx={{
@@ -449,9 +482,29 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
                       }}
                       arial-label="remove"
                       size="small"
+                      onClick={(e) => handleDeleteFormOpen(e, major)}
                     >
                       <DeleteForeverIcon />
                     </Fab>
+                    )}
+                    {major.disabled && (
+                    <Fab
+                      color="success"
+                      sx={{
+                        color: 'white',
+                        backgroundColor: 'success.main',
+                        '&:hover': {
+                          cursor: 'pointer',
+                          backgroundColor: 'success.dark'
+                        }
+                      }}
+                      arial-label="remove"
+                      size="small"
+                      onClick={(e) => handleRecoverFormOpen(e, major)}
+                    >
+                      <RestorePageIcon />
+                    </Fab>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
