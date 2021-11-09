@@ -23,7 +23,7 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { addWeeks, addDays } from 'date-fns';
+import { format, addWeeks, addDays } from 'date-fns';
 import {
   fetchSemestersData, deleteSemester, updateSemester, recoverSemester
 } from 'src/store/semester-actions';
@@ -400,12 +400,12 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
                     <Typography color="textPrimary">
-                      {semester.startDate}
+                      {format(semester.startDate, 'dd-MM-yyyy HH:mm:ss.SSS')}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
                     <Typography color="textPrimary">
-                      {semester.endDate}
+                      {format(semester.endDate, 'dd-MM-yyyy HH:mm:ss.SSS')}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

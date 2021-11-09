@@ -25,7 +25,7 @@ export const fetchSemestersData = (token, pageNo, pageSize, sortBy, search) => a
     const response = await fetchData();
     let semesters = response.data;
     semesters = semesters.map((semester) => ({
-      id: semester.id, name: semester.name, startDate: format(new Date(semester.startDate), 'dd-MM-yyyy HH:mm:ss.SSS'), endDate: format(new Date(semester.endDate), 'dd-MM-yyyy HH:mm:ss.SSS')
+      id: semester.id, name: semester.name, startDate: new Date(semester.startDate), endDate: new Date(semester.endDate)
     }));
     dispatch(
       semesterActions.replaceSemesterList({
@@ -41,14 +41,15 @@ export const fetchSemestersData = (token, pageNo, pageSize, sortBy, search) => a
 export const updateSemester = (token, semester, pageNo, pageSize, sortBy, search) => async (dispatch) => {
   const url = `${BASE_URL}/semesters/${semester.id}`;
   const postData = async () => {
+    console.log(semester.startDate);
+    console.log(semester.endDate);
     const response = await axios.put(
       url,
-      { name: semester.name, startDate: semester.startDate, endDate: semester.endDate },
+      { name: semester.name, startDate: semester.startDate.toISOString(), endDate: semester.endDate.toISOString() },
       {
         headers: getRequiredAuthenHeader(token)
       }
     );
-
     if (response.status !== 200) {
       throw new Error('Could not update Semester');
     }
@@ -80,7 +81,7 @@ export const updateSemester = (token, semester, pageNo, pageSize, sortBy, search
       const response = await fetchData();
       let semesters = response.data;
       semesters = semesters.map((singleSemester) => ({
-        id: singleSemester.id, name: singleSemester.name, startDate: format(new Date(singleSemester.startDate), 'dd-MM-yyyy HH:mm:ss.SSS'), endDate: format(new Date(singleSemester.endDate), 'dd-MM-yyyy HH:mm:ss.SSS')
+        id: singleSemester.id, name: singleSemester.name, startDate: new Date(singleSemester.startDate), endDate: new Date(singleSemester.endDate)
       }));
       dispatch(
         semesterActions.replaceSemesterList({

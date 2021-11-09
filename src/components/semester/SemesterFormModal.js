@@ -7,7 +7,7 @@ import {
   TextField,
   Card,
   CardHeader,
-  CardContent
+  CardContent,
   //   FormControl,
   //   InputLabel,
   //   Select,
@@ -31,12 +31,16 @@ const SemesterFormModal = (props) => {
   const { semester, type } = props;
   const [values, setValues] = useState({
     name: '',
+    startDate: '',
+    endDate: ''
   });
   useEffect(() => {
     if (semester.name) {
       setValues({
         id: semester.id,
         name: semester.name,
+        startDate: semester.startDate,
+        endDate: semester.endDate,
       });
     }
   }, [semester]);
