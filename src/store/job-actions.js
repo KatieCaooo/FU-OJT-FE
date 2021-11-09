@@ -23,7 +23,7 @@ export const fetchJobsData = (token, pageNo, pageSize, sortBy, search) => async 
     const response = await fetchData();
     const jobs = response.data;
     dispatch(
-      jobActions.replaceStudentList({
+      jobActions.replaceJobList({
         jobs: jobs || [],
         totalQuantity: response.totalElements
       })

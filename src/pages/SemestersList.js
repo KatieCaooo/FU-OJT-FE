@@ -28,8 +28,8 @@ const SemesterList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <SemesterListToolbar />
           <Box sx={{ pt: 3 }}>
+            <SemesterListToolbar />
             <SemesterListResult
               semesters={semesterData.semesters}
               totalElements={semesterData.totalQuantity}

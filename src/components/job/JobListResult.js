@@ -29,7 +29,7 @@ import JobFormModal from './JobFormModal';
 const JobListResult = ({ jobs, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
-  const [selectedStudentIds, setSelectedStudentIds] = useState([]);
+  const [selectedJobIds, setSelectedJobIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -123,33 +123,33 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
       newSelectedStudentIds = [];
     }
 
-    setSelectedStudentIds(newSelectedStudentIds);
+    setSelectedJobIds(newSelectedStudentIds);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedStudentIds.indexOf(id);
-    let newSelectedStudentIds = [];
+    const selectedIndex = selectedJobIds.indexOf(id);
+    let newSelectedJobIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedStudentIds = newSelectedStudentIds.concat(
-        selectedStudentIds,
+      newSelectedJobIds = newSelectedJobIds.concat(
+        selectedJobIds,
         id
       );
     } else if (selectedIndex === 0) {
-      newSelectedStudentIds = newSelectedStudentIds.concat(
-        selectedStudentIds.slice(1)
+      newSelectedJobIds = newSelectedJobIds.concat(
+        selectedJobIds.slice(1)
       );
-    } else if (selectedIndex === selectedStudentIds.length - 1) {
-      newSelectedStudentIds = newSelectedStudentIds.concat(
-        selectedStudentIds.slice(0, -1)
+    } else if (selectedIndex === selectedJobIds.length - 1) {
+      newSelectedJobIds = newSelectedJobIds.concat(
+        selectedJobIds.slice(0, -1)
       );
     } else if (selectedIndex > 0) {
-      newSelectedStudentIds = newSelectedStudentIds.concat(
-        selectedStudentIds.slice(0, selectedIndex),
-        selectedStudentIds.slice(selectedIndex + 1)
+      newSelectedJobIds = newSelectedJobIds.concat(
+        selectedJobIds.slice(0, selectedIndex),
+        selectedJobIds.slice(selectedIndex + 1)
       );
     }
-    setSelectedStudentIds(newSelectedStudentIds);
+    setSelectedJobIds(newSelectedJobIds);
   };
 
   const handleLimitChange = (event) => {
@@ -195,8 +195,8 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     {
       name: 'Benefits',
       label: 'Benefits',
-      search: 'benefit',
-      sort: 'benefit',
+      search: 'benefits',
+      sort: 'benefits',
       align: 'center'
     },
   ];
@@ -238,11 +238,11 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedStudentIds.length === jobs.length}
+                    checked={setSelectedJobIds.length === jobs.length}
                     color="primary"
                     indeterminate={
-                      selectedStudentIds.length > 0
-                      && selectedStudentIds.length < jobs.length
+                      setSelectedJobIds.length > 0
+                      && setSelectedJobIds.length < jobs.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -318,11 +318,11 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                 <TableRow
                   hover
                   key={job.id}
-                  selected={selectedStudentIds.indexOf(job.id) !== -1}
+                  selected={selectedJobIds.indexOf(job.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedStudentIds.indexOf(job.id) !== -1}
+                      checked={selectedJobIds.indexOf(job.id) !== -1}
                       onChange={(event) => handleSelectOne(event, job.id)}
                       value="true"
                     />

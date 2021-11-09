@@ -28,22 +28,18 @@ const style = {
 };
 
 const SemesterFormModal = (props) => {
-  const { account } = props;
-  console.log(account);
+  const { semester, type } = props;
   const [values, setValues] = useState({
     name: '',
-    startDate: '',
-    endDate: '',
   });
   useEffect(() => {
-    if (account.name) {
+    if (semester.name) {
       setValues({
-        name: account.name,
-        startDate: account.startDate,
-        endDate: account.endDate,
+        id: semester.id,
+        name: semester.name,
       });
     }
-  }, [account]);
+  }, [semester]);
 
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -52,6 +48,11 @@ const SemesterFormModal = (props) => {
       [event.target.name]: event.target.value
     });
   };
+
+  const onSaveHandler = () => {
+    props.onClose(type, values);
+  };
+
   return (
     <Modal
       {...props}
@@ -62,42 +63,35 @@ const SemesterFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
-              subheader="The information can be edited"
+              subheader={type === 'UPDATE' ? 'The information can be edited' : 'Information of Semester to be Created'}
               title="Semester Information"
             />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                <Grid item md={6} xs={6}>
+                {type === 'UPDATE'
+                && (
+                <Grid item md={3} xs={3}>
+                  <TextField
+                    disabled
+                    fullWidth
+                    label="Id"
+                    name="id"
+                    onChange={handleChange}
+                    required
+                    value={values.id}
+                    variant="outlined"
+                  />
+                </Grid>
+                )}
+                <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
                     fullWidth
-                    label="Semester Name"
+                    label="Name"
                     name="name"
                     onChange={handleChange}
                     required
                     value={values.name}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Start Date"
-                    name="startDate"
-                    onChange={handleChange}
-                    required
-                    value={values.startDate}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="End Date"
-                    name="endDate"
-                    onChange={handleChange}
-                    required
-                    value={values.endDate}
                     variant="outlined"
                   />
                 </Grid>
@@ -111,8 +105,8 @@ const SemesterFormModal = (props) => {
                 p: 2
               }}
             >
-              <Button color="primary" variant="contained">
-                Save details
+              <Button color="primary" variant="contained" onClick={onSaveHandler}>
+                {type === 'UPDATE' ? 'Save details' : 'Create'}
               </Button>
             </Box>
           </Card>
@@ -125,5 +119,7 @@ const SemesterFormModal = (props) => {
 export default SemesterFormModal;
 
 SemesterFormModal.propTypes = {
-  account: PropTypes.object
+  semester: PropTypes.object,
+  onClose: PropTypes.func,
+  type: PropTypes.string
 };

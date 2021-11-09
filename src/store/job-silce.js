@@ -4,14 +4,6 @@ import { createSlice } from '@reduxjs/toolkit';
 const jobSlice = createSlice({
   name: 'jobs',
   initialState: {
-    filter: {
-      limit: 10,
-      page: 0,
-      order: 'asc',
-      orderBy: 'id',
-      sortedBy: 'id asc',
-      search: ''
-    },
     jobs: [],
     totalQuantity: 0,
     changed: false
