@@ -18,6 +18,7 @@ import {
   Briefcase as BriefcaseIcon,
   FileText as FileIcon,
   Calendar as CalendarIcon,
+  Clipboard as ClipboardIcon,
   List as ListIcon,
   User as UserIcon,
   Users as UsersIcon
@@ -71,6 +72,12 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       href: '/app/semesters',
       icon: CalendarIcon,
       title: 'Semesters',
+      roles: ['SYS_ADMIN']
+    },
+    {
+      href: '/app/evaluations',
+      icon: ClipboardIcon,
+      title: 'Evaluations Test',
       roles: ['SYS_ADMIN']
     },
     {
