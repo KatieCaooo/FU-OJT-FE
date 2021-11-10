@@ -95,7 +95,7 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   };
 
   const onFilterHandler = () => {
-    const gradeFilter = `grade=='*${values.grade}*'`;
+    const gradeFilter = `grade==${values.grade}`;
     const commentFilter = `description=='*${values.comment}*'`;
     const statusFilter = `isPass==${values.isPass === 'Passed' ? 'True' : 'False'}`;
     const filter = [];

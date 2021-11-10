@@ -9,7 +9,7 @@ import {
   TextField,
   Card,
   CardHeader,
-  CardContent
+  CardContent, InputLabel, Select, MenuItem, FormControl
   //   FormControl,
   //   InputLabel,
   //   Select,
@@ -32,13 +32,17 @@ const style = {
 const EvaluationFormModal = (props) => {
   const { evaluation, type } = props;
   const [values, setValues] = useState({
-    name: '',
+    grade: '',
+    comment: '',
+    isPass: '',
   });
   useEffect(() => {
     if (evaluation.name) {
       setValues({
         id: evaluation.id,
-        name: evaluation.name,
+        grade: evaluation.grade,
+        comment: evaluation.comment,
+        isPass: evaluation.isPass
       });
     }
   }, [evaluation]);
@@ -89,7 +93,7 @@ const EvaluationFormModal = (props) => {
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
                     fullWidth
-                    label="Name"
+                    label="Grade"
                     name="name"
                     onChange={handleChange}
                     required
@@ -100,7 +104,7 @@ const EvaluationFormModal = (props) => {
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
                     fullWidth
-                    label="Name"
+                    label="Comment"
                     name="name"
                     onChange={handleChange}
                     required
@@ -109,15 +113,27 @@ const EvaluationFormModal = (props) => {
                   />
                 </Grid>
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
-                  <TextField
-                    fullWidth
-                    label="Name"
-                    name="name"
-                    onChange={handleChange}
-                    required
-                    value={values.isPass}
-                    variant="outlined"
-                  />
+                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                    <InputLabel id="disabled-label" size="small">
+                      Status
+                    </InputLabel>
+                    <Select
+                      labelId="isPass-label"
+                      id="isPass-dropdown"
+                      value={values.isPass}
+                      onChange={handleChange}
+                      label="Status"
+                      name="isPass"
+                      size="small"
+                    >
+                      <MenuItem value="Passed">
+                        Passed
+                      </MenuItem>
+                      <MenuItem value="Not Passed">
+                        Not Passed
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
             </CardContent>

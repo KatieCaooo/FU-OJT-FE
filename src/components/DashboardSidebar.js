@@ -78,7 +78,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       href: '/app/evaluations',
       icon: ClipboardIcon,
       title: 'Evaluations Test',
-      roles: ['SYS_ADMIN']
+      roles: ['STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
       href: '/app/account',
