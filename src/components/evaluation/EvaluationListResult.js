@@ -1,5 +1,3 @@
-// noinspection DuplicatedCode
-
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -95,11 +93,11 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   };
 
   const onFilterHandler = () => {
-    const gradeFilter = `grade==${values.grade}`;
+    const gradeFilter = `grade==${values.grade ? values.grade : ''}`;
     const commentFilter = `comment=='*${values.comment}*'`;
     const statusFilter = `isPass==${values.isPass === 'Passed' ? 'True' : 'False'}`;
     const filter = [];
-    if (values.name !== '') {
+    if (values.grade !== '') {
       filter.push(gradeFilter);
     }
     if (values.comment !== '') {

@@ -1,5 +1,3 @@
-// noinspection DuplicatedCode
-
 const { BASE_URL, getRequiredAuthenHeader } = require('src/api/config');
 const axios = require('axios');
 const { evaluationActions } = require('./evaluation-slice');

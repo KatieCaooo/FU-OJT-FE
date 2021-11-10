@@ -1,5 +1,3 @@
-// noinspection DuplicatedCode
-
 import {
   Modal,
   Box,
