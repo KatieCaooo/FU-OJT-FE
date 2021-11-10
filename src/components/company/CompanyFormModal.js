@@ -7,11 +7,11 @@ import {
   TextField,
   Card,
   CardHeader,
-  CardContent,
-//   FormControl,
-//   InputLabel,
-//   Select,
-//   MenuItem
+  CardContent
+  //   FormControl,
+  //   InputLabel,
+  //   Select,
+  //   MenuItem
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -28,25 +28,22 @@ const style = {
 };
 
 const CompanyFormModal = (props) => {
-  const { account } = props;
-  console.log(account);
+  const { company, type } = props;
   const [values, setValues] = useState({
-    companyName: '',
+    name: '',
     description: '',
-    email: '',
-    address: '',
-    phone: ''
-    // major: ''
+    address: ''
   });
   useEffect(() => {
-    if (account.name) {
+    if (company.name) {
       setValues({
-        name: account.name,
-        description: account.description,
-        // address: account.student.address,
+        id: company.id,
+        name: company.name,
+        description: company.description,
+        address: company.address
       });
     }
-  }, [account]);
+  }, [company]);
 
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -54,6 +51,10 @@ const CompanyFormModal = (props) => {
       ...values,
       [event.target.name]: event.target.value
     });
+  };
+
+  const onSaveHandler = () => {
+    props.onClose(type, values);
   };
   return (
     <Modal
@@ -65,16 +66,38 @@ const CompanyFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
-              subheader="The information can be edited"
-              title="Company Profile"
+              subheader={
+                type === 'UPDATE'
+                  ? 'The information can be edited'
+                  : 'Information of company to be created.'
+              }
+              title="Company Information"
             />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                <Grid item md={6} xs={6}>
+                {type === 'UPDATE' && (
+                  <Grid item md={3} xs={3}>
+                    <TextField
+                      disabled
+                      fullWidth
+                      label="Id"
+                      name="id"
+                      onChange={handleChange}
+                      required
+                      value={values.id}
+                      variant="outlined"
+                    />
+                  </Grid>
+                )}
+                <Grid
+                  item
+                  md={type === 'UPDATE' ? 9 : 12}
+                  xs={type === 'UPDATE' ? 9 : 12}
+                >
                   <TextField
                     fullWidth
-                    label="Company Name"
+                    label="Name"
                     name="name"
                     onChange={handleChange}
                     required
@@ -86,7 +109,7 @@ const CompanyFormModal = (props) => {
                   <TextField
                     fullWidth
                     label="Description"
-                    name="email"
+                    name="description"
                     onChange={handleChange}
                     required
                     value={values.description}
@@ -100,7 +123,7 @@ const CompanyFormModal = (props) => {
                     name="address"
                     onChange={handleChange}
                     required
-                    value={values.description}
+                    value={values.address}
                     variant="outlined"
                   />
                 </Grid>
@@ -114,8 +137,12 @@ const CompanyFormModal = (props) => {
                 p: 2
               }}
             >
-              <Button color="primary" variant="contained">
-                Save details
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={onSaveHandler}
+              >
+                {type === 'UPDATE' ? 'Save details' : 'Create'}
               </Button>
             </Box>
           </Card>
@@ -128,5 +155,7 @@ const CompanyFormModal = (props) => {
 export default CompanyFormModal;
 
 CompanyFormModal.propTypes = {
-  account: PropTypes.object
+  company: PropTypes.object,
+  onClose: PropTypes.func,
+  type: PropTypes.string
 };

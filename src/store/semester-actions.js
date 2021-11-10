@@ -41,8 +41,6 @@ export const fetchSemestersData = (token, pageNo, pageSize, sortBy, search) => a
 export const updateSemester = (token, semester, pageNo, pageSize, sortBy, search) => async (dispatch) => {
   const url = `${BASE_URL}/semesters/${semester.id}`;
   const postData = async () => {
-    console.log(semester.startDate);
-    console.log(semester.endDate);
     const response = await axios.put(
       url,
       { name: semester.name, startDate: semester.startDate.toISOString(), endDate: semester.endDate.toISOString() },
