@@ -94,7 +94,7 @@ const EvaluationFormModal = (props) => {
                   <TextField
                     fullWidth
                     label="Grade"
-                    name="name"
+                    name="grade"
                     onChange={handleChange}
                     required
                     value={values.grade}
@@ -105,7 +105,7 @@ const EvaluationFormModal = (props) => {
                   <TextField
                     fullWidth
                     label="Comment"
-                    name="name"
+                    name="comment"
                     onChange={handleChange}
                     required
                     value={values.comment}
