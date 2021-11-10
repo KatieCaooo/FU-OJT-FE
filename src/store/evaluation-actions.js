@@ -26,7 +26,7 @@ export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => 
     const response = await fetchData();
     let evaluations = response.data;
     evaluations = evaluations.map((evaluation) => ({
-      id: evaluation.id, comment: evaluation.comment, grade: evaluation.grade, isPass: evaluation.isPass
+      id: evaluation.id, comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass
     }));
     dispatch(
       evaluationActions.replaceEvaluationList({
@@ -44,7 +44,7 @@ export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
   const postData = async () => {
     const response = await axios.put(
       url,
-      { comment: evaluation.comment, grade: evaluation.grade, isPass: evaluation.isPass },
+      { comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass === 'Passed' },
       {
         headers: getRequiredAuthenHeader(token)
       }
@@ -81,7 +81,7 @@ export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
       const response = await fetchData();
       let evaluations = response.data;
       evaluations = evaluations.map((singleEvaluation) => ({
-        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, isPass: singleEvaluation.isPass
+        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, pass: singleEvaluation.pass
       }));
       dispatch(
         evaluationActions.replaceEvaluationList({
@@ -100,7 +100,7 @@ export const createEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
   const postData = async () => {
     const response = await axios.post(
       url,
-      { comment: evaluation.comment, grade: evaluation.grade, isPass: evaluation.isPass },
+      { comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass === 'Passed' },
       {
         headers: getRequiredAuthenHeader(token)
       }
@@ -137,7 +137,7 @@ export const createEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
       const response = await fetchData();
       let evaluations = response.data;
       evaluations = evaluations.map((singleEvaluation) => ({
-        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, isPass: singleEvaluation.isPass
+        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, pass: singleEvaluation.pass
       }));
       dispatch(
         evaluationActions.replaceEvaluationList({

@@ -82,7 +82,7 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   const [values, setValues] = useState({
     grade: '',
     comment: '',
-    passed: ''
+    pass: ''
   });
 
   const handleFilterChange = (event) => {
@@ -95,7 +95,7 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   const onFilterHandler = () => {
     const gradeFilter = `grade==${values.grade ? values.grade : ''}`;
     const commentFilter = `comment=='*${values.comment}*'`;
-    const statusFilter = `isPass==${values.isPass === 'Passed' ? 'True' : 'False'}`;
+    const statusFilter = `pass==${values.pass === 'Passed' ? 'True' : 'False'}`;
     const filter = [];
     if (values.grade !== '') {
       filter.push(gradeFilter);
@@ -103,7 +103,7 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
     if (values.comment !== '') {
       filter.push(commentFilter);
     }
-    if (values.isPass !== '') {
+    if (values.pass !== '') {
       filter.push(statusFilter);
     }
     dispatch(evaluationActions.setSearch(filter.join(';')));
@@ -176,10 +176,10 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
       align: 'left'
     },
     {
-      name: 'isPass',
+      name: 'pass',
       label: 'Passed',
-      search: 'isPass',
-      sort: 'isPass',
+      search: 'pass',
+      sort: 'pass',
       align: 'center'
     }
   ];
@@ -263,12 +263,12 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                       Status
                     </InputLabel>
                     <Select
-                      labelId="isPass-label"
-                      id="isPass-dropdown"
-                      value={values.isPass}
+                      labelId="pass-label"
+                      id="pass-dropdown"
+                      value={values.pass}
                       onChange={handleFilterChange}
                       label="Status"
-                      name="isPass"
+                      name="pass"
                       size="small"
                     >
                       <MenuItem value="">
@@ -327,8 +327,8 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                     {evaluation.comment}
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={evaluation.isPass ? 'error.main' : 'success.main'} variant="button">
-                      {evaluation.isPass ? 'Not Passed' : 'Passed'}
+                    <Typography color={evaluation.pass ? 'error.main' : 'success.main'} variant="button">
+                      {evaluation.pass ? 'Not Passed' : 'Passed'}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

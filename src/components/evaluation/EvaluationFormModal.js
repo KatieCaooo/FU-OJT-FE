@@ -32,7 +32,7 @@ const EvaluationFormModal = (props) => {
   const [values, setValues] = useState({
     grade: '',
     comment: '',
-    isPass: '',
+    pass: '',
   });
   useEffect(() => {
     if (evaluation.name) {
@@ -40,7 +40,7 @@ const EvaluationFormModal = (props) => {
         id: evaluation.id,
         grade: evaluation.grade,
         comment: evaluation.comment,
-        isPass: evaluation.isPass
+        pass: evaluation.pass
       });
     }
   }, [evaluation]);
@@ -116,12 +116,12 @@ const EvaluationFormModal = (props) => {
                       Status
                     </InputLabel>
                     <Select
-                      labelId="isPass-label"
-                      id="isPass-dropdown"
-                      value={values.isPass}
+                      labelId="pass-label"
+                      id="pass-dropdown"
+                      value={values.pass}
                       onChange={handleChange}
                       label="Status"
-                      name="isPass"
+                      name="pass"
                       size="small"
                     >
                       <MenuItem value="Passed">
