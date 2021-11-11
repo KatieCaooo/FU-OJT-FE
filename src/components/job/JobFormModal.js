@@ -28,25 +28,26 @@ const style = {
 };
 
 const CompanyFormModal = (props) => {
-  const { account } = props;
-  console.log(account);
+  const { job, type } = props;
   const [values, setValues] = useState({
-    companyName: '',
+    name: '',
+    title: '',
     description: '',
-    email: '',
-    address: '',
-    phone: ''
-    // major: ''
+    skills: '',
+    benefits: ''
   });
   useEffect(() => {
-    if (account.name) {
+    if (job.name) {
       setValues({
-        name: account.name,
-        description: account.description
-        // address: account.student.address,
+        id: job.id,
+        name: job.name,
+        title: job.title,
+        description: job.description,
+        skills: job.skills,
+        benefits: job.benefits,
       });
     }
-  }, [account]);
+  }, [job]);
 
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -54,6 +55,9 @@ const CompanyFormModal = (props) => {
       ...values,
       [event.target.name]: event.target.value
     });
+  };
+  const onSaveHandler = () => {
+    props.onClose(type, values);
   };
   return (
     <Modal
@@ -65,16 +69,38 @@ const CompanyFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
-              subheader="The information can be edited"
-              title="Company Profile"
+              subheader={
+                type === 'UPDATE'
+                  ? 'The information can be edited'
+                  : 'Information of job to be created.'
+              }
+              title="Job Information"
             />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                <Grid item md={6} xs={6}>
+                {type === 'UPDATE' && (
+                  <Grid item md={3} xs={3}>
+                    <TextField
+                      disabled
+                      fullWidth
+                      label="Id"
+                      name="id"
+                      onChange={handleChange}
+                      required
+                      value={values.id}
+                      variant="outlined"
+                    />
+                  </Grid>
+                )}
+                <Grid
+                  item
+                  md={type === 'UPDATE' ? 9 : 12}
+                  xs={type === 'UPDATE' ? 9 : 12}
+                >
                   <TextField
                     fullWidth
-                    label="Company Name"
+                    label="Job Name"
                     name="name"
                     onChange={handleChange}
                     required
@@ -85,8 +111,19 @@ const CompanyFormModal = (props) => {
                 <Grid item md={12} xs={12}>
                   <TextField
                     fullWidth
+                    label="Title"
+                    name="title"
+                    onChange={handleChange}
+                    required
+                    value={values.title}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
                     label="Description"
-                    name="email"
+                    name="description"
                     onChange={handleChange}
                     required
                     value={values.description}
@@ -96,11 +133,22 @@ const CompanyFormModal = (props) => {
                 <Grid item md={12} xs={12}>
                   <TextField
                     fullWidth
-                    label="Address"
-                    name="address"
+                    label="Skills"
+                    name="skills"
                     onChange={handleChange}
                     required
-                    value={values.description}
+                    value={values.skills}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Benefits"
+                    name="benefits"
+                    onChange={handleChange}
+                    required
+                    value={values.benefits}
                     variant="outlined"
                   />
                 </Grid>
@@ -114,8 +162,12 @@ const CompanyFormModal = (props) => {
                 p: 2
               }}
             >
-              <Button color="primary" variant="contained">
-                Save details
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={onSaveHandler}
+              >
+                {type === 'UPDATE' ? 'Save details' : 'Create'}
               </Button>
             </Box>
           </Card>
@@ -128,5 +180,7 @@ const CompanyFormModal = (props) => {
 export default CompanyFormModal;
 
 CompanyFormModal.propTypes = {
-  account: PropTypes.object
+  job: PropTypes.object,
+  onClose: PropTypes.func,
+  type: PropTypes.string
 };

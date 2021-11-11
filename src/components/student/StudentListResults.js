@@ -343,6 +343,9 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       <MenuItem value="Business Administration">
                         Business Administration
                       </MenuItem>
+                      <MenuItem value="Digital Art Design">
+                        Digital Art Design
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>

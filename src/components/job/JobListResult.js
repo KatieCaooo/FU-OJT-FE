@@ -22,31 +22,31 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobsData } from 'src/store/job-actions';
+import { fetchJobsData, updateJob } from 'src/store/job-actions';
+import { jobActions } from '../../store/job-silce';
 import getInitials from '../../utils/getInitials';
 import JobFormModal from './JobFormModal';
 
 const JobListResult = ({ jobs, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
+  const {
+    limit, page, order, orderBy, sortedBy, search
+  } = useSelector((state) => state.jobs.filter);
   const dispatch = useDispatch();
   const [selectedJobIds, setSelectedJobIds] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
-  const [sortedBy, setSortedBy] = useState('id asc');
-  const [search, setSearch] = useState('');
-
-  const [account, setAccount] = useState({});
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = (event, selectedAccount) => {
-    setOpen(true);
-    setAccount(selectedAccount);
+  const [currentJob, setCurrentJob] = useState({});
+  const [updateFormOpen, setUpdateFormOpen] = useState(false);
+  const handleUpdateFormOpen = (event, selectedJob) => {
+    setUpdateFormOpen(true);
+    setCurrentJob(selectedJob);
   };
 
-  const handleClose = () => setOpen(false);
-
+  const handleUpdateFormClose = (type, job) => {
+    if (type === 'UPDATE') {
+      dispatch(updateJob(token, job, page, limit, sortedBy, search));
+    }
+    setUpdateFormOpen(false);
+  };
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
     const isOldAsc = order === 'asc';
@@ -54,9 +54,9 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     const isSetDefault = isSameProperty && !isOldAsc;
     const orderValue = isAsc ? 'desc' : 'asc';
     const orderByValue = !isSetDefault ? property : 'id';
-    setOrder(orderValue);
-    setOrderBy(orderByValue);
-    setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
+    dispatch(jobActions.setOrder(orderValue));
+    dispatch(jobActions.setOrderBy(orderByValue));
+    dispatch(jobActions.setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
     dispatch(
       fetchJobsData(
         token,
@@ -80,11 +80,18 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     benefits: '',
   });
 
-  const handleFilterChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+  const handleFilterChange = (event, dateValues, fieldName) => {
+    if (!event) {
+      setValues({
+        ...values,
+        [fieldName]: dateValues
+      });
+    } else {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value
+      });
+    }
   };
 
   const onFilterHandler = () => {
@@ -92,7 +99,7 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     const titleFilter = `title=='*${values.title}*'`;
     const descriptionFilter = `description=='*${values.description}*'`;
     const skillFilter = `skills=='*${values.skills}*'`;
-    const benefitFilter = `phone=='*${values.benefits}*'`;
+    const benefitFilter = `benefits=='*${values.benefits}*'`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
@@ -109,21 +116,21 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     if (values.benefits !== '') {
       filter.push(benefitFilter);
     }
-    setSearch(filter.join(';'));
-    setPage(0);
+    dispatch(jobActions.setSearch(filter.join(';')));
+    dispatch(jobActions.setPage(0));
     dispatch(fetchJobsData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
   const handleSelectAll = (event) => {
-    let newSelectedStudentIds;
+    let newSelectedJobIds;
 
     if (event.target.checked) {
-      newSelectedStudentIds = jobs.map((job) => job.id);
+      newSelectedJobIds = jobs.map((job) => job.id);
     } else {
-      newSelectedStudentIds = [];
+      newSelectedJobIds = [];
     }
 
-    setSelectedJobIds(newSelectedStudentIds);
+    setSelectedJobIds(newSelectedJobIds);
   };
 
   const handleSelectOne = (event, id) => {
@@ -153,13 +160,13 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
   };
 
   const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-    setPage(0);
+    dispatch(jobActions.setLimit(event.target.value));
+    dispatch(jobActions.setPage(0));
     dispatch(fetchJobsData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+    dispatch(jobActions.setPage(newPage));
     dispatch(fetchJobsData(token, newPage, limit, sortedBy, search));
   };
 
@@ -203,7 +210,7 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
 
   return (
     <Card {...rest}>
-      <JobFormModal account={account} open={open} onClose={handleClose} />
+      <JobFormModal job={currentJob} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -238,11 +245,11 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={setSelectedJobIds.length === jobs.length}
+                    checked={selectedJobIds.length === jobs.length}
                     color="primary"
                     indeterminate={
-                      setSelectedJobIds.length > 0
-                      && setSelectedJobIds.length < jobs.length
+                      selectedJobIds.length > 0
+                      && selectedJobIds.length < jobs.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -359,7 +366,7 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                       color="secondary"
                       aria-label="edit"
                       size="small"
-                      onClick={(e) => handleOpen(e, job)}
+                      onClick={(e) => handleUpdateFormOpen(e, job)}
                     >
                       <EditIcon />
                     </Fab>
