@@ -1,0 +1,114 @@
+import { Grid, List, ListItem } from '@material-ui/core';
+import React from 'react';
+
+const JobRepresentativeView = () => {
+  const a = 2;
+  console.log(a);
+  return (
+    <Grid container>
+      <Grid item sx={6}>
+        <List>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+          <ListItem>abc</ListItem>
+        </List>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default JobRepresentativeView;
