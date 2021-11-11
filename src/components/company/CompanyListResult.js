@@ -159,15 +159,15 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
     {
       name: 'Description',
       label: 'Description',
-      search: 'email',
-      sort: 'email',
+      search: 'description',
+      sort: 'description',
       align: 'left'
     },
     {
-      name: 'Description',
+      name: 'Address',
       label: 'Address',
-      search: 'description',
-      sort: 'description',
+      search: 'address',
+      sort: 'address',
       align: 'left'
     }
   ];
