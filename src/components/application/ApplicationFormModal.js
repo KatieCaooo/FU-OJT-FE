@@ -7,11 +7,11 @@ import {
   TextField,
   Card,
   CardHeader,
-  CardContent, Typography, InputLabel, Select, MenuItem, FormControl
-  //   FormControl,
-  //   InputLabel,
-  //   Select,
-  //   MenuItem
+  CardContent,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -28,7 +28,7 @@ const style = {
 };
 
 const ApplicationFormModal = (props) => {
-  const { application, type} = props;
+  const { application, type } = props;
   const [values, setValues] = useState({
     studentCode: '',
     major: '',
@@ -65,7 +65,7 @@ const ApplicationFormModal = (props) => {
     props.onClose(type, values);
   };
 
-  return(
+  return (
     <Modal
       {...props}
       aria-labelledby="modal-modal-title"

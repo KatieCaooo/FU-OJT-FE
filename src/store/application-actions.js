@@ -26,9 +26,14 @@ export const fetchApplicationData = (token, pageNo, pageSize, sortBy, search) =>
     const response = await fetchData();
     let applications = response.data;
     applications = applications.map((application) => ({
-      id: application.id, studentCode: application.student.studentCode, major: application.major.name,
-      experience: application.experience, job: application.job.name, company: application.company.name,
-      companyAccepted: application.companyAccepted, studentConfirmed: application.studentConfirmed
+      id: application.id,
+      studentCode: application.student.studentCode,
+      major: application.major.name,
+      experience: application.experience,
+      job: application.job.name,
+      company: application.company.name,
+      companyAccepted: application.companyAccepted,
+      studentConfirmed: application.studentConfirmed
     }));
     dispatch(
       applicationActions.replaceApplicationList({
@@ -46,7 +51,9 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
   const postData = async () => {
     const response = await axios.put(
       url,
-      {experience: application.experience, jobId: application.job.id, accountId: application.student.id, companyAccepted: application.companyAccepted === 'Accepted', studentConfirmed: application.studentConfirmed === 'Accepted'},
+      {
+        experience: application.experience, jobId: application.job.id, accountId: application.student.id, companyAccepted: application.companyAccepted === 'Accepted', studentConfirmed: application.studentConfirmed === 'Accepted'
+      },
       {
         headers: getRequiredAuthenHeader(token)
       }
@@ -83,9 +90,14 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
       const response = await fetchData();
       let applications = response.data;
       applications = applications.map((singleApplication) => ({
-        id: singleApplication.id, studentCode: singleApplication.student.studentCode, major: singleApplication.majors.name,
-        experience: singleApplication.experience, job: singleApplication.job.name, company: singleApplication.company.name,
-        companyAccepted: singleApplication.companyAccepted, studentConfirmed: singleApplication.studentConfirmed
+        id: singleApplication.id,
+        studentCode: singleApplication.student.studentCode,
+        major: singleApplication.majors.name,
+        experience: singleApplication.experience,
+        job: singleApplication.job.name,
+        company: singleApplication.company.name,
+        companyAccepted: singleApplication.companyAccepted,
+        studentConfirmed: singleApplication.studentConfirmed
       }));
       dispatch(
         applicationActions.replaceApplicationList({
@@ -104,7 +116,7 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
   const postData = async () => {
     const response = await axios.post(
       url,
-      {experience: application.experience, jobId: application.job.id, accountId: application.student.id},
+      { experience: application.experience, jobId: application.job.id, accountId: application.student.id },
       {
         headers: getRequiredAuthenHeader(token)
       }
@@ -141,9 +153,14 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
       const response = await fetchData();
       let applications = response.data;
       applications = applications.map((singleApplication) => ({
-        id: singleApplication.id, studentCode: singleApplication.student.studentCode, major: singleApplication.majors.name,
-        experience: singleApplication.experience, job: singleApplication.job.name, company: singleApplication.company.name,
-        companyAccepted: singleApplication.companyAccepted, studentConfirmed: singleApplication.studentConfirmed
+        id: singleApplication.id,
+        studentCode: singleApplication.student.studentCode,
+        major: singleApplication.majors.name,
+        experience: singleApplication.experience,
+        job: singleApplication.job.name,
+        company: singleApplication.company.name,
+        companyAccepted: singleApplication.companyAccepted,
+        studentConfirmed: singleApplication.studentConfirmed
       }));
       dispatch(
         applicationActions.replaceApplicationList({
@@ -198,9 +215,14 @@ export const deleteApplication = (token, application, pageNo, pageSize, sortBy, 
       const response = await fetchData();
       let applications = response.data;
       applications = applications.map((singleApplication) => ({
-        id: singleApplication.id, studentCode: singleApplication.student.studentCode, major: singleApplication.majors.name,
-        experience: singleApplication.experience, job: singleApplication.job.name, company: singleApplication.company.name,
-        companyAccepted: singleApplication.companyAccepted, studentConfirmed: singleApplication.studentConfirmed
+        id: singleApplication.id,
+        studentCode: singleApplication.student.studentCode,
+        major: singleApplication.majors.name,
+        experience: singleApplication.experience,
+        job: singleApplication.job.name,
+        company: singleApplication.company.name,
+        companyAccepted: singleApplication.companyAccepted,
+        studentConfirmed: singleApplication.studentConfirmed
       }));
       dispatch(
         applicationActions.replaceApplicationList({

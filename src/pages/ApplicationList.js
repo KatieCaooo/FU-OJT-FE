@@ -1,9 +1,9 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchApplicationData } from '../store/application-actions';
 import { useEffect } from 'react';
-import ApplicationListResult from '../components/application/ApplicationListResult'
+import { fetchApplicationData } from '../store/application-actions';
+import ApplicationListResult from '../components/application/ApplicationListResult';
 
 const ApplicationList = () => {
   const applicationsData = useSelector((state) => state.applications);
@@ -39,4 +39,4 @@ const ApplicationList = () => {
   );
 };
 
-export default  ApplicationList;
+export default ApplicationList;

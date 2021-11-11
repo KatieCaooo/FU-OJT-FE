@@ -7,7 +7,7 @@ import {
   Button,
   Card,
   Checkbox,
-  Fab,
+  // Fab,
   FormControl,
   // Grid,
   InputLabel,
@@ -24,14 +24,14 @@ import {
   Typography
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+// import EditIcon from '@mui/icons-material/Edit';
+// import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApplicationData, updateApplication, deleteApplication } from '../../store/application-actions';
+import { fetchApplicationData } from '../../store/application-actions';
 import { applicationActions } from '../../store/application-slice';
-import ApplicationFormModal from './ApplicationFormModal';
+// import ApplicationFormModal from './ApplicationFormModal';
 import getInitials from '../../utils/getInitials';
-import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
+// import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
 
 const applicationListResult = ({ applications, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
@@ -40,33 +40,33 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   } = useSelector((state) => state.applications.filter);
   const dispatch = useDispatch();
   const [selectedApplicationIds, setSelectedApplicationIds] = useState([]);
-  const [currentApplication, setCurrentApplication] = useState({});
-
-  const [updateFormOpen, setUpdateFormOpen] = useState(false);
-  const handleUpdateFormOpen = (event, selectedApplication) => {
-    setUpdateFormOpen(true);
-    setCurrentApplication(selectedApplication);
-  };
-
-  const handleUpdateFormClose = (type, application) => {
-    if (type === 'UPDATE') {
-      dispatch(updateApplication(token, application, page, limit, sortedBy, search));
-    }
-    setUpdateFormOpen(false);
-  };
-
-  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
-  const handleDeleteFormOpen = (event, selectedApplication) => {
-    setDeleteFormOpen(true);
-    setCurrentApplication(selectedApplication);
-  };
-
-  const handleDeleteFormClose = (type, application) => {
-    if (type === 'DELETE') {
-      dispatch(deleteApplication(token, application, page, limit, sortedBy, search));
-    }
-    setDeleteFormOpen(false);
-  };
+  // const [currentApplication, setCurrentApplication] = useState({});
+  //
+  // const [updateFormOpen, setUpdateFormOpen] = useState(false);
+  // const handleUpdateFormOpen = (event, selectedApplication) => {
+  //   setUpdateFormOpen(true);
+  //   setCurrentApplication(selectedApplication);
+  // };
+  //
+  // const handleUpdateFormClose = (type, application) => {
+  //   if (type === 'UPDATE') {
+  //     dispatch(updateApplication(token, application, page, limit, sortedBy, search));
+  //   }
+  //   setUpdateFormOpen(false);
+  // };
+  //
+  // const [deleteFormOpen, setDeleteFormOpen] = useState(false);
+  // const handleDeleteFormOpen = (event, selectedApplication) => {
+  //   setDeleteFormOpen(true);
+  //   setCurrentApplication(selectedApplication);
+  // };
+  //
+  // const handleDeleteFormClose = (type, application) => {
+  //   if (type === 'DELETE') {
+  //     dispatch(deleteApplication(token, application, page, limit, sortedBy, search));
+  //   }
+  //   setDeleteFormOpen(false);
+  // };
 
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
@@ -248,18 +248,26 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
 
   return (
     <Card {...rest}>
-      <ApplicationFormModal application={currentApplication} open={updateFormOpen} onClose={handleUpdateFormClose}
-                            type='UPDATE' />
-      <ApplicationDeletionConfirmModal application={currentApplication} open={deleteFormOpen}
-                                       onClose={handleDeleteFormClose} operation='DELETE' />
+      {/* <ApplicationFormModal */}
+      {/*  application={currentApplication} */}
+      {/*  open={updateFormOpen} */}
+      {/*  onClose={handleUpdateFormClose} */}
+      {/*  type="UPDATE" */}
+      {/* /> */}
+      {/* <ApplicationDeletionConfirmModal */}
+      {/*  application={currentApplication} */}
+      {/*  open={deleteFormOpen} */}
+      {/*  onClose={handleDeleteFormClose} */}
+      {/*  operation="DELETE" */}
+      {/* /> */}
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding='checkbox' />
+                <TableCell padding="checkbox" />
                 {headerCells.map((headerCell) => (
-                  <TableCell key={headerCell.name} align={headerCell.align} margin='inherit'>
+                  <TableCell key={headerCell.name} align={headerCell.align} margin="inherit">
                     <TableSortLabel
                       active={orderBy === headerCell.name}
                       direction={orderBy === headerCell.name ? order : 'asc'}
@@ -270,7 +278,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     >
                       {headerCell.label}
                       {orderBy === headerCell.name ? (
-                        <Box component='span' sx={visuallyHidden}>
+                        <Box component="span" sx={visuallyHidden}>
                           {order === 'desc'
                             ? 'sorted descending'
                             : 'sorted ascending'}
@@ -279,15 +287,15 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </TableSortLabel>
                   </TableCell>
                 ))}
-                <TableCell colSpan={2} align='center'>
+                <TableCell colSpan={2} align="center">
                   Actions
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell padding='checkbox'>
+                <TableCell padding="checkbox">
                   <Checkbox
                     checked={selectedApplicationIds.length === applications.length}
-                    color='primary'
+                    color="primary"
                     indeterminate={
                       selectedApplicationIds.length > 0
                       && selectedApplicationIds.length < applications.length
@@ -298,97 +306,97 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label='Student Code'
-                    name='studentCode'
+                    label="Student Code"
+                    name="studentCode"
                     onChange={handleFilterChange}
                     value={values.studentCode}
-                    variant='outlined'
-                    size='small'
+                    variant="outlined"
+                    size="small"
                   />
                 </TableCell>
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label='Major'
-                    name='major'
+                    label="Major"
+                    name="major"
                     onChange={handleFilterChange}
                     value={values.major}
-                    variant='outlined'
-                    size='small'
+                    variant="outlined"
+                    size="small"
                   />
                 </TableCell>
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label='Job'
-                    name='job'
+                    label="Job"
+                    name="job"
                     onChange={handleFilterChange}
                     value={values.job}
-                    variant='outlined'
-                    size='small'
+                    variant="outlined"
+                    size="small"
                   />
                 </TableCell>
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label='Company'
-                    name='company'
+                    label="Company"
+                    name="company"
                     onChange={handleFilterChange}
                     value={values.company}
-                    variant='outlined'
-                    size='small'
+                    variant="outlined"
+                    size="small"
                   />
                 </TableCell>
-                <TableCell sx={{ maxWidth: 200 }} align='center'>
-                  <FormControl variant='outlined' sx={{ minWidth: 130 }}>
-                    <InputLabel id='disabled-label' size='small'>
+                <TableCell sx={{ maxWidth: 200 }} align="center">
+                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                    <InputLabel id="disabled-label" size="small">
                       Status
                     </InputLabel>
                     <Select
-                      labelId='studentConfirm-label'
-                      id='studentConfirm-dropdown'
+                      labelId="studentConfirm-label"
+                      id="studentConfirm-dropdown"
                       value={values.studentConfirmed}
                       onChange={handleFilterChange}
-                      label='Status'
-                      name='studentConfirm'
-                      size='small'
+                      label="Status"
+                      name="studentConfirm"
+                      size="small"
                     >
-                      <MenuItem value='Accepted'>
+                      <MenuItem value="Accepted">
                         Accepted
                       </MenuItem>
-                      <MenuItem value='Denied'>
+                      <MenuItem value="Denied">
                         Denied
                       </MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>
                 <TableCell>
-                  <FormControl variant='outlined' sx={{ minWidth: 130 }}>
-                    <InputLabel id='disabled-label' size='small'>
+                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                    <InputLabel id="disabled-label" size="small">
                       Status
                     </InputLabel>
                     <Select
-                      labelId='companyAccepted-label'
-                      id='companyAccepted-dropdown'
+                      labelId="companyAccepted-label"
+                      id="companyAccepted-dropdown"
                       value={values.companyAccepted}
                       onChange={handleFilterChange}
-                      label='Status'
-                      name='companyAccepted'
-                      size='small'
+                      label="Status"
+                      name="companyAccepted"
+                      size="small"
                     >
-                      <MenuItem value='Accepted'>
+                      <MenuItem value="Accepted">
                         Accepted
                       </MenuItem>
-                      <MenuItem value='Denied'>
+                      <MenuItem value="Denied">
                         Denied
                       </MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>
-                <TableCell colSpan={2} align='center'>
+                <TableCell colSpan={2} align="center">
                   <Button
-                    size='large'
-                    variant='contained'
+                    size="large"
+                    variant="contained"
                     onClick={onFilterHandler}
                   >
                     Apply Filter
@@ -403,11 +411,11 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                   key={application.id}
                   selected={selectedApplicationIds.indexOf(application.id) !== -1}
                 >
-                  <TableCell padding='checkbox'>
+                  <TableCell padding="checkbox">
                     <Checkbox
                       checked={selectedApplicationIds.indexOf(application.id) !== -1}
                       onChange={(event) => handleSelectOne(event, application.id)}
-                      value='true'
+                      value="true"
                     />
                   </TableCell>
                   <TableCell sx={{ maxWidth: 405 }}>
@@ -420,7 +428,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       <Avatar src={application.avatarUrl} sx={{ mr: 2 }}>
                         {getInitials(application.studentCode)}
                       </Avatar>
-                      <Typography color='textPrimary'>
+                      <Typography color="textPrimary">
                         {application.studentCode}
                       </Typography>
                     </Box>
@@ -457,7 +465,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
         </Box>
       </PerfectScrollbar>
       <TablePagination
-        component='div'
+        component="div"
         count={totalElements}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
@@ -469,10 +477,9 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   );
 };
 
-applicationListResult.propTypes =
-  {
-    applications: PropTypes.array.isRequired,
-    totalElements: PropTypes.number.isRequired
-  };
+applicationListResult.propTypes = {
+  applications: PropTypes.array.isRequired,
+  totalElements: PropTypes.number.isRequired
+};
 
 export default applicationListResult;

@@ -23,7 +23,7 @@ const routes = (isLoggedIn, isAdmin) => [
       { path: 'account', element: <Account /> },
       { path: 'students', element: isAdmin ? <StudentList /> : <Navigate to="/" /> },
       { path: 'dashboard', element: <Dashboard /> },
-      { path: 'applications', element: <ApplicationList />},
+      { path: 'applications', element: <ApplicationList /> },
       { path: 'companies', element: <CompaniesList /> },
       { path: 'jobs', element: <JobsList /> },
       { path: 'semesters', element: <SemestersList /> },
