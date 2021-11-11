@@ -29,7 +29,7 @@ const ApplicationList = () => {
         <Container maxWidth={false}>
           <Box sx={{ pt: 3 }}>
             <ApplicationListResult
-              evaluations={applicationsData.evaluations}
+              applications={applicationsData.applications}
               totalElements={applicationsData.totalQuantity}
             />
           </Box>
