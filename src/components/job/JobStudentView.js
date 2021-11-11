@@ -8,6 +8,7 @@ import moment from 'moment';
 import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobsData } from 'src/store/job-actions';
+import JobApplicationFormModal from './JobApplicationFormModal';
 
 const products = [
   {
@@ -115,6 +116,8 @@ const JobStudentView = () => {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
 
+  const [applicationFormOpen, setApplicationFormOpen] = useState(false);
+
   useEffect(() => {
     dispatch(fetchJobsData(token, 0, 6));
     setSearch('');
@@ -134,6 +137,15 @@ const JobStudentView = () => {
     setLimit(event.target.value);
     setPage(0);
     dispatch(fetchJobsData(token, 0, event.target.value, null, search));
+  };
+
+  const handleApplicationFormClose = () => {
+    console.log('closed');
+    setApplicationFormOpen(false);
+  };
+
+  const handleApplicationFormOpen = () => {
+    setApplicationFormOpen(true);
   };
 
   return (
@@ -239,6 +251,7 @@ const JobStudentView = () => {
         >
           {currentJob && (
             <>
+              <JobApplicationFormModal job={currentJob} open={applicationFormOpen} onClose={handleApplicationFormClose} />
               <ListSubheader sx={{
                 borderRadius: '6px 0 0 0',
                 boxShadow: '0 4px 28px rgba(123,151,158,.25)',
@@ -251,7 +264,7 @@ const JobStudentView = () => {
                 </Box>
                 <Divider />
                 <Box sx={{ textAlign: 'center' }}>
-                  <Button variant="contained" sx={{ width: '80%' }}>Apply Now</Button>
+                  <Button variant="contained" sx={{ width: '80%' }} onClick={handleApplicationFormOpen}>Apply Now</Button>
                 </Box>
               </ListSubheader>
               <Box sx={{ paddingLeft: 4, paddingRight: 4 }}>
