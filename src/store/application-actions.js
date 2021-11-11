@@ -2,7 +2,7 @@ const { BASE_URL, getRequiredAuthenHeader } = require('src/api/config');
 const axios = require('axios');
 const { applicationActions } = require('./application-slice');
 
-export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => async (dispatch) => {
+export const fetchApplicationData = (token, pageNo, pageSize, sortBy, search) => async (dispatch) => {
   const url = `${BASE_URL}/applications`;
   const fetchData = async () => {
     const response = await axios.get(url, {
@@ -26,7 +26,7 @@ export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => 
     const response = await fetchData();
     let applications = response.data;
     applications = applications.map((application) => ({
-      id: application.id, studentCode: application.student.studentCode, major: application.majors.name,
+      id: application.id, studentCode: application.student.studentCode, major: application.major.name,
       experience: application.experience, job: application.job.name, company: application.company.name,
       companyAccepted: application.companyAccepted, studentConfirmed: application.studentConfirmed
     }));
