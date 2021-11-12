@@ -26,7 +26,7 @@ export const fetchJobsData = (token, pageNo, pageSize, sortBy, search) => async 
     const response = await fetchData();
     let jobs = response.data;
     jobs = jobs.map((job) => ({
-      id: job.id, name: job.name, title: job.title, description: job.description, skills: job.skills, benefits: job.benefits
+      id: job.id, name: job.name, title: job.title, salary: job.salary, description: job.description,
     }));
     dispatch(
       jobActions.replaceJobList({
@@ -47,9 +47,8 @@ export const updateJob = (token, job, pageNo, pageSize, sortBy, search) => async
       {
         name: job.name,
         title: job.title,
+        salary: job.salary,
         description: job.description,
-        skills: job.skills,
-        benefits: job.benefits
       },
       {
         headers: getRequiredAuthenHeader(token)
@@ -90,9 +89,8 @@ export const updateJob = (token, job, pageNo, pageSize, sortBy, search) => async
         id: singleJob.id,
         name: singleJob.name,
         title: singleJob.title,
+        salary: singleJob.salary,
         description: singleJob.description,
-        skills: singleJob.skills,
-        benefits: singleJob.benefits,
       }));
       dispatch(
         jobActions.replaceJobList({

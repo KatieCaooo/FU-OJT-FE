@@ -75,9 +75,8 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
   const [values, setValues] = useState({
     name: '',
     title: '',
+    salary: '',
     description: '',
-    skills: '',
-    benefits: '',
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -97,9 +96,8 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
     const titleFilter = `title=='*${values.title}*'`;
+    const salaryFilter = `salary=='*${values.salary}*'`;
     const descriptionFilter = `description=='*${values.description}*'`;
-    const skillFilter = `skills=='*${values.skills}*'`;
-    const benefitFilter = `benefits=='*${values.benefits}*'`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
@@ -107,14 +105,11 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     if (values.title !== '') {
       filter.push(titleFilter);
     }
+    if (values.salary !== '') {
+      filter.push(salaryFilter);
+    }
     if (values.description !== '') {
       filter.push(descriptionFilter);
-    }
-    if (values.skills !== '') {
-      filter.push(skillFilter);
-    }
-    if (values.benefits !== '') {
-      filter.push(benefitFilter);
     }
     dispatch(jobActions.setSearch(filter.join(';')));
     dispatch(jobActions.setPage(0));
@@ -186,24 +181,17 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
       align: 'center'
     },
     {
+      name: 'Salary',
+      label: 'Salary',
+      search: 'salary',
+      sort: 'salary',
+      align: 'center'
+    },
+    {
       name: 'Description',
       label: 'Description',
       search: 'description',
       sort: 'description',
-      align: 'center'
-    },
-    {
-      name: 'Skills',
-      label: 'Skills',
-      search: 'skills',
-      sort: 'skills',
-      align: 'left'
-    },
-    {
-      name: 'Benefits',
-      label: 'Benefits',
-      search: 'benefits',
-      sort: 'benefits',
       align: 'center'
     },
   ];
@@ -276,6 +264,17 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                     size="small"
                   />
                 </TableCell>
+                <TableCell sx={{ maxWidth: 100 }}>
+                  <TextField
+                    fullWidth
+                    label="Salary"
+                    name="salary"
+                    onChange={handleFilterChange}
+                    value={values.salary}
+                    variant="outlined"
+                    size="small"
+                  />
+                </TableCell>
                 <TableCell sx={{ maxWidth: 150 }}>
                   <TextField
                     fullWidth
@@ -283,28 +282,6 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                     name="description"
                     onChange={handleFilterChange}
                     value={values.description}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 300 }}>
-                  <TextField
-                    fullWidth
-                    label="Skills"
-                    name="skills"
-                    onChange={handleFilterChange}
-                    value={values.skills}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 120 }}>
-                  <TextField
-                    fullWidth
-                    label="Benefits"
-                    name="benefits"
-                    onChange={handleFilterChange}
-                    value={values.benefits}
                     variant="outlined"
                     size="small"
                   />
@@ -352,14 +329,11 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                   <TableCell sx={{ maxWidth: 120 }} align="center">
                     {job.title}
                   </TableCell>
+                  <TableCell sx={{ maxWidth: 120 }} align="center">
+                    {job.salary}
+                  </TableCell>
                   <TableCell sx={{ maxWidth: 150 }} align="center">
                     {job.description}
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 300 }}>
-                    {job.skills}
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">
-                    {job.benefits}
                   </TableCell>
                   <TableCell align="right">
                     <Fab

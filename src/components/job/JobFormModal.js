@@ -42,9 +42,8 @@ const CompanyFormModal = (props) => {
         id: job.id,
         name: job.name,
         title: job.title,
+        salary: job.salary,
         description: job.description,
-        skills: job.skills,
-        benefits: job.benefits,
       });
     }
   }, [job]);
@@ -122,33 +121,22 @@ const CompanyFormModal = (props) => {
                 <Grid item md={12} xs={12}>
                   <TextField
                     fullWidth
+                    label="Salary"
+                    name="salary"
+                    onChange={handleChange}
+                    required
+                    value={values.salary}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
                     label="Description"
                     name="description"
                     onChange={handleChange}
                     required
                     value={values.description}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Skills"
-                    name="skills"
-                    onChange={handleChange}
-                    required
-                    value={values.skills}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Benefits"
-                    name="benefits"
-                    onChange={handleChange}
-                    required
-                    value={values.benefits}
                     variant="outlined"
                   />
                 </Grid>
