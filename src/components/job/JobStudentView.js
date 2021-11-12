@@ -1,5 +1,5 @@
 import {
-  Grid, List, ListItem, ListItemAvatar, Typography, Box, TablePagination, ListSubheader, Button, Divider
+  Grid, List, ListItem, ListItemAvatar, Typography, Box, TablePagination, ListSubheader, Button, Divider, Backdrop, CircularProgress
 } from '@material-ui/core';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -103,6 +103,7 @@ const selectedStyle = { direction: 'ltr', backgroundColor: '#f5dbbc', border: '0
 const notSelectedStyle = { direction: 'ltr' };
 
 const JobStudentView = () => {
+  const isLoading = useSelector((state) => state.attachment.jobApplication.isLoading);
   console.log(products[0]);
   const dispatch = useDispatch();
   const jobStore = useSelector((state) => state.jobs);
@@ -252,6 +253,12 @@ const JobStudentView = () => {
           {currentJob && (
             <>
               <JobApplicationFormModal job={currentJob} open={applicationFormOpen} onClose={handleApplicationFormClose} />
+              <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 10000 }}
+                open={isLoading}
+              >
+                <CircularProgress color="inherit" />
+              </Backdrop>
               <ListSubheader sx={{
                 borderRadius: '6px 0 0 0',
                 boxShadow: '0 4px 28px rgba(123,151,158,.25)',
