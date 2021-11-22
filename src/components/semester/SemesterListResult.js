@@ -65,10 +65,10 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
   };
 
   const [deleteFormOpen, setDeleteFormOpen] = useState(false);
-  // const handleDeleteFormOpen = (event, selectedSemester) => {
-  //   setDeleteFormOpen(true);
-  //   setCurrentSemester(selectedSemester);
-  // };
+  const handleDeleteFormOpen = (event, selectedSemester) => {
+    setDeleteFormOpen(true);
+    setCurrentSemester(selectedSemester);
+  };
 
   const handleDeleteFormClose = (type, semester) => {
     if (type === 'DELETE') {
@@ -431,6 +431,7 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                       }}
                       arial-label="remove"
                       size="small"
+                      onClick={(e) => handleDeleteFormOpen(e, semester)}
                     >
                       <DeleteForeverIcon />
                     </Fab>

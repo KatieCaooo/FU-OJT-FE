@@ -134,7 +134,7 @@ export const createSemester = (token, semester, pageNo, pageSize, sortBy, search
       const response = await fetchData();
       let semesters = response.data;
       semesters = semesters.map((singleSemester) => ({
-        id: singleSemester.id, name: singleSemester.name, startDate: format(new Date(singleSemester.startDate), 'dd-MM-yyyy HH:mm:ss.SSS'), endDate: format(new Date(singleSemester.endDate), 'dd-MM-yyyy HH:mm:ss.SSS')
+        id: singleSemester.id, name: singleSemester.name, startDate: new Date(singleSemester.startDate), endDate: new Date(singleSemester.endDate)
       }));
       dispatch(
         semesterActions.replaceSemesterList({
@@ -189,7 +189,7 @@ export const deleteSemester = (token, semester, pageNo, pageSize, sortBy, search
       const response = await fetchData();
       let semesters = response.data;
       semesters = semesters.map((singleSemester) => ({
-        id: singleSemester.id, name: singleSemester.name, startDate: format(new Date(singleSemester.startDate), 'dd-MM-yyyy HH:mm:ss.SSS'), endDate: format(new Date(singleSemester.endDate), 'dd-MM-yyyy HH:mm')
+        id: singleSemester.id, name: singleSemester.name, startDate: new Date(singleSemester.startDate), endDate: new Date(singleSemester.endDate)
       }));
       dispatch(
         semesterActions.replaceSemesterList({
