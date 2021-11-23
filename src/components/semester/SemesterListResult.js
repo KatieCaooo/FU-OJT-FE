@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -8,6 +7,7 @@ import {
   Button,
   Card,
   Checkbox,
+  Grid,
   Fab,
   Table,
   TableBody,
@@ -19,37 +19,76 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSemestersData } from 'src/store/semester-actions';
+import { format, addWeeks, addDays } from 'date-fns';
+import {
+  fetchSemestersData, deleteSemester, updateSemester, recoverSemester
+} from 'src/store/semester-actions';
+import { DateRangePicker, LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import getInitials from '../../utils/getInitials';
+import { semesterActions } from '../../store/semester-slice';
 import SemesterFormModal from './SemesterFormModal';
+import SemesterDeletionConfirmModal from './SemesterDeletionConfirmModal';
 
 const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
+  const getWeeksAfter = (date, amount) => (date ? addWeeks(date, amount) : undefined);
   const token = useSelector((state) => state.account.token);
+  const {
+    limit, page, order, orderBy, sortedBy, search
+  } = useSelector((state) => state.majors.filter);
   const dispatch = useDispatch();
   const [selectedSemesterIds, setSelectedSemesterIds] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
-  const [sortedBy, setSortedBy] = useState('id asc');
-  const [search, setSearch] = useState('');
+  // const [limit, setLimit] = useState(10);
+  // const [page, setPage] = useState(0);
+  // const [order, setOrder] = useState('asc');
+  // const [orderBy, setOrderBy] = useState('id');
+  // const [sortedBy, setSortedBy] = useState('id asc');
+  // const [search, setSearch] = useState('');
 
-  const [account, setAccount] = useState({});
+  const [currentSemester, setCurrentSemester] = useState({});
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = (event, selectedAccount) => {
-    setOpen(true);
-    setAccount(selectedAccount);
+  const [updateFormOpen, setUpdateFormOpen] = useState(false);
+  const handleUpdateFormOpen = (event, selectedSemester) => {
+    setUpdateFormOpen(true);
+    setCurrentSemester(selectedSemester);
   };
 
-  const handleClose = () => setOpen(false);
+  const handleUpdateFormClose = (type, semester) => {
+    if (type === 'UPDATE') {
+      dispatch(updateSemester(token, semester, page, limit, sortedBy, search));
+    }
+    setUpdateFormOpen(false);
+  };
+
+  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
+  const handleDeleteFormOpen = (event, selectedSemester) => {
+    setDeleteFormOpen(true);
+    setCurrentSemester(selectedSemester);
+  };
+
+  const handleDeleteFormClose = (type, semester) => {
+    if (type === 'DELETE') {
+      dispatch(deleteSemester(token, semester, page, limit, sortedBy, search));
+    }
+    setDeleteFormOpen(false);
+  };
+
+  const [recoverFormOpen, setRecoverFormOpen] = useState(false);
+  // const handleRecoverFormOpen = (event, selectedSemester) => {
+  //   setRecoverFormOpen(true);
+  //   setCurrentSemester(selectedSemester);
+  // };
+
+  const handleRecoverFormClose = (type, semester) => {
+    if (type === 'RECOVER') {
+      dispatch(recoverSemester(token, semester, page, limit, sortedBy, search));
+    }
+    setRecoverFormOpen(false);
+  };
 
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
@@ -58,9 +97,9 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
     const isSetDefault = isSameProperty && !isOldAsc;
     const orderValue = isAsc ? 'desc' : 'asc';
     const orderByValue = !isSetDefault ? property : 'id';
-    setOrder(orderValue);
-    setOrderBy(orderByValue);
-    setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
+    dispatch(semesterActions.setOrder(orderValue));
+    dispatch(semesterActions.setOrderBy(orderByValue));
+    dispatch(semesterActions.setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
     dispatch(
       fetchSemestersData(
         token,
@@ -78,33 +117,48 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
 
   const [values, setValues] = useState({
     name: '',
-    startDate: '',
-    endDate: '',
+    startDate: [null, null],
+    endDate: [null, null],
   });
 
-  const handleFilterChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+  const handleFilterChange = (event, dateValues, fieldName) => {
+    if (!event) {
+      setValues({
+        ...values,
+        [fieldName]: dateValues
+      });
+    } else {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value
+      });
+    }
   };
 
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
-    const startDateFilter = `startDate=='*${values.startDate}*'`;
-    const endDateFilter = `endDate=='*${values.endDate}*'`;
+    const startDateStartFilter = `startDate>=${values.startDate[0] ? values.startDate[0].toISOString() : ''}`;
+    const startDateEndFilter = `startDate<${values.startDate[1] ? addDays(values.startDate[1], 1).toISOString() : ''}`;
+    const endDateStartFilter = `endDate>=${values.endDate[0] ? values.endDate[0].toISOString() : ''}`;
+    const endDateEndFilter = `endDate<${values.endDate[1] ? addDays(values.endDate[1], 1).toISOString() : ''}`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
     }
-    if (values.startDate !== '') {
-      filter.push(startDateFilter);
+    if (values.startDate[0]) {
+      filter.push(startDateStartFilter);
     }
-    if (values.endDate !== '') {
-      filter.push(endDateFilter);
+    if (values.startDate[1]) {
+      filter.push(startDateEndFilter);
     }
-    setSearch(filter.join(';'));
-    setPage(0);
+    if (values.endDate[0]) {
+      filter.push(endDateStartFilter);
+    }
+    if (values.endDate[1]) {
+      filter.push(endDateEndFilter);
+    }
+    dispatch(semesterActions.setSearch(filter.join(';')));
+    dispatch(semesterActions.setPage(0));
     dispatch(fetchSemestersData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
@@ -147,13 +201,13 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
   };
 
   const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-    setPage(0);
+    dispatch(semesterActions.setLimit(event.target.value));
+    dispatch(semesterActions.setPage(0));
     dispatch(fetchSemestersData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+    dispatch(semesterActions.setPage(newPage));
     dispatch(fetchSemestersData(token, newPage, limit, sortedBy, search));
   };
 
@@ -170,20 +224,22 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
       label: 'Start Date',
       search: 'startDate',
       sort: 'startDate',
-      align: 'left'
+      align: 'center'
     },
     {
       name: 'End Date',
       label: 'End Date',
       search: 'endDate',
       sort: 'endDate',
-      align: 'left'
+      align: 'center'
     }
   ];
 
   return (
     <Card {...rest}>
-      <SemesterFormModal account={account} open={open} onClose={handleClose} />
+      <SemesterFormModal semester={currentSemester} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
+      <SemesterDeletionConfirmModal semester={currentSemester} open={deleteFormOpen} onClose={handleDeleteFormClose} operation="DELETE" />
+      <SemesterDeletionConfirmModal semester={currentSemester} open={recoverFormOpen} onClose={handleRecoverFormClose} operation="RECOVER" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 700 }}>
           <Table>
@@ -238,43 +294,69 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                     size="small"
                   />
                 </TableCell>
-                <TableCell sx={{ maxWidth: 300 }}>
+                <TableCell>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                      label="Start Date"
+                    <DateRangePicker
+                      name="startDate"
                       value={values.startDate}
-                      onChange={handleFilterChange}
-                      renderInput={(params) => <TextField {...params} />}
+                      maxDate={getWeeksAfter(values.startDate[0], 4)}
+                      inputFormat="dd-MM-yyyy"
+                      onChange={(newValue) => { handleFilterChange(null, newValue, 'startDate'); }}
+                      renderInput={(startProps, endProps) => (
+                        <Grid
+                          container
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <TextField
+                            sx={{ maxWidth: 125 }}
+                            variant="outlined"
+                            size="small"
+                            {...startProps}
+                          />
+                          <Box sx={{ mx: 2 }}> to </Box>
+                          <TextField
+                            sx={{ maxWidth: 125 }}
+                            variant="outlined"
+                            size="small"
+                            {...endProps}
+                          />
+                        </Grid>
+                      )}
                     />
                   </LocalizationProvider>
-                  {/* <TextField */}
-                  {/*  fullWidth */}
-                  {/*  label="Start Date" */}
-                  {/*  name="startDate" */}
-                  {/*  onChange={handleFilterChange} */}
-                  {/*  value={values.startDate} */}
-                  {/*  variant="outlined" */}
-                  {/*  size="small" */}
-                  {/* /> */}
                 </TableCell>
-                <TableCell sx={{ maxWidth: 300 }}>
+                <TableCell>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                      label="Start Date"
+                    <DateRangePicker
+                      name="endDate"
                       value={values.endDate}
-                      onChange={handleFilterChange}
-                      renderInput={(params) => <TextField {...params} />}
+                      maxDate={getWeeksAfter(values.endDate[0], 4)}
+                      inputFormat="dd-MM-yyyy"
+                      onChange={(newValue) => { handleFilterChange(null, newValue, 'endDate'); }}
+                      renderInput={(startProps, endProps) => (
+                        <Grid
+                          container
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <TextField
+                            sx={{ maxWidth: 125 }}
+                            variant="outlined"
+                            size="small"
+                            {...startProps}
+                          />
+                          <Box sx={{ mx: 2 }}> to </Box>
+                          <TextField
+                            sx={{ maxWidth: 125 }}
+                            variant="outlined"
+                            size="small"
+                            {...endProps}
+                          />
+                        </Grid>
+                      )}
                     />
                   </LocalizationProvider>
-                  {/* <TextField */}
-                  {/*  fullWidth */}
-                  {/*  label="End Date" */}
-                  {/*  name="endDate" */}
-                  {/*  onChange={handleFilterChange} */}
-                  {/*  value={values.endDate} */}
-                  {/*  variant="outlined" */}
-                  {/*  size="small" */}
-                  {/* /> */}
                 </TableCell>
                 <TableCell colSpan={2} align="center">
                   <Button
@@ -316,18 +398,22 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">
-                    {moment(semester.startDate).format('DD-MM-YYYY')}
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {format(semester.startDate, 'dd-MM-yyyy HH:mm:ss.SSS')}
+                    </Typography>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">
-                    {moment(semester.endDate).format('DD-MM-YYYY')}
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {format(semester.endDate, 'dd-MM-yyyy HH:mm:ss.SSS')}
+                    </Typography>
                   </TableCell>
                   <TableCell align="right">
                     <Fab
                       color="secondary"
                       aria-label="edit"
                       size="small"
-                      onClick={(e) => handleOpen(e, semester)}
+                      onClick={(e) => handleUpdateFormOpen(e, semester)}
                     >
                       <EditIcon />
                     </Fab>
@@ -345,6 +431,7 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
                       }}
                       arial-label="remove"
                       size="small"
+                      onClick={(e) => handleDeleteFormOpen(e, semester)}
                     >
                       <DeleteForeverIcon />
                     </Fab>

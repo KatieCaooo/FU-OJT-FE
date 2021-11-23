@@ -22,30 +22,38 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCompaniesData } from 'src/store/company-actions';
+import { fetchCompaniesData, updateCompany } from 'src/store/company-actions';
+import { companyActions } from '../../store/company-slice';
 import getInitials from '../../utils/getInitials';
 import CompanyFormModal from './CompanyFormModal';
 
 const CompanyListResult = ({ companies, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
+  const {
+    limit, page, order, orderBy, sortedBy, search
+  } = useSelector((state) => state.companies.filter);
   const dispatch = useDispatch();
   const [selectedCompanyIds, setSelectedCompanyIds] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
-  const [sortedBy, setSortedBy] = useState('id asc');
-  const [search, setSearch] = useState('');
+  // const [limit, setLimit] = useState(10);
+  // const [page, setPage] = useState(0);
+  // const [order, setOrder] = useState('asc');
+  // const [orderBy, setOrderBy] = useState('id');
+  // const [sortedBy, setSortedBy] = useState('id asc');
+  // const [search, setSearch] = useState('');
 
-  const [account, setAccount] = useState({});
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = (event, selectedAccount) => {
-    setOpen(true);
-    setAccount(selectedAccount);
+  const [currentCompany, setCurrentCompany] = useState({});
+  const [updateFormOpen, setUpdateFormOpen] = useState(false);
+  const handleUpdateFormOpen = (event, selectedCompany) => {
+    setUpdateFormOpen(true);
+    setCurrentCompany(selectedCompany);
   };
 
-  const handleClose = () => setOpen(false);
+  const handleUpdateFormClose = (type, company) => {
+    if (type === 'UPDATE') {
+      dispatch(updateCompany(token, company, page, limit, sortedBy, search));
+    }
+    setUpdateFormOpen(false);
+  };
 
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
@@ -54,9 +62,9 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
     const isSetDefault = isSameProperty && !isOldAsc;
     const orderValue = isAsc ? 'desc' : 'asc';
     const orderByValue = !isSetDefault ? property : 'id';
-    setOrder(orderValue);
-    setOrderBy(orderByValue);
-    setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
+    dispatch(companyActions.setOrder(orderValue));
+    dispatch(companyActions.setOrderBy(orderByValue));
+    dispatch(companyActions.setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
     dispatch(
       fetchCompaniesData(
         token,
@@ -75,18 +83,27 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
   const [values, setValues] = useState({
     name: '',
     description: '',
+    address: ''
   });
 
-  const handleFilterChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+  const handleFilterChange = (event, dateValues, fieldName) => {
+    if (!event) {
+      setValues({
+        ...values,
+        [fieldName]: dateValues
+      });
+    } else {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value
+      });
+    }
   };
 
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
-    const descriptionFilter = `description=='*${values.desciption}*'`;
+    const descriptionFilter = `description=='*${values.description}*'`;
+    const addressFilter = `address=='*${values.address}*'`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
@@ -94,8 +111,11 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
     if (values.description !== '') {
       filter.push(descriptionFilter);
     }
-    setSearch(filter.join(';'));
-    setPage(0);
+    if (values.address !== '') {
+      filter.push(addressFilter);
+    }
+    dispatch(companyActions.setSearch(filter.join(';')));
+    dispatch(companyActions.setPage(0));
     dispatch(fetchCompaniesData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
@@ -138,13 +158,13 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
   };
 
   const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-    setPage(0);
+    dispatch(companyActions.setLimit(event.target.value));
+    dispatch(companyActions.setPage(0));
     dispatch(fetchCompaniesData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+    dispatch(companyActions.setPage(newPage));
     dispatch(fetchCompaniesData(token, newPage, limit, sortedBy, search));
   };
 
@@ -174,7 +194,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
 
   return (
     <Card {...rest}>
-      <CompanyFormModal account={account} open={open} onClose={handleClose} />
+      <CompanyFormModal company={currentCompany} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 700 }}>
           <Table>
@@ -295,14 +315,14 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                     {company.description}
                   </TableCell>
                   <TableCell sx={{ maxWidth: 120 }} align="left">
-                    {company.description}
+                    {company.address}
                   </TableCell>
                   <TableCell align="right">
                     <Fab
                       color="secondary"
                       aria-label="edit"
                       size="small"
-                      onClick={(e) => handleOpen(e, company)}
+                      onClick={(e) => handleUpdateFormOpen(e, company)}
                     >
                       <EditIcon />
                     </Fab>

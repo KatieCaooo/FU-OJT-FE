@@ -22,31 +22,31 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobsData } from 'src/store/job-actions';
+import { fetchJobsData, updateJob } from 'src/store/job-actions';
+import { jobActions } from '../../store/job-silce';
 import getInitials from '../../utils/getInitials';
 import JobFormModal from './JobFormModal';
 
 const JobListResult = ({ jobs, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
+  const {
+    limit, page, order, orderBy, sortedBy, search
+  } = useSelector((state) => state.jobs.filter);
   const dispatch = useDispatch();
-  const [selectedStudentIds, setSelectedStudentIds] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
-  const [sortedBy, setSortedBy] = useState('id asc');
-  const [search, setSearch] = useState('');
-
-  const [account, setAccount] = useState({});
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = (event, selectedAccount) => {
-    setOpen(true);
-    setAccount(selectedAccount);
+  const [selectedJobIds, setSelectedJobIds] = useState([]);
+  const [currentJob, setCurrentJob] = useState({});
+  const [updateFormOpen, setUpdateFormOpen] = useState(false);
+  const handleUpdateFormOpen = (event, selectedJob) => {
+    setUpdateFormOpen(true);
+    setCurrentJob(selectedJob);
   };
 
-  const handleClose = () => setOpen(false);
-
+  const handleUpdateFormClose = (type, job) => {
+    if (type === 'UPDATE') {
+      dispatch(updateJob(token, job, page, limit, sortedBy, search));
+    }
+    setUpdateFormOpen(false);
+  };
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
     const isOldAsc = order === 'asc';
@@ -54,9 +54,9 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     const isSetDefault = isSameProperty && !isOldAsc;
     const orderValue = isAsc ? 'desc' : 'asc';
     const orderByValue = !isSetDefault ? property : 'id';
-    setOrder(orderValue);
-    setOrderBy(orderByValue);
-    setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
+    dispatch(jobActions.setOrder(orderValue));
+    dispatch(jobActions.setOrderBy(orderByValue));
+    dispatch(jobActions.setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
     dispatch(
       fetchJobsData(
         token,
@@ -75,24 +75,29 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
   const [values, setValues] = useState({
     name: '',
     title: '',
+    salary: '',
     description: '',
-    skills: '',
-    benefits: '',
   });
 
-  const handleFilterChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+  const handleFilterChange = (event, dateValues, fieldName) => {
+    if (!event) {
+      setValues({
+        ...values,
+        [fieldName]: dateValues
+      });
+    } else {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value
+      });
+    }
   };
 
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
     const titleFilter = `title=='*${values.title}*'`;
+    const salaryFilter = `salary=='*${values.salary}*'`;
     const descriptionFilter = `description=='*${values.description}*'`;
-    const skillFilter = `skills=='*${values.skills}*'`;
-    const benefitFilter = `phone=='*${values.benefits}*'`;
     const filter = [];
     if (values.name !== '') {
       filter.push(nameFilter);
@@ -100,66 +105,63 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     if (values.title !== '') {
       filter.push(titleFilter);
     }
+    if (values.salary !== '') {
+      filter.push(salaryFilter);
+    }
     if (values.description !== '') {
       filter.push(descriptionFilter);
     }
-    if (values.skills !== '') {
-      filter.push(skillFilter);
-    }
-    if (values.benefits !== '') {
-      filter.push(benefitFilter);
-    }
-    setSearch(filter.join(';'));
-    setPage(0);
+    dispatch(jobActions.setSearch(filter.join(';')));
+    dispatch(jobActions.setPage(0));
     dispatch(fetchJobsData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
   const handleSelectAll = (event) => {
-    let newSelectedStudentIds;
+    let newSelectedJobIds;
 
     if (event.target.checked) {
-      newSelectedStudentIds = jobs.map((job) => job.id);
+      newSelectedJobIds = jobs.map((job) => job.id);
     } else {
-      newSelectedStudentIds = [];
+      newSelectedJobIds = [];
     }
 
-    setSelectedStudentIds(newSelectedStudentIds);
+    setSelectedJobIds(newSelectedJobIds);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedStudentIds.indexOf(id);
-    let newSelectedStudentIds = [];
+    const selectedIndex = selectedJobIds.indexOf(id);
+    let newSelectedJobIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedStudentIds = newSelectedStudentIds.concat(
-        selectedStudentIds,
+      newSelectedJobIds = newSelectedJobIds.concat(
+        selectedJobIds,
         id
       );
     } else if (selectedIndex === 0) {
-      newSelectedStudentIds = newSelectedStudentIds.concat(
-        selectedStudentIds.slice(1)
+      newSelectedJobIds = newSelectedJobIds.concat(
+        selectedJobIds.slice(1)
       );
-    } else if (selectedIndex === selectedStudentIds.length - 1) {
-      newSelectedStudentIds = newSelectedStudentIds.concat(
-        selectedStudentIds.slice(0, -1)
+    } else if (selectedIndex === selectedJobIds.length - 1) {
+      newSelectedJobIds = newSelectedJobIds.concat(
+        selectedJobIds.slice(0, -1)
       );
     } else if (selectedIndex > 0) {
-      newSelectedStudentIds = newSelectedStudentIds.concat(
-        selectedStudentIds.slice(0, selectedIndex),
-        selectedStudentIds.slice(selectedIndex + 1)
+      newSelectedJobIds = newSelectedJobIds.concat(
+        selectedJobIds.slice(0, selectedIndex),
+        selectedJobIds.slice(selectedIndex + 1)
       );
     }
-    setSelectedStudentIds(newSelectedStudentIds);
+    setSelectedJobIds(newSelectedJobIds);
   };
 
   const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-    setPage(0);
+    dispatch(jobActions.setLimit(event.target.value));
+    dispatch(jobActions.setPage(0));
     dispatch(fetchJobsData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+    dispatch(jobActions.setPage(newPage));
     dispatch(fetchJobsData(token, newPage, limit, sortedBy, search));
   };
 
@@ -179,31 +181,24 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
       align: 'center'
     },
     {
+      name: 'Salary',
+      label: 'Salary',
+      search: 'salary',
+      sort: 'salary',
+      align: 'center'
+    },
+    {
       name: 'Description',
       label: 'Description',
       search: 'description',
       sort: 'description',
       align: 'center'
     },
-    {
-      name: 'Skills',
-      label: 'Skills',
-      search: 'skills',
-      sort: 'skills',
-      align: 'left'
-    },
-    {
-      name: 'Benefits',
-      label: 'Benefits',
-      search: 'benefit',
-      sort: 'benefit',
-      align: 'center'
-    },
   ];
 
   return (
     <Card {...rest}>
-      <JobFormModal account={account} open={open} onClose={handleClose} />
+      <JobFormModal job={currentJob} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -238,11 +233,11 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedStudentIds.length === jobs.length}
+                    checked={selectedJobIds.length === jobs.length}
                     color="primary"
                     indeterminate={
-                      selectedStudentIds.length > 0
-                      && selectedStudentIds.length < jobs.length
+                      selectedJobIds.length > 0
+                      && selectedJobIds.length < jobs.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -269,6 +264,17 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                     size="small"
                   />
                 </TableCell>
+                <TableCell sx={{ maxWidth: 100 }}>
+                  <TextField
+                    fullWidth
+                    label="Salary"
+                    name="salary"
+                    onChange={handleFilterChange}
+                    value={values.salary}
+                    variant="outlined"
+                    size="small"
+                  />
+                </TableCell>
                 <TableCell sx={{ maxWidth: 150 }}>
                   <TextField
                     fullWidth
@@ -276,28 +282,6 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                     name="description"
                     onChange={handleFilterChange}
                     value={values.description}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 300 }}>
-                  <TextField
-                    fullWidth
-                    label="Skills"
-                    name="skills"
-                    onChange={handleFilterChange}
-                    value={values.skills}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 120 }}>
-                  <TextField
-                    fullWidth
-                    label="Benefits"
-                    name="benefits"
-                    onChange={handleFilterChange}
-                    value={values.benefits}
                     variant="outlined"
                     size="small"
                   />
@@ -318,11 +302,11 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                 <TableRow
                   hover
                   key={job.id}
-                  selected={selectedStudentIds.indexOf(job.id) !== -1}
+                  selected={selectedJobIds.indexOf(job.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedStudentIds.indexOf(job.id) !== -1}
+                      checked={selectedJobIds.indexOf(job.id) !== -1}
                       onChange={(event) => handleSelectOne(event, job.id)}
                       value="true"
                     />
@@ -345,21 +329,18 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                   <TableCell sx={{ maxWidth: 120 }} align="center">
                     {job.title}
                   </TableCell>
+                  <TableCell sx={{ maxWidth: 120 }} align="center">
+                    {job.salary}
+                  </TableCell>
                   <TableCell sx={{ maxWidth: 150 }} align="center">
                     {job.description}
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 300 }}>
-                    {job.skills}
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">
-                    {job.benefits}
                   </TableCell>
                   <TableCell align="right">
                     <Fab
                       color="secondary"
                       aria-label="edit"
                       size="small"
-                      onClick={(e) => handleOpen(e, job)}
+                      onClick={(e) => handleUpdateFormOpen(e, job)}
                     >
                       <EditIcon />
                     </Fab>

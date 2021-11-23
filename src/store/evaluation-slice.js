@@ -1,20 +1,20 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-const semesterSlice = createSlice({
-  name: 'semesters',
+const evaluationSlice = createSlice({
+  name: 'evaluations',
   initialState: {
     filter: {
       limit: 10, page: 0, order: 'asc', orderBy: 'id', sortedBy: 'id asc', search: ''
     },
-    semesters: [],
+    evaluations: [],
     totalQuantity: 0,
     changed: false
   },
   reducers: {
-    replaceSemesterList(state, action) {
+    replaceEvaluationList(state, action) {
       state.totalQuantity = action.payload.totalQuantity;
-      state.semesters = action.payload.semesters;
+      state.evaluations = action.payload.evaluations;
     },
     setLimit(state, action) {
       state.filter.limit = action.payload;
@@ -37,6 +37,6 @@ const semesterSlice = createSlice({
   }
 });
 
-export const semesterActions = semesterSlice.actions;
+export const evaluationActions = evaluationSlice.actions;
 
-export default semesterSlice;
+export default evaluationSlice;
