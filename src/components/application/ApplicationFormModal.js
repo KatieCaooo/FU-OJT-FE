@@ -42,11 +42,11 @@ const ApplicationFormModal = (props) => {
     if (application.name) {
       setValues({
         id: application.id,
-        studentCode: application.studentCode,
-        major: application.major,
+        studentCode: application.student.studentCode,
+        major: application.student.major.name,
         experience: application.experience,
-        job: application.job,
-        company: application.company,
+        job: application.job.name,
+        company: application.job.company.name,
         companyAccepted: application.companyAccepted,
         studentConfirmed: application.studentConfirmed
       });

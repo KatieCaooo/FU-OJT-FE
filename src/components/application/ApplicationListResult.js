@@ -6,7 +6,7 @@ import {
   Box,
   Button,
   Card,
-  Checkbox,
+  Checkbox, Fab,
   // Fab,
   FormControl,
   // Grid,
@@ -24,14 +24,14 @@ import {
   Typography
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
-// import EditIcon from '@mui/icons-material/Edit';
-// import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApplicationData } from '../../store/application-actions';
+import { fetchApplicationData, updateApplication, deleteApplication } from '../../store/application-actions';
 import { applicationActions } from '../../store/application-slice';
-// import ApplicationFormModal from './ApplicationFormModal';
+import ApplicationFormModal from './ApplicationFormModal';
 import getInitials from '../../utils/getInitials';
-// import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
+import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
 
 const applicationListResult = ({ applications, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
@@ -40,33 +40,33 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   } = useSelector((state) => state.applications.filter);
   const dispatch = useDispatch();
   const [selectedApplicationIds, setSelectedApplicationIds] = useState([]);
-  // const [currentApplication, setCurrentApplication] = useState({});
-  //
-  // const [updateFormOpen, setUpdateFormOpen] = useState(false);
-  // const handleUpdateFormOpen = (event, selectedApplication) => {
-  //   setUpdateFormOpen(true);
-  //   setCurrentApplication(selectedApplication);
-  // };
-  //
-  // const handleUpdateFormClose = (type, application) => {
-  //   if (type === 'UPDATE') {
-  //     dispatch(updateApplication(token, application, page, limit, sortedBy, search));
-  //   }
-  //   setUpdateFormOpen(false);
-  // };
-  //
-  // const [deleteFormOpen, setDeleteFormOpen] = useState(false);
-  // const handleDeleteFormOpen = (event, selectedApplication) => {
-  //   setDeleteFormOpen(true);
-  //   setCurrentApplication(selectedApplication);
-  // };
-  //
-  // const handleDeleteFormClose = (type, application) => {
-  //   if (type === 'DELETE') {
-  //     dispatch(deleteApplication(token, application, page, limit, sortedBy, search));
-  //   }
-  //   setDeleteFormOpen(false);
-  // };
+  const [currentApplication, setCurrentApplication] = useState({});
+
+  const [updateFormOpen, setUpdateFormOpen] = useState(false);
+  const handleUpdateFormOpen = (event, selectedApplication) => {
+    setUpdateFormOpen(true);
+    setCurrentApplication(selectedApplication);
+  };
+
+  const handleUpdateFormClose = (type, application) => {
+    if (type === 'UPDATE') {
+      dispatch(updateApplication(token, application, page, limit, sortedBy, search));
+    }
+    setUpdateFormOpen(false);
+  };
+
+  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
+  const handleDeleteFormOpen = (event, selectedApplication) => {
+    setDeleteFormOpen(true);
+    setCurrentApplication(selectedApplication);
+  };
+
+  const handleDeleteFormClose = (type, application) => {
+    if (type === 'DELETE') {
+      dispatch(deleteApplication(token, application, page, limit, sortedBy, search));
+    }
+    setDeleteFormOpen(false);
+  };
 
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
@@ -123,8 +123,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     const experienceFilter = `application.application.name=='${values.experience}'`;
     const jobFilter = `application.job.name=='${values.job}'`;
     const companyFilter = `application.company.name=='${values.company}'`;
-    const companyStatusFilter = `pass==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
-    const studentStatusFilter = `pass==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
+    const companyStatusFilter = `companyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
+    const studentStatusFilter = `studentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
     const filter = [];
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
@@ -248,18 +248,18 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
 
   return (
     <Card {...rest}>
-      {/* <ApplicationFormModal */}
-      {/*  application={currentApplication} */}
-      {/*  open={updateFormOpen} */}
-      {/*  onClose={handleUpdateFormClose} */}
-      {/*  type="UPDATE" */}
-      {/* /> */}
-      {/* <ApplicationDeletionConfirmModal */}
-      {/*  application={currentApplication} */}
-      {/*  open={deleteFormOpen} */}
-      {/*  onClose={handleDeleteFormClose} */}
-      {/*  operation="DELETE" */}
-      {/* /> */}
+      <ApplicationFormModal
+        application={currentApplication}
+        open={updateFormOpen}
+        onClose={handleUpdateFormClose}
+        type="UPDATE"
+      />
+      <ApplicationDeletionConfirmModal
+        application={currentApplication}
+        open={deleteFormOpen}
+        onClose={handleDeleteFormClose}
+        operation="DELETE"
+      />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -358,7 +358,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       value={values.studentConfirmed}
                       onChange={handleFilterChange}
                       label="Status"
-                      name="studentConfirm"
+                      name="studentConfirmed"
                       size="small"
                     >
                       <MenuItem value="Accepted">
@@ -439,7 +439,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color="textPrimary">
+                    <Typography color='"textPrimary'>
                       {application.job}
                     </Typography>
                   </TableCell>
@@ -457,6 +457,34 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     <Typography color={application.companyAccepted ? 'error.main' : 'success.main'} variant="button">
                       {application.companyAccepted ? 'Accepted' : 'Denied'}
                     </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Fab
+                      color="secondary"
+                      aria-label="edit"
+                      size="small"
+                      onClick={(e) => handleUpdateFormOpen(e, application)}
+                    >
+                      <EditIcon />
+                    </Fab>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Fab
+                      color="error"
+                      sx={{
+                        color: 'white',
+                        backgroundColor: 'error.main',
+                        '&:hover': {
+                          cursor: 'pointer',
+                          backgroundColor: 'error.dark'
+                        }
+                      }}
+                      arial-label="remove"
+                      size="small"
+                      onClick={(e) => handleDeleteFormOpen(e, application)}
+                    >
+                      <DeleteForeverIcon />
+                    </Fab>
                   </TableCell>
                 </TableRow>
               ))}

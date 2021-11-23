@@ -28,10 +28,10 @@ export const fetchApplicationData = (token, pageNo, pageSize, sortBy, search) =>
     applications = applications.map((application) => ({
       id: application.id,
       studentCode: application.student.studentCode,
-      major: application.major.name,
+      major: application.student.major.name,
       experience: application.experience,
       job: application.job.name,
-      company: application.company.name,
+      company: application.job.company.name,
       companyAccepted: application.companyAccepted,
       studentConfirmed: application.studentConfirmed
     }));
@@ -52,7 +52,11 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
     const response = await axios.put(
       url,
       {
-        experience: application.experience, jobId: application.job.id, accountId: application.student.id, companyAccepted: application.companyAccepted === 'Accepted', studentConfirmed: application.studentConfirmed === 'Accepted'
+        experience: application.experience,
+        jobId: application.job.id,
+        accountId: application.student.id,
+        companyAccepted: application.companyAccepted === 'Accepted',
+        studentConfirmed: application.studentConfirmed === 'Accepted'
       },
       {
         headers: getRequiredAuthenHeader(token)
@@ -92,10 +96,10 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
       applications = applications.map((singleApplication) => ({
         id: singleApplication.id,
         studentCode: singleApplication.student.studentCode,
-        major: singleApplication.majors.name,
+        major: singleApplication.student.major.name,
         experience: singleApplication.experience,
         job: singleApplication.job.name,
-        company: singleApplication.company.name,
+        company: singleApplication.job.company.name,
         companyAccepted: singleApplication.companyAccepted,
         studentConfirmed: singleApplication.studentConfirmed
       }));
@@ -116,7 +120,11 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
   const postData = async () => {
     const response = await axios.post(
       url,
-      { experience: application.experience, jobId: application.job.id, accountId: application.student.id },
+      {
+        experience: application.experience,
+        jobId: application.job.id,
+        accountId: application.student.id
+      },
       {
         headers: getRequiredAuthenHeader(token)
       }
@@ -155,10 +163,10 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
       applications = applications.map((singleApplication) => ({
         id: singleApplication.id,
         studentCode: singleApplication.student.studentCode,
-        major: singleApplication.majors.name,
+        major: singleApplication.student.major.name,
         experience: singleApplication.experience,
         job: singleApplication.job.name,
-        company: singleApplication.company.name,
+        company: singleApplication.job.company.name,
         companyAccepted: singleApplication.companyAccepted,
         studentConfirmed: singleApplication.studentConfirmed
       }));
@@ -217,10 +225,10 @@ export const deleteApplication = (token, application, pageNo, pageSize, sortBy, 
       applications = applications.map((singleApplication) => ({
         id: singleApplication.id,
         studentCode: singleApplication.student.studentCode,
-        major: singleApplication.majors.name,
+        major: singleApplication.student.major.name,
         experience: singleApplication.experience,
         job: singleApplication.job.name,
-        company: singleApplication.company.name,
+        company: singleApplication.job.company.name,
         companyAccepted: singleApplication.companyAccepted,
         studentConfirmed: singleApplication.studentConfirmed
       }));
