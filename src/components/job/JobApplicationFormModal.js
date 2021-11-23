@@ -54,7 +54,7 @@ const JobApplicationFormModal = (props) => {
     setValues({
       ...values, jobId: job.id, accountId: account.id, name: account.account.name
     });
-  }, []);
+  }, [job]);
 
   useEffect(() => {
     setSelectedFiles({});
@@ -69,7 +69,7 @@ const JobApplicationFormModal = (props) => {
   };
 
   const onSaveHandler = () => {
-    props.onClose('Apply', values, job);
+    props.onClose('Apply', values);
   };
 
   const selectFile = (event) => {
@@ -88,6 +88,14 @@ const JobApplicationFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
+              sx={{
+                '& .MuiCardHeader-title': {
+                  fontSize: 25
+                },
+                '& .MuiCardHeader-subheader': {
+                  fontSize: 20
+                }
+              }}
               subheader={`${job.name} at ${job.company.name}`}
               title="Apply for Job"
             />
@@ -110,6 +118,7 @@ const JobApplicationFormModal = (props) => {
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
+                    disabled
                     fullWidth
                     label="Major"
                     name="name"
