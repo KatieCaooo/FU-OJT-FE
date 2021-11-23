@@ -17,7 +17,7 @@ const store = configureStore({
     semesters: semesterSlice.reducer,
     majors: majorSlice.reducer,
     jobs: jobSlice.reducer,
-    attachment: attachmentSlice.reducer
+    attachment: attachmentSlice.reducer,
     evaluations: evaluationSlice.reducer
   }
 });
