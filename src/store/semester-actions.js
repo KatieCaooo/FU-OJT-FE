@@ -94,11 +94,11 @@ export const updateSemester = (token, semester, pageNo, pageSize, sortBy, search
 };
 
 export const createSemester = (token, semester, pageNo, pageSize, sortBy, search) => async (dispatch) => {
-  const url = `${BASE_URL}/semester`;
+  const url = `${BASE_URL}/semesters`;
   const postData = async () => {
     const response = await axios.post(
       url,
-      { name: semester.name },
+      { name: semester.name, startDate: semester.startDate.toISOString(), endDate: semester.endDate.toISOString() },
       {
         headers: getRequiredAuthenHeader(token)
       }

@@ -102,7 +102,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
 
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
-    const descriptionFilter = `description=='*${values.desciption}*'`;
+    const descriptionFilter = `description=='*${values.description}*'`;
     const addressFilter = `address=='*${values.address}*'`;
     const filter = [];
     if (values.name !== '') {
