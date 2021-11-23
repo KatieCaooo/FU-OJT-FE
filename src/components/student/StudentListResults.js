@@ -26,30 +26,46 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchStudentsData } from 'src/store/student-actions';
+import { fetchStudentsData, updateStudent, deleteStudent } from 'src/store/student-actions';
+import { studentActions } from 'src/store/student-slice';
 import getInitials from '../../utils/getInitials';
 import StudentFormModal from './StudentFormModal';
+import StudentDeletionConfirmModal from './StudentDeletionConfirmModal';
 
 const StudentListResults = ({ students, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
+  const {
+    limit, page, order, orderBy, sortedBy, search
+  } = useSelector((state) => state.students.filter);
   const dispatch = useDispatch();
   const [selectedStudentIds, setSelectedStudentIds] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
-  const [sortedBy, setSortedBy] = useState('id asc');
-  const [search, setSearch] = useState('');
 
-  const [account, setAccount] = useState({});
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = (event, selectedAccount) => {
-    setOpen(true);
-    setAccount(selectedAccount);
+  const [currentStudent, setCurrentStudent] = useState({});
+  const [updateFormOpen, setUpdateFormOpen] = useState(false);
+  const handleUpdateFormOpen = (event, selectedStudent) => {
+    setUpdateFormOpen(true);
+    setCurrentStudent(selectedStudent);
   };
 
-  const handleClose = () => setOpen(false);
+  const handleUpdateFormClose = (type, student) => {
+    if (type === 'UPDATE') {
+      dispatch(updateStudent(token, student, page, limit, sortedBy, search));
+    }
+    setUpdateFormOpen(false);
+  };
+
+  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
+  const handleDeleteFormOpen = (event, selectedStudent) => {
+    setDeleteFormOpen(true);
+    setCurrentStudent(selectedStudent);
+  };
+
+  const handleDeleteFormClose = (type, student) => {
+    if (type === 'DELETE') {
+      dispatch(deleteStudent(token, student, page, limit, sortedBy, search));
+    }
+    setDeleteFormOpen(false);
+  };
 
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
@@ -58,9 +74,9 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
     const isSetDefault = isSameProperty && !isOldAsc;
     const orderValue = isAsc ? 'desc' : 'asc';
     const orderByValue = !isSetDefault ? property : 'id';
-    setOrder(orderValue);
-    setOrderBy(orderByValue);
-    setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`);
+    dispatch(studentActions.setOrder(orderValue));
+    dispatch(studentActions.setOrderBy(orderByValue));
+    dispatch(studentActions.setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
     dispatch(
       fetchStudentsData(
         token,
@@ -85,11 +101,18 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
     major: ''
   });
 
-  const handleFilterChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+  const handleFilterChange = (event, dateValues, fieldName) => {
+    if (!event) {
+      setValues({
+        ...values,
+        [fieldName]: dateValues
+      });
+    } else {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value
+      });
+    }
   };
 
   const onFilterHandler = () => {
@@ -118,10 +141,10 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
     if (values.major !== '') {
       filter.push(majorFilter);
     }
-    setSearch(
+    dispatch(studentActions.setSearch(
       filter.join(';')
-    );
-    setPage(0);
+    ));
+    dispatch(studentActions.setPage(0));
     dispatch(fetchStudentsData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
@@ -164,13 +187,13 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   };
 
   const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-    setPage(0);
+    dispatch(studentActions.setLimit(event.target.value));
+    dispatch(studentActions.setPage(0));
     dispatch(fetchStudentsData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+    dispatch(studentActions.setPage(newPage));
     dispatch(fetchStudentsData(token, newPage, limit, sortedBy, search));
   };
 
@@ -221,7 +244,8 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
 
   return (
     <Card {...rest}>
-      <StudentFormModal account={account} open={open} onClose={handleClose} />
+      <StudentFormModal student={currentStudent} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
+      <StudentDeletionConfirmModal student={currentStudent} open={deleteFormOpen} onClose={handleDeleteFormClose} operation="DELETE" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -343,6 +367,9 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       <MenuItem value="Business Administration">
                         Business Administration
                       </MenuItem>
+                      <MenuItem value="Digital Art Design">
+                        Digital Art Design
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>
@@ -402,7 +429,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                     {student.student.major.name}
                   </TableCell>
                   <TableCell align="right">
-                    <Fab color="secondary" aria-label="edit" size="small" onClick={(e) => handleOpen(e, student)}>
+                    <Fab color="secondary" aria-label="edit" size="small" onClick={(e) => handleUpdateFormOpen(e, student)}>
                       <EditIcon />
                     </Fab>
                   </TableCell>
@@ -419,6 +446,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       }}
                       arial-label="remove"
                       size="small"
+                      onClick={(e) => handleDeleteFormOpen(e, student)}
                     >
                       <DeleteForeverIcon />
                     </Fab>

@@ -1,24 +1,24 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchSemestersData } from 'src/store/semester-actions';
+import { fetchEvaluationData } from 'src/store/evaluation-actions';
 import { useEffect } from 'react';
-import SemesterListToolbar from '../components/semester/SemesterListToolbar';
-import SemesterListResult from '../components/semester/SemesterListResult';
+import EvaluationListToolbar from '../components/evaluation/EvaluationListToolbar';
+import EvaluationListResult from '../components/evaluation/EvaluationListResult';
 
-const SemesterList = () => {
-  const semesterData = useSelector((state) => state.semesters);
+const EvaluationsList = () => {
+  const evaluationsData = useSelector((state) => state.evaluations);
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchSemestersData(token, 0, 10));
+    dispatch(fetchEvaluationData(token, 0, 10));
   }, [dispatch]);
 
   return (
     <>
       <Helmet>
-        <title> Semesters | Material Kit </title>
+        <title> Majors | Material Kit </title>
       </Helmet>
       <Box
         sx={{
@@ -29,10 +29,10 @@ const SemesterList = () => {
       >
         <Container maxWidth={false}>
           <Box sx={{ pt: 3 }}>
-            <SemesterListToolbar />
-            <SemesterListResult
-              semesters={semesterData.semesters}
-              totalElements={semesterData.totalQuantity}
+            <EvaluationListToolbar />
+            <EvaluationListResult
+              evaluations={evaluationsData.evaluations}
+              totalElements={evaluationsData.totalQuantity}
             />
           </Box>
         </Container>
@@ -41,4 +41,4 @@ const SemesterList = () => {
   );
 };
 
-export default SemesterList;
+export default EvaluationsList;

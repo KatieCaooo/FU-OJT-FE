@@ -6,6 +6,9 @@ import companySlice from './company-slice';
 import semesterSlice from './semester-slice';
 import majorSlice from './major-slice';
 import jobSlice from './job-silce';
+import attachmentSlice from './attachment-slice';
+import evaluationSlice from './evaluation-slice';
+import applicationSlice from './application-slice';
 
 const store = configureStore({
   reducer: {
@@ -15,6 +18,9 @@ const store = configureStore({
     semesters: semesterSlice.reducer,
     majors: majorSlice.reducer,
     jobs: jobSlice.reducer,
+    attachment: attachmentSlice.reducer,
+    evaluations: evaluationSlice.reducer,
+    applications: applicationSlice.reducer
   }
 });
 

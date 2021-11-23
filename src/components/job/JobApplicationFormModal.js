@@ -18,8 +18,10 @@ import {
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
+import { uploadAttachment } from 'src/store/attachment-actions';
+import { attachmentActions } from 'src/store/attachment-slice';
 
 const style = {
   position: 'absolute',
@@ -37,12 +39,14 @@ const Input = styled('input')({
 });
 
 const JobApplicationFormModal = (props) => {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.account.token);
   const { job, open } = props;
   const account = useSelector((state) => state.account);
   const [selectedFiles, setSelectedFiles] = useState({});
   const [values, setValues] = useState({
     jobId: null,
-    expectation: '',
+    experience: '',
     attachments: {}
   });
 
@@ -50,7 +54,7 @@ const JobApplicationFormModal = (props) => {
     setValues({
       ...values, jobId: job.id, accountId: account.id, name: account.account.name
     });
-  }, []);
+  }, [job]);
 
   useEffect(() => {
     setSelectedFiles({});
@@ -65,11 +69,13 @@ const JobApplicationFormModal = (props) => {
   };
 
   const onSaveHandler = () => {
-    props.onClose('Apply', values, job);
+    props.onClose('Apply', values);
   };
 
   const selectFile = (event) => {
     setSelectedFiles(event.target.files);
+    dispatch(uploadAttachment(token, { page: 'jobApplication', attachments: event.target.files }));
+    dispatch(attachmentActions.setIsLoading({ page: 'jobApplication', isLoading: true }));
   };
 
   return (
@@ -82,6 +88,14 @@ const JobApplicationFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
+              sx={{
+                '& .MuiCardHeader-title': {
+                  fontSize: 25
+                },
+                '& .MuiCardHeader-subheader': {
+                  fontSize: 20
+                }
+              }}
               subheader={`${job.name} at ${job.company.name}`}
               title="Apply for Job"
             />
@@ -104,6 +118,7 @@ const JobApplicationFormModal = (props) => {
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
+                    disabled
                     fullWidth
                     label="Major"
                     name="name"
@@ -118,11 +133,11 @@ const JobApplicationFormModal = (props) => {
                     multiline
                     maxRows={8}
                     minRows={4}
-                    label="Expectation"
-                    name="expectation"
+                    label="Experience"
+                    name="experience"
                     onChange={handleChange}
                     required
-                    value={values.expectation}
+                    value={values.experience}
                     variant="outlined"
                   />
                 </Grid>

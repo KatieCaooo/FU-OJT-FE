@@ -1,24 +1,23 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchSemestersData } from 'src/store/semester-actions';
 import { useEffect } from 'react';
-import SemesterListToolbar from '../components/semester/SemesterListToolbar';
-import SemesterListResult from '../components/semester/SemesterListResult';
+import { fetchApplicationData } from '../store/application-actions';
+import ApplicationListResult from '../components/application/ApplicationListResult';
 
-const SemesterList = () => {
-  const semesterData = useSelector((state) => state.semesters);
+const ApplicationList = () => {
+  const applicationsData = useSelector((state) => state.applications);
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchSemestersData(token, 0, 10));
+    dispatch(fetchApplicationData(token, 0, 10));
   }, [dispatch]);
 
   return (
     <>
       <Helmet>
-        <title> Semesters | Material Kit </title>
+        <title> Majors | Material Kit </title>
       </Helmet>
       <Box
         sx={{
@@ -29,10 +28,9 @@ const SemesterList = () => {
       >
         <Container maxWidth={false}>
           <Box sx={{ pt: 3 }}>
-            <SemesterListToolbar />
-            <SemesterListResult
-              semesters={semesterData.semesters}
-              totalElements={semesterData.totalQuantity}
+            <ApplicationListResult
+              applications={applicationsData.applications}
+              totalElements={applicationsData.totalQuantity}
             />
           </Box>
         </Container>
@@ -41,4 +39,4 @@ const SemesterList = () => {
   );
 };
 
-export default SemesterList;
+export default ApplicationList;

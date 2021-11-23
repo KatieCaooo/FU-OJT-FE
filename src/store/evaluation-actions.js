@@ -1,13 +1,16 @@
 const { BASE_URL, getRequiredAuthenHeader } = require('src/api/config');
 const axios = require('axios');
-const { studentActions } = require('./student-slice');
+const { evaluationActions } = require('./evaluation-slice');
 
-export const fetchStudentsData = (token, pageNo, pageSize, sortBy, search) => async (dispatch) => {
-  const url = `${BASE_URL}/users`;
+export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => async (dispatch) => {
+  const url = `${BASE_URL}/evaluations`;
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: `student.id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
+        search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+        pageSize,
+        pageNo,
+        sortBy
       },
       headers: getRequiredAuthenHeader(token)
     });
@@ -21,10 +24,13 @@ export const fetchStudentsData = (token, pageNo, pageSize, sortBy, search) => as
 
   try {
     const response = await fetchData();
-    const students = response.data;
+    let evaluations = response.data;
+    evaluations = evaluations.map((evaluation) => ({
+      id: evaluation.id, comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass
+    }));
     dispatch(
-      studentActions.replaceStudentList({
-        students: students || [],
+      evaluationActions.replaceEvaluationList({
+        evaluations: evaluations || [],
         totalQuantity: response.totalElements
       })
     );
@@ -33,21 +39,19 @@ export const fetchStudentsData = (token, pageNo, pageSize, sortBy, search) => as
   }
 };
 
-export const updateStudent = (token, student, pageNo, pageSize, sortBy, search) => async (dispatch) => {
-  const url = `${BASE_URL}/users/${student.id}`;
+export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, search) => async (dispatch) => {
+  const url = `${BASE_URL}/semesters/${evaluation.id}`;
   const postData = async () => {
     const response = await axios.put(
       url,
-      {
-        name: student.name, studentCode: student.studentCode, semesterId: student.semesterId, email: student.email, address: student.address, phone: student.phone, major: student.major
-      },
+      { comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass === 'Passed' },
       {
         headers: getRequiredAuthenHeader(token)
       }
     );
 
     if (response.status !== 200) {
-      throw new Error('Could not update Student');
+      throw new Error('Could not update evaluation');
     }
 
     return response.data;
@@ -57,7 +61,7 @@ export const updateStudent = (token, student, pageNo, pageSize, sortBy, search) 
     await postData().then(async (updateRes) => {
       console.log(updateRes);
       const fetchData = async () => {
-        const fetchUrl = `${BASE_URL}/users`;
+        const fetchUrl = `${BASE_URL}/evaluations`;
         const response = await axios.get(fetchUrl, {
           params: {
             search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
@@ -75,13 +79,13 @@ export const updateStudent = (token, student, pageNo, pageSize, sortBy, search) 
         return response.data;
       };
       const response = await fetchData();
-      let students = response.data;
-      students = students.map((singleStudent) => ({
-        id: singleStudent.id, name: singleStudent.name, studentCode: singleStudent.studentCode, semester: singleStudent.semester, email: singleStudent.email, address: singleStudent.address, phone: singleStudent.phone, major: singleStudent.major
+      let evaluations = response.data;
+      evaluations = evaluations.map((singleEvaluation) => ({
+        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, pass: singleEvaluation.pass
       }));
       dispatch(
-        studentActions.replaceStudentList({
-          students: students || [],
+        evaluationActions.replaceEvaluationList({
+          evaluations: evaluations || [],
           totalQuantity: response.totalElements
         })
       );
@@ -91,28 +95,29 @@ export const updateStudent = (token, student, pageNo, pageSize, sortBy, search) 
   }
 };
 
-export const deleteStudent = (token, student, pageNo, pageSize, sortBy, search) => async (dispatch) => {
-  const url = `${BASE_URL}/users/${student.id}`;
+export const createEvaluation = (token, evaluation, pageNo, pageSize, sortBy, search) => async (dispatch) => {
+  const url = `${BASE_URL}/evaluations`;
   const postData = async () => {
-    const response = await axios.delete(
+    const response = await axios.post(
       url,
+      { comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass === 'Passed' },
       {
         headers: getRequiredAuthenHeader(token)
       }
     );
 
     if (response.status !== 200) {
-      throw new Error('Could not delete student');
+      throw new Error('Could not create evaluation');
     }
 
     return response.data;
   };
 
   try {
-    await postData().then(async () => {
-      const fetchData = async (deleteResponse) => {
-        console.log(deleteResponse);
-        const fetchUrl = `${BASE_URL}/users`;
+    await postData().then(async (updateRes) => {
+      console.log(updateRes);
+      const fetchData = async () => {
+        const fetchUrl = `${BASE_URL}/evaluations`;
         const response = await axios.get(fetchUrl, {
           params: {
             search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
@@ -130,13 +135,13 @@ export const deleteStudent = (token, student, pageNo, pageSize, sortBy, search) 
         return response.data;
       };
       const response = await fetchData();
-      let students = response.data;
-      students = students.map((singleStudent) => ({
-        id: singleStudent.id, name: singleStudent.name, studentCode: singleStudent.studentCode, semester: singleStudent.semester, email: singleStudent.email, address: singleStudent.address, phone: singleStudent.phone, major: singleStudent.major
+      let evaluations = response.data;
+      evaluations = evaluations.map((singleEvaluation) => ({
+        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, pass: singleEvaluation.pass
       }));
       dispatch(
-        studentActions.replaceSemesterList({
-          students: students || [],
+        evaluationActions.replaceEvaluationList({
+          evaluations: evaluations || [],
           totalQuantity: response.totalElements
         })
       );

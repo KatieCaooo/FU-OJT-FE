@@ -29,28 +29,30 @@ const style = {
 };
 
 const StudentFormModal = (props) => {
-  const { account } = props;
-  console.log(account);
+  const { student, type } = props;
   const [values, setValues] = useState({
     name: '',
     studentCode: '',
+    semesterId: '',
     email: '',
     address: '',
     phone: '',
     major: ''
   });
   useEffect(() => {
-    if (account.name) {
+    if (student.name) {
       setValues({
-        name: account.name,
-        studentCode: account.student.studentCode,
-        email: account.email,
-        address: account.student.address,
-        phone: account.phone,
-        major: account.student.major.name
+        id: student.id,
+        name: student.name,
+        studentCode: student.student.studentCode,
+        semesterID: student.student.semesterID,
+        email: student.email,
+        address: student.student.address,
+        phone: student.phone,
+        major: student.student.major
       });
     }
-  }, [account]);
+  }, [student]);
 
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -58,6 +60,9 @@ const StudentFormModal = (props) => {
       ...values,
       [event.target.name]: event.target.value
     });
+  };
+  const onSaveHandler = () => {
+    props.onClose(type, values);
   };
   return (
     <Modal
@@ -69,13 +74,35 @@ const StudentFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
-              subheader="The information can be edited"
-              title="User Profile"
+              subheader={
+                type === 'UPDATE'
+                  ? 'The information can be edited'
+                  : 'Information of company to be created.'
+              }
+              title="Student Information"
             />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                <Grid item md={6} xs={6}>
+                {type === 'UPDATE' && (
+                  <Grid item md={3} xs={3}>
+                    <TextField
+                      disabled
+                      fullWidth
+                      label="Id"
+                      name="id"
+                      onChange={handleChange}
+                      required
+                      value={values.id}
+                      variant="outlined"
+                    />
+                  </Grid>
+                )}
+                <Grid
+                  item
+                  md={type === 'UPDATE' ? 9 : 12}
+                  xs={type === 'UPDATE' ? 9 : 12}
+                >
                   <TextField
                     fullWidth
                     label="Full name"
@@ -97,10 +124,20 @@ const StudentFormModal = (props) => {
                     variant="outlined"
                   />
                 </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="SemesterID"
+                    name="semesterId"
+                    onChange={handleChange}
+                    value={values.semesterId}
+                    variant="outlined"
+                  />
+                </Grid>
                 <Grid item md={12} xs={12}>
                   <TextField
                     fullWidth
-                    label="Email Address"
+                    label="Email"
                     name="email"
                     onChange={handleChange}
                     required
@@ -130,15 +167,6 @@ const StudentFormModal = (props) => {
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  {/* <TextField
-                    fullWidth
-                    label="Major"
-                    name="major"
-                    onChange={handleChange}
-                    value={values.major}
-                    disabled
-                    variant="outlined"
-                  /> */}
                   <FormControl variant="outlined" sx={{ width: '100%' }}>
                     <InputLabel id="major-label" sx={{ width: '100%' }}>
                       Major
@@ -152,56 +180,15 @@ const StudentFormModal = (props) => {
                       name="major"
                       sx={{ width: '100%' }}
                     >
-                      <MenuItem value="Software Engineering">
+                      <MenuItem value="1">
                         Software Engineering
                       </MenuItem>
-                      <MenuItem value="Business Administration">
+                      <MenuItem value="2">
                         Business Administration
                       </MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
-                {/* <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid> */}
               </Grid>
             </CardContent>
             <Divider />
@@ -212,8 +199,12 @@ const StudentFormModal = (props) => {
                 p: 2
               }}
             >
-              <Button color="primary" variant="contained">
-                Save details
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={onSaveHandler}
+              >
+                {type === 'UPDATE' ? 'Save details' : 'Create'}
               </Button>
             </Box>
           </Card>
@@ -226,5 +217,7 @@ const StudentFormModal = (props) => {
 export default StudentFormModal;
 
 StudentFormModal.propTypes = {
-  account: PropTypes.object
+  student: PropTypes.object,
+  onClose: PropTypes.func,
+  type: PropTypes.string
 };

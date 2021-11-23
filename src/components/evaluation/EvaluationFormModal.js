@@ -7,7 +7,7 @@ import {
   TextField,
   Card,
   CardHeader,
-  CardContent
+  CardContent, InputLabel, Select, MenuItem, FormControl
   //   FormControl,
   //   InputLabel,
   //   Select,
@@ -27,23 +27,23 @@ const style = {
   p: 4
 };
 
-const CompanyFormModal = (props) => {
-  const { company, type } = props;
+const EvaluationFormModal = (props) => {
+  const { evaluation, type } = props;
   const [values, setValues] = useState({
-    name: '',
-    description: '',
-    address: ''
+    grade: '',
+    comment: '',
+    pass: '',
   });
   useEffect(() => {
-    if (company.name) {
+    if (evaluation.name) {
       setValues({
-        id: company.id,
-        name: company.name,
-        description: company.description,
-        address: company.address
+        id: evaluation.id,
+        grade: evaluation.grade,
+        comment: evaluation.comment,
+        pass: evaluation.pass
       });
     }
-  }, [company]);
+  }, [evaluation]);
 
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -56,6 +56,7 @@ const CompanyFormModal = (props) => {
   const onSaveHandler = () => {
     props.onClose(type, values);
   };
+
   return (
     <Modal
       {...props}
@@ -66,17 +67,14 @@ const CompanyFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
-              subheader={
-                type === 'UPDATE'
-                  ? 'The information can be edited'
-                  : 'Information of company to be created.'
-              }
-              title="Company Information"
+              subheader={type === 'UPDATE' ? 'The information can be edited' : 'Information of Evaluation to be Created'}
+              title="Evaluation Information"
             />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                {type === 'UPDATE' && (
+                {type === 'UPDATE'
+                && (
                   <Grid item md={3} xs={3}>
                     <TextField
                       disabled
@@ -90,42 +88,50 @@ const CompanyFormModal = (props) => {
                     />
                   </Grid>
                 )}
-                <Grid
-                  item
-                  md={type === 'UPDATE' ? 9 : 12}
-                  xs={type === 'UPDATE' ? 9 : 12}
-                >
+                <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
                     fullWidth
-                    label="Name"
-                    name="name"
+                    label="Grade"
+                    name="grade"
                     onChange={handleChange}
                     required
-                    value={values.name}
+                    value={values.grade}
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item md={12} xs={12}>
+                <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
                     fullWidth
-                    label="Description"
-                    name="description"
+                    label="Comment"
+                    name="comment"
                     onChange={handleChange}
                     required
-                    value={values.description}
+                    value={values.comment}
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Address"
-                    name="address"
-                    onChange={handleChange}
-                    required
-                    value={values.address}
-                    variant="outlined"
-                  />
+                <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
+                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                    <InputLabel id="disabled-label" size="small">
+                      Status
+                    </InputLabel>
+                    <Select
+                      labelId="pass-label"
+                      id="pass-dropdown"
+                      value={values.pass}
+                      onChange={handleChange}
+                      label="Status"
+                      name="pass"
+                      size="small"
+                    >
+                      <MenuItem value="Passed">
+                        Passed
+                      </MenuItem>
+                      <MenuItem value="Not Passed">
+                        Not Passed
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
             </CardContent>
@@ -137,11 +143,7 @@ const CompanyFormModal = (props) => {
                 p: 2
               }}
             >
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={onSaveHandler}
-              >
+              <Button color="primary" variant="contained" onClick={onSaveHandler}>
                 {type === 'UPDATE' ? 'Save details' : 'Create'}
               </Button>
             </Box>
@@ -152,10 +154,10 @@ const CompanyFormModal = (props) => {
   );
 };
 
-export default CompanyFormModal;
+export default EvaluationFormModal;
 
-CompanyFormModal.propTypes = {
-  company: PropTypes.object,
+EvaluationFormModal.propTypes = {
+  evaluation: PropTypes.object,
   onClose: PropTypes.func,
   type: PropTypes.string
 };
