@@ -26,10 +26,11 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchStudentsData, updateStudent } from 'src/store/student-actions';
+import { fetchStudentsData, updateStudent, deleteStudent } from 'src/store/student-actions';
 import { studentActions } from 'src/store/student-slice';
 import getInitials from '../../utils/getInitials';
 import StudentFormModal from './StudentFormModal';
+import StudentDeletionConfirmModal from './StudentDeletionConfirmModal';
 
 const StudentListResults = ({ students, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
@@ -38,12 +39,6 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   } = useSelector((state) => state.students.filter);
   const dispatch = useDispatch();
   const [selectedStudentIds, setSelectedStudentIds] = useState([]);
-  // const [limit, setLimit] = useState(10);
-  // const [page, setPage] = useState(0);
-  // const [order, setOrder] = useState('asc');
-  // const [orderBy, setOrderBy] = useState('id');
-  // const [sortedBy, setSortedBy] = useState('id asc');
-  // const [search, setSearch] = useState('');
 
   const [currentStudent, setCurrentStudent] = useState({});
   const [updateFormOpen, setUpdateFormOpen] = useState(false);
@@ -57,6 +52,19 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
       dispatch(updateStudent(token, student, page, limit, sortedBy, search));
     }
     setUpdateFormOpen(false);
+  };
+
+  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
+  const handleDeleteFormOpen = (event, selectedStudent) => {
+    setDeleteFormOpen(true);
+    setCurrentStudent(selectedStudent);
+  };
+
+  const handleDeleteFormClose = (type, student) => {
+    if (type === 'DELETE') {
+      dispatch(deleteStudent(token, student, page, limit, sortedBy, search));
+    }
+    setDeleteFormOpen(false);
   };
 
   const handleRequestSort = (event, property, sortField) => {
@@ -237,6 +245,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
   return (
     <Card {...rest}>
       <StudentFormModal student={currentStudent} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
+      <StudentDeletionConfirmModal student={currentStudent} open={deleteFormOpen} onClose={handleDeleteFormClose} operation="DELETE" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -437,6 +446,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       }}
                       arial-label="remove"
                       size="small"
+                      onClick={(e) => handleDeleteFormOpen(e, student)}
                     >
                       <DeleteForeverIcon />
                     </Fab>

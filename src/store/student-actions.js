@@ -90,3 +90,58 @@ export const updateStudent = (token, student, pageNo, pageSize, sortBy, search) 
     console.log(error);
   }
 };
+
+export const deleteStudent = (token, student, pageNo, pageSize, sortBy, search) => async (dispatch) => {
+  const url = `${BASE_URL}/users/${student.id}`;
+  const postData = async () => {
+    const response = await axios.delete(
+      url,
+      {
+        headers: getRequiredAuthenHeader(token)
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error('Could not delete student');
+    }
+
+    return response.data;
+  };
+
+  try {
+    await postData().then(async () => {
+      const fetchData = async (deleteResponse) => {
+        console.log(deleteResponse);
+        const fetchUrl = `${BASE_URL}/users`;
+        const response = await axios.get(fetchUrl, {
+          params: {
+            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            pageSize,
+            pageNo,
+            sortBy
+          },
+          headers: getRequiredAuthenHeader(token)
+        });
+
+        if (response.status !== 200) {
+          throw new Error('Could not fetch data');
+        }
+
+        return response.data;
+      };
+      const response = await fetchData();
+      let students = response.data;
+      students = students.map((singleStudent) => ({
+        id: singleStudent.id, name: singleStudent.name, studentCode: singleStudent.studentCode, semester: singleStudent.semester, email: singleStudent.email, address: singleStudent.address, phone: singleStudent.phone, major: singleStudent.major
+      }));
+      dispatch(
+        studentActions.replaceSemesterList({
+          students: students || [],
+          totalQuantity: response.totalElements
+        })
+      );
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
