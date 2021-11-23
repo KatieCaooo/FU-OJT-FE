@@ -1,0 +1,12 @@
+version: '3'
+services:
+  nginx-react:
+    image: thanhthu0321/ojt-manager-frontend:latest
+    # container_name: ngixreactapp
+    build:
+      context: .
+      # dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: production

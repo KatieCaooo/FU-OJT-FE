@@ -1,23 +1,24 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
+import { fetchMajorsData } from 'src/store/major-actions';
 import { useEffect } from 'react';
-import { fetchStudentsData } from 'src/store/student-actions';
-import StudentListToolbar from '../components/student/StudentListToolbar';
-import StudentListResults from '../components/student/StudentListResults';
+import MajorListToolbar from '../components/major/MajorListToolbar';
+import MajorListResult from '../components/major/MajorListResult';
 
-const StudentList = () => {
-  const studentData = useSelector((state) => state.students);
+const SemesterList = () => {
+  const majorData = useSelector((state) => state.majors);
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchStudentsData(token, 0, 10));
+    dispatch(fetchMajorsData(token, 0, 10));
   }, [dispatch]);
+
   return (
     <>
       <Helmet>
-        <title>Students | Material Kit</title>
+        <title> Majors | Material Kit </title>
       </Helmet>
       <Box
         sx={{
@@ -27,11 +28,11 @@ const StudentList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <StudentListToolbar />
           <Box sx={{ pt: 3 }}>
-            <StudentListResults
-              students={studentData.students}
-              totalElements={studentData.totalQuantity}
+            <MajorListToolbar />
+            <MajorListResult
+              majors={majorData.majors}
+              totalElements={majorData.totalQuantity}
             />
           </Box>
         </Container>
@@ -40,4 +41,4 @@ const StudentList = () => {
   );
 };
 
-export default StudentList;
+export default SemesterList;

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
@@ -14,11 +13,13 @@ import {
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
-  Lock as LockIcon,
   Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
+  Compass as CompassIcon,
+  Briefcase as BriefcaseIcon,
+  FileText as FileIcon,
+  Calendar as CalendarIcon,
+  List as ListIcon,
   User as UserIcon,
-  UserPlus as UserPlusIcon,
   Users as UsersIcon
 } from 'react-feather';
 import { useSelector } from 'react-redux';
@@ -37,16 +38,40 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
+      href: '/app/applications',
+      icon: FileIcon,
+      title: 'Applications',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/app/jobs',
+      icon: BriefcaseIcon,
+      title: 'Jobs',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
+      href: '/app/companies',
+      icon: CompassIcon,
+      title: 'Companies',
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+    },
+    {
       href: '/app/students',
       icon: UsersIcon,
       title: 'Students',
       roles: ['SYS_ADMIN']
     },
     {
-      href: '/app/products',
-      icon: ShoppingBagIcon,
-      title: 'Products',
-      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+      href: '/app/majors',
+      icon: ListIcon,
+      title: 'Majors',
+      roles: ['SYS_ADMIN']
+    },
+    {
+      href: '/app/semesters',
+      icon: CalendarIcon,
+      title: 'Semesters',
+      roles: ['SYS_ADMIN']
     },
     {
       href: '/app/account',
@@ -59,18 +84,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       icon: SettingsIcon,
       title: 'Settings',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
-    },
-    {
-      href: '/login',
-      icon: LockIcon,
-      title: 'Login',
-      roles: []
-    },
-    {
-      href: '/register',
-      icon: UserPlusIcon,
-      title: 'Register',
-      roles: []
     },
     {
       href: '/404',
@@ -156,7 +169,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
-      <Box
+      {/* <Box
         sx={{
           backgroundColor: 'background.default',
           m: 2,
@@ -185,7 +198,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
             See PRO version
           </Button>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 

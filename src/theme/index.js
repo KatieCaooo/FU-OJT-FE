@@ -8,11 +8,22 @@ const theme = createTheme({
     },
     primary: {
       contrastText: '#ffffff',
-      main: '#5664d2'
+      main: '#b97962'
+    },
+    secondary: {
+      contrastText: '#ffffff',
+      light: '#42a5f5',
+      main: '#1976d2',
+      dark: '#1565c0'
     },
     text: {
       primary: '#172b4d',
-      secondary: '#6b778c'
+      secondary: '#6b778c',
+    },
+    error: {
+      light: '#ef5350',
+      main: '#d32f2f',
+      dark: '#c62828'
     }
   },
   shadows: [

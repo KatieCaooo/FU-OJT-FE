@@ -1,13 +1,13 @@
 const { BASE_URL, getRequiredAuthenHeader } = require('src/api/config');
 const axios = require('axios');
-const { studentActions } = require('./student-slice');
+const { companyActions } = require('./company-slice');
 
-export const fetchStudentsData = (token, pageNo, pageSize, sortBy, search) => async (dispatch) => {
-  const url = `${BASE_URL}/users`;
+export const fetchCompaniesData = (token, pageNo, pageSize, sortBy, search) => async (dispatch) => {
+  const url = `${BASE_URL}/companies`;
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: `student.id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
+        search: `id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
       },
       headers: getRequiredAuthenHeader(token)
     });
@@ -21,10 +21,10 @@ export const fetchStudentsData = (token, pageNo, pageSize, sortBy, search) => as
 
   try {
     const response = await fetchData();
-    const students = response.data;
+    const companies = response.data;
     dispatch(
-      studentActions.replaceStudentList({
-        students: students || [],
+      companyActions.replaceCompanyList({
+        companies: companies || [],
         totalQuantity: response.totalElements
       })
     );
@@ -33,4 +33,4 @@ export const fetchStudentsData = (token, pageNo, pageSize, sortBy, search) => as
   }
 };
 
-export const sendStudentData = () => {};
+export const sendCompanyData = () => {};

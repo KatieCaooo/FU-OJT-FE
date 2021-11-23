@@ -6,7 +6,10 @@ import StudentList from './pages/StudentList';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
-import ProductList from './pages/ProductList';
+import CompaniesList from './pages/CompaniesList';
+import JobsList from './pages/JobsList';
+import SemestersList from './pages/SemestersList';
+import MajorList from './pages/MajorList';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 
@@ -18,7 +21,10 @@ const routes = (isLoggedIn, isAdmin) => [
       { path: 'account', element: <Account /> },
       { path: 'students', element: isAdmin ? <StudentList /> : <Navigate to="/" /> },
       { path: 'dashboard', element: <Dashboard /> },
-      { path: 'products', element: <ProductList /> },
+      { path: 'companies', element: <CompaniesList /> },
+      { path: 'jobs', element: <JobsList /> },
+      { path: 'semesters', element: <SemestersList /> },
+      { path: 'majors', element: <MajorList /> },
       { path: 'settings', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
