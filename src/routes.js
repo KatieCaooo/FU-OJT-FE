@@ -11,6 +11,7 @@ import JobsList from './pages/JobsList';
 import SemestersList from './pages/SemestersList';
 import MajorList from './pages/MajorList';
 import EvaluationList from './pages/EvaluationList';
+import ApplicationList from './pages/ApplicationList';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 
@@ -22,6 +23,7 @@ const routes = (isLoggedIn, isAdmin) => [
       { path: 'account', element: <Account /> },
       { path: 'students', element: isAdmin ? <StudentList /> : <Navigate to="/" /> },
       { path: 'dashboard', element: <Dashboard /> },
+      { path: 'applications', element: <ApplicationList /> },
       { path: 'companies', element: <CompaniesList /> },
       { path: 'jobs', element: <JobsList /> },
       { path: 'semesters', element: <SemestersList /> },
