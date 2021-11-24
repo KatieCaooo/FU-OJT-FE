@@ -36,7 +36,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
         </RouterLink>
         <RouterLink to="/">
           <Typography color="white" variant="h2" fontFamily="Times New Roman">
-            OJT Management
+            Internship Management
           </Typography>
         </RouterLink>
         <Box sx={{ flexGrow: 1 }} />
