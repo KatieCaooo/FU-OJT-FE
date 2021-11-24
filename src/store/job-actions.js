@@ -97,3 +97,70 @@ export const updateJob = (token, job, pageNo, pageSize, sortBy, search) => async
     console.log(error);
   }
 };
+export const deleteJob = (token, job, pageNo, pageSize, sortBy, search) => async (dispatch) => {
+  const url = `${BASE_URL}/jobs/${job.id}`;
+  const postData = async () => {
+    const response = await axios.delete(
+      url,
+      {
+        headers: getRequiredAuthenHeader(token)
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error('Could not delete job');
+    }
+
+    return response.data;
+  };
+
+  try {
+    await postData().then(async () => {
+      const fetchData = async (deleteResponse) => {
+        console.log(deleteResponse);
+        const fetchUrl = `${BASE_URL}/jobs`;
+        const response = await axios.get(fetchUrl, {
+          params: {
+            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            pageSize,
+            pageNo,
+            sortBy
+          },
+          headers: getRequiredAuthenHeader(token)
+        });
+
+        if (response.status !== 200) {
+          throw new Error('Could not fetch data');
+        }
+
+        return response.data;
+      };
+      const response = await fetchData();
+      let jobs = response.data;
+      jobs = jobs.map((singleJob) => ({
+        id: singleJob.id,
+        name: singleJob.name,
+        title: singleJob.title,
+        salary: singleJob.salary,
+        topReasons: singleJob.topReasons,
+        description: singleJob.description,
+        aboutOurTeam: singleJob.aboutOurTeam,
+        responsibilities: singleJob.responsibilities,
+        mustHaveSkills: singleJob.mustHaveSkills,
+        niceToHaveSkills: singleJob.niceToHaveSkills,
+        whyYouWillLove: singleJob.whyYouWillLove,
+        benefits: singleJob.benefits,
+        semesters: singleJob.semestersId,
+        majors: singleJob.majors.id,
+      }));
+      dispatch(
+        jobActions.replaceJobList({
+          jobs: jobs || [],
+          totalQuantity: response.totalElements
+        })
+      );
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

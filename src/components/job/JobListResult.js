@@ -22,10 +22,11 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobsData, updateJob } from 'src/store/job-actions';
+import { fetchJobsData, updateJob, deleteJob } from 'src/store/job-actions';
 import { jobActions } from '../../store/job-silce';
 import getInitials from '../../utils/getInitials';
 import JobFormModal from './JobFormModal';
+import JobDeletionConfirmModal from './JobDeletionConfirmModal';
 
 const JobListResult = ({ jobs, totalElements, ...rest }) => {
   const token = useSelector((state) => state.account.token);
@@ -46,6 +47,18 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
       dispatch(updateJob(token, job, page, limit, sortedBy, search));
     }
     setUpdateFormOpen(false);
+  };
+  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
+  const handleDeleteFormOpen = (event, selectedJob) => {
+    setDeleteFormOpen(true);
+    setCurrentJob(selectedJob);
+  };
+
+  const handleDeleteFormClose = (type, job) => {
+    if (type === 'DELETE') {
+      dispatch(deleteJob(token, job, page, limit, sortedBy, search));
+    }
+    setDeleteFormOpen(false);
   };
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
@@ -199,6 +212,7 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
   return (
     <Card {...rest}>
       <JobFormModal job={currentJob} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
+      <JobDeletionConfirmModal job={currentJob} open={deleteFormOpen} onClose={handleDeleteFormClose} operation="DELETE" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -358,6 +372,7 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                       }}
                       arial-label="remove"
                       size="small"
+                      onClick={(e) => handleDeleteFormOpen(e, job)}
                     >
                       <DeleteForeverIcon />
                     </Fab>
