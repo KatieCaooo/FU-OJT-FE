@@ -36,7 +36,8 @@ const ApplicationFormModal = (props) => {
     job: '',
     company: '',
     companyAccepted: '',
-    studentConfirmed: ''
+    studentConfirmed: '',
+    schoolDenied: ''
   });
   useEffect(() => {
     if (application.name) {
@@ -48,7 +49,8 @@ const ApplicationFormModal = (props) => {
         job: application.job.name,
         company: application.job.company.name,
         companyAccepted: application.companyAccepted,
-        studentConfirmed: application.studentConfirmed
+        studentConfirmed: application.studentConfirmed,
+        schoolDenied: application.schoolDenied
       });
     }
   }, [application]);

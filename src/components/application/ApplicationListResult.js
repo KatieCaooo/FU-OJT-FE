@@ -119,11 +119,11 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   };
 
   const onFilterHandler = () => {
-    const studentCodeFilter = `application.student.studentCode=='*${values.studentCode}*'`;
-    const applicationFilter = `application.application.name=='${values.application}'`;
-    const experienceFilter = `application.application.name=='${values.experience}'`;
-    const jobFilter = `application.job.name=='${values.job}'`;
-    const companyFilter = `application.company.name=='${values.company}'`;
+    const studentCodeFilter = `studentCode=='*${values.studentCode}*'`;
+    const majorFilter = `major=='${values.major}'`;
+    const experienceFilter = `experience=='${values.experience}'`;
+    const jobFilter = `job=='${values.job}'`;
+    const companyFilter = `company=='${values.company}'`;
     const companyStatusFilter = `companyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
     const studentStatusFilter = `studentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
     const schoolDeniedFilter = `studentConfirmed==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
@@ -131,8 +131,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
     }
-    if (values.application !== '') {
-      filter.push(applicationFilter);
+    if (values.major !== '') {
+      filter.push(majorFilter);
     }
     if (values.experience !== '') {
       filter.push(experienceFilter);
@@ -208,7 +208,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
 
   const headerCells = [
     {
-      name: 'StudentCode',
+      name: 'Student Code',
       label: 'Student Code',
       search: 'studentCode',
       sort: 'studentCode',
@@ -229,28 +229,28 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
       align: 'left'
     },
     {
-      name: 'company',
+      name: 'Company',
       label: 'Company',
       search: 'company',
       sort: 'company',
       align: 'center'
     },
     {
-      name: 'studentConfirmed',
+      name: 'Student Confirmed',
       label: 'Student Confirmed',
       search: 'studentConfirmed',
       sort: 'studentConfirmed',
       align: 'center'
     },
     {
-      name: 'companyAccepted',
+      name: 'Company Accepted',
       label: 'Company Accepted',
       search: 'companyAccepted',
       sort: 'companyAccepted',
       align: 'center'
     },
     {
-      name: 'schoolDenied',
+      name: 'School Denied',
       label: 'School Denied',
       search: 'schoolDenied',
       sort: 'schoolDenied',
@@ -461,10 +461,10 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       }}
                     >
                       <Avatar src={application.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(application.studentCode)}
+                        {getInitials(application.major)}
                       </Avatar>
                       <Typography color="textPrimary">
-                        {application.studentCode}
+                        {application.major}
                       </Typography>
                     </Box>
                   </TableCell>

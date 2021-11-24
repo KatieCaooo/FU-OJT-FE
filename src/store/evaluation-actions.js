@@ -26,7 +26,14 @@ export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => 
     const response = await fetchData();
     let evaluations = response.data;
     evaluations = evaluations.map((evaluation) => ({
-      id: evaluation.id, comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass
+      id: evaluation.id,
+      studentCode: evaluation.applicationDTO.student.studentCode,
+      major: evaluation.applicationDTO.student.major.name,
+      job: evaluation.applicationDTO.job.name,
+      company: evaluation.applicationDTO.job.company.name,
+      comment: evaluation.comment,
+      grade: evaluation.grade,
+      pass: evaluation.pass
     }));
     dispatch(
       evaluationActions.replaceEvaluationList({
@@ -81,7 +88,14 @@ export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
       const response = await fetchData();
       let evaluations = response.data;
       evaluations = evaluations.map((singleEvaluation) => ({
-        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, pass: singleEvaluation.pass
+        id: singleEvaluation.id,
+        studentCode: singleEvaluation.applicationDTO.student.studentCode,
+        major: singleEvaluation.applicationDTO.student.major.name,
+        job: singleEvaluation.applicationDTO.job.name,
+        company: singleEvaluation.applicationDTO.job.company.name,
+        comment: singleEvaluation.comment,
+        grade: singleEvaluation.grade,
+        pass: singleEvaluation.pass
       }));
       dispatch(
         evaluationActions.replaceEvaluationList({
@@ -137,7 +151,14 @@ export const createEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
       const response = await fetchData();
       let evaluations = response.data;
       evaluations = evaluations.map((singleEvaluation) => ({
-        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, pass: singleEvaluation.pass
+        id: singleEvaluation.id,
+        studentCode: singleEvaluation.applicationDTO.student.studentCode,
+        major: singleEvaluation.applicationDTO.student.major.name,
+        job: singleEvaluation.applicationDTO.job.name,
+        company: singleEvaluation.applicationDTO.job.company.name,
+        comment: singleEvaluation.comment,
+        grade: singleEvaluation.grade,
+        pass: singleEvaluation.pass
       }));
       dispatch(
         evaluationActions.replaceEvaluationList({

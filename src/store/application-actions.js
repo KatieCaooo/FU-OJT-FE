@@ -95,15 +95,15 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
       const response = await fetchData();
       let applications = response.data;
       applications = applications.map((singleApplication) => ({
-        id: application.id,
-        studentCode: application.student.studentCode,
-        major: application.student.major.name,
-        experience: application.experience,
-        job: application.job.name,
-        company: application.job.company.name,
-        companyAccepted: application.companyAccepted,
-        studentConfirmed: application.studentConfirmed,
-        schoolDenied: application.schoolDenied
+        id: singleApplication.id,
+        studentCode: singleApplication.student.studentCode,
+        major: singleApplication.student.major.name,
+        experience: singleApplication.experience,
+        job: singleApplication.job.name,
+        company: singleApplication.job.company.name,
+        companyAccepted: singleApplication.companyAccepted,
+        studentConfirmed: singleApplication.studentConfirmed,
+        schoolDenied: singleApplication.schoolDenied
       }));
       dispatch(
         applicationActions.replaceApplicationList({
@@ -163,15 +163,15 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
       const response = await fetchData();
       let applications = response.data;
       applications = applications.map((singleApplication) => ({
-        id: application.id,
-        studentCode: application.student.studentCode,
-        major: application.student.major.name,
-        experience: application.experience,
-        job: application.job.name,
-        company: application.job.company.name,
-        companyAccepted: application.companyAccepted,
-        studentConfirmed: application.studentConfirmed,
-        schoolDenied: application.schoolDenied
+        id: singleApplication.id,
+        studentCode: singleApplication.student.studentCode,
+        major: singleApplication.student.major.name,
+        experience: singleApplication.experience,
+        job: singleApplication.job.name,
+        company: singleApplication.job.company.name,
+        companyAccepted: singleApplication.companyAccepted,
+        studentConfirmed: singleApplication.studentConfirmed,
+        schoolDenied: singleApplication.schoolDenied
       }));
       dispatch(
         applicationActions.replaceApplicationList({
@@ -226,15 +226,15 @@ export const deleteApplication = (token, application, pageNo, pageSize, sortBy, 
       const response = await fetchData();
       let applications = response.data;
       applications = applications.map((singleApplication) => ({
-        id: application.id,
-        studentCode: application.student.studentCode,
-        major: application.student.major.name,
-        experience: application.experience,
-        job: application.job.name,
-        company: application.job.company.name,
-        companyAccepted: application.companyAccepted,
-        studentConfirmed: application.studentConfirmed,
-        schoolDenied: application.schoolDenied
+        id: singleApplication.id,
+        studentCode: singleApplication.student.studentCode,
+        major: singleApplication.student.major.name,
+        experience: singleApplication.experience,
+        job: singleApplication.job.name,
+        company: singleApplication.job.company.name,
+        companyAccepted: singleApplication.companyAccepted,
+        studentConfirmed: singleApplication.studentConfirmed,
+        schoolDenied: singleApplication.schoolDenied
       }));
       dispatch(
         applicationActions.replaceApplicationList({
