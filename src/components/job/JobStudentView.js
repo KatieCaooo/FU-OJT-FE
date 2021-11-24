@@ -5,7 +5,7 @@ import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlin
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import React, { useEffect, useState } from 'react';
 // import moment from 'moment';
-// import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobsData } from 'src/store/job-actions';
 import { BASE_URL, getRequiredAuthenHeader } from 'src/api/config';
@@ -244,7 +244,7 @@ const JobStudentView = () => {
                   </Typography>
                   <List>
                     {job.topReasons.map((reason) => (
-                      <ListItem>
+                      <ListItem key={uuid()}>
                         <Typography>{reason}</Typography>
                       </ListItem>
                     ))}
@@ -331,7 +331,7 @@ const JobStudentView = () => {
                     <Typography variant="h4">Top 3 Reasons To Join Us</Typography>
                     <List>
                       {currentJob.topReasons.map((reason) => (
-                        <ListItem>
+                        <ListItem key={uuid()}>
                           <Typography>{reason}</Typography>
                         </ListItem>
                       ))}
@@ -364,7 +364,7 @@ const JobStudentView = () => {
                     <Typography variant="h4">Responsibilities</Typography>
                     <List>
                       {currentJob.responsibilities.map((responsibility) => (
-                        <ListItem>
+                        <ListItem key={uuid()}>
                           <Typography>{responsibility}</Typography>
                         </ListItem>
                       ))}
@@ -382,7 +382,7 @@ const JobStudentView = () => {
                       <Typography variant="h5">Must have:</Typography>
                       <List>
                         {currentJob.mustHaveSkills.map((skill) => (
-                          <ListItem>
+                          <ListItem key={uuid()}>
                             <Typography>{skill}</Typography>
                           </ListItem>
                         ))}
@@ -394,7 +394,7 @@ const JobStudentView = () => {
                       <Typography variant="h5">Nice to have:</Typography>
                       <List>
                         {currentJob.niceToHaveSkills.map((skill) => (
-                          <ListItem>
+                          <ListItem key={uuid()}>
                             <Typography>{skill}</Typography>
                           </ListItem>
                         ))}
@@ -416,7 +416,7 @@ const JobStudentView = () => {
                     <Typography variant="h5">Some of our benefits:</Typography>
                     <List>
                       {currentJob.benefits.map((benefit) => (
-                        <ListItem>
+                        <ListItem key={uuid()}>
                           <Typography>{benefit}</Typography>
                         </ListItem>
                       ))}

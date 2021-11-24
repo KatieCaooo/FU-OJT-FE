@@ -182,7 +182,7 @@ const JobApplicationFormModal = (props) => {
                   >
                     <List>
                       {Object.keys(selectedFiles).length === 0 && (<ListItem>No files selected yet.</ListItem>)}
-                      {Object.keys(selectedFiles).map((key) => (<ListItem>{selectedFiles[key].name}</ListItem>))}
+                      {Object.keys(selectedFiles).map((key) => (<ListItem key={key}>{selectedFiles[key].name}</ListItem>))}
                     </List>
                   </Box>
                 </Grid>
