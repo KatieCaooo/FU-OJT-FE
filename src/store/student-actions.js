@@ -135,7 +135,7 @@ export const deleteStudent = (token, student, pageNo, pageSize, sortBy, search) 
         id: singleStudent.id, name: singleStudent.name, studentCode: singleStudent.studentCode, semester: singleStudent.semester, email: singleStudent.email, address: singleStudent.address, phone: singleStudent.phone, major: singleStudent.major
       }));
       dispatch(
-        studentActions.replaceSemesterList({
+        studentActions.replaceStudentList({
           students: students || [],
           totalQuantity: response.totalElements
         })
