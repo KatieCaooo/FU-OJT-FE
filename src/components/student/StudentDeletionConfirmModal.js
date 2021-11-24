@@ -27,7 +27,12 @@ const style = {
 const StudentDeletionConfirmModal = (props) => {
   const { student, operation } = props;
   const [values, setValues] = useState({
-    name: ''
+    name: '',
+    studentCode: '',
+    email: '',
+    address: '',
+    phone: '',
+    major: ''
   });
   useEffect(() => {
     if (student.name) {
@@ -95,8 +100,8 @@ const StudentDeletionConfirmModal = (props) => {
             </Grid>
             <Grid item sx={10}>
               <Typography>
-                {operation === 'DELETE' && 'Are you sure you want to archive this major?'}
-                {operation === 'RECOVER' && 'Are you sure you want to recover this major?'}
+                {operation === 'DELETE' && 'Are you sure you want to archive this student?'}
+                {operation === 'RECOVER' && 'Are you sure you want to recover this student?'}
               </Typography>
             </Grid>
           </Grid>
