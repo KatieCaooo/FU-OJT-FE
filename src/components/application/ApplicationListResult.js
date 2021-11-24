@@ -100,7 +100,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     job: '',
     company: '',
     companyAccepted: '',
-    studentConfirmed: ''
+    studentConfirmed: '',
+    schoolDenied: ''
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -125,6 +126,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     const companyFilter = `application.company.name=='${values.company}'`;
     const companyStatusFilter = `companyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
     const studentStatusFilter = `studentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
+    const schoolDeniedFilter = `studentConfirmed==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
     const filter = [];
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
@@ -146,6 +148,9 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     }
     if (values.studentConfirmed !== '') {
       filter.push(studentStatusFilter);
+    }
+    if (values.schoolDenied !== '') {
+      filter.push(schoolDeniedFilter);
     }
     dispatch(applicationActions.setSearch(filter.join(';')));
     dispatch(applicationActions.setPage(0));
@@ -242,6 +247,13 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
       label: 'Company Accepted',
       search: 'companyAccepted',
       sort: 'companyAccepted',
+      align: 'center'
+    },
+    {
+      name: 'schoolDenied',
+      label: 'School Denied',
+      search: 'schoolDenied',
+      sort: 'schoolDenied',
       align: 'center'
     }
   ];
@@ -370,6 +382,29 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Select>
                   </FormControl>
                 </TableCell>
+                <TableCell sx={{ maxWidth: 200 }} align="center">
+                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                    <InputLabel id="disabled-label" size="small">
+                      Status
+                    </InputLabel>
+                    <Select
+                      labelId="schoolDeny-label"
+                      id="schoolDeny-dropdown"
+                      value={values.schoolDenied}
+                      onChange={handleFilterChange}
+                      label="Status"
+                      name="schoolDeny"
+                      size="small"
+                    >
+                      <MenuItem value="Accepted">
+                        Accepted
+                      </MenuItem>
+                      <MenuItem value="Denied">
+                        Denied
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </TableCell>
                 <TableCell>
                   <FormControl variant="outlined" sx={{ minWidth: 130 }}>
                     <InputLabel id="disabled-label" size="small">
@@ -451,6 +486,11 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                   <TableCell sx={{ maxWidth: 160 }} align="center">
                     <Typography color={application.studentConfirmed ? 'error.main' : 'success.main'} variant="button">
                       {application.studentConfirmed ? 'Accepted' : 'Denied'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
+                      {application.schoolDenied ? 'Accepted' : 'Denied'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
