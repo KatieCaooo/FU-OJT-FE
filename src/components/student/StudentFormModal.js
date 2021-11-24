@@ -45,7 +45,7 @@ const StudentFormModal = (props) => {
         id: student.id,
         name: student.name,
         studentCode: student.student.studentCode,
-        semesterID: student.student.semesterID,
+        semesterId: student.student.semesterId,
         email: student.email,
         address: student.student.address,
         phone: student.phone,

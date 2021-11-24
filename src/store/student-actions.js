@@ -39,7 +39,7 @@ export const updateStudent = (token, student, pageNo, pageSize, sortBy, search) 
     const response = await axios.put(
       url,
       {
-        name: student.name, studentCode: student.studentCode, semesterId: student.semesterId, email: student.email, address: student.address, phone: student.phone, major: student.major
+        name: student.name, studentCode: student.studentCode, semesterId: parseInt(student.semesterId, 10), email: student.email, address: student.address, phone: student.phone, majorId: student.major.id
       },
       {
         headers: getRequiredAuthenHeader(token)
@@ -77,7 +77,7 @@ export const updateStudent = (token, student, pageNo, pageSize, sortBy, search) 
       const response = await fetchData();
       let students = response.data;
       students = students.map((singleStudent) => ({
-        id: singleStudent.id, name: singleStudent.name, studentCode: singleStudent.studentCode, semester: singleStudent.semester, email: singleStudent.email, address: singleStudent.address, phone: singleStudent.phone, major: singleStudent.major
+        id: singleStudent.id, name: singleStudent.name, studentCode: singleStudent.studentCode, semesterId: singleStudent.semester.id, email: singleStudent.email, address: singleStudent.address, phone: singleStudent.phone, majorId: singleStudent.major.id
       }));
       dispatch(
         studentActions.replaceStudentList({
@@ -132,10 +132,10 @@ export const deleteStudent = (token, student, pageNo, pageSize, sortBy, search) 
       const response = await fetchData();
       let students = response.data;
       students = students.map((singleStudent) => ({
-        id: singleStudent.id, name: singleStudent.name, studentCode: singleStudent.studentCode, semester: singleStudent.semester, email: singleStudent.email, address: singleStudent.address, phone: singleStudent.phone, major: singleStudent.major
+        id: singleStudent.id, name: singleStudent.name, studentCode: singleStudent.studentCode, semesterId: singleStudent.semesterId, email: singleStudent.email, address: singleStudent.address, phone: singleStudent.phone, majorId: singleStudent.major.id
       }));
       dispatch(
-        studentActions.replaceSemesterList({
+        studentActions.replaceStudentList({
           students: students || [],
           totalQuantity: response.totalElements
         })
