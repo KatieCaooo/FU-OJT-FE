@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -80,6 +80,9 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   };
 
   const [values, setValues] = useState({
+    studentCode: '',
+    major: '',
+    job: '',
     grade: '',
     comment: '',
     pass: ''
@@ -93,10 +96,22 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   };
 
   const onFilterHandler = () => {
+    const studentCodeFilter = `studentCode=='*${values.studentCode}*'`;
+    const majorFilter = `major=='${values.major}'`;
+    const jobFilter = `job=='${values.job}'`;
     const gradeFilter = `grade==${values.grade ? values.grade : ''}`;
     const commentFilter = `comment=='*${values.comment}*'`;
     const statusFilter = `pass==${values.pass === 'Passed' ? 'True' : 'False'}`;
     const filter = [];
+    if (values.studentCode !== '') {
+      filter.push(studentCodeFilter);
+    }
+    if (values.major !== '') {
+      filter.push(majorFilter);
+    }
+    if (values.job !== '') {
+      filter.push(jobFilter);
+    }
     if (values.grade !== '') {
       filter.push(gradeFilter);
     }
@@ -162,18 +177,32 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
 
   const headerCells = [
     {
+      name: 'Student Code',
+      label: 'Student Code',
+      search: 'studentCode',
+      sort: 'studentCode',
+      align: 'center'
+    },
+    {
+      name: 'Major',
+      label: 'Major',
+      search: 'major',
+      sort: 'major',
+      align: 'center'
+    },
+    {
+      name: 'Job',
+      label: 'Job',
+      search: 'job',
+      sort: 'job',
+      align: 'center'
+    },
+    {
       name: 'Grade',
       label: 'Grade',
       search: 'grade',
       sort: 'grade',
       align: 'center'
-    },
-    {
-      name: 'Comment',
-      label: 'Comment',
-      search: 'comment',
-      sort: 'comment',
-      align: 'left'
     },
     {
       name: 'pass',
@@ -238,10 +267,10 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label="Grade"
-                    name="grade"
+                    label="Student code"
+                    name="studentCode"
                     onChange={handleFilterChange}
-                    value={values.grade}
+                    value={values.studentCode}
                     variant="outlined"
                     size="small"
                   />
@@ -249,10 +278,32 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label="Comment"
-                    name="comment"
+                    label="Major"
+                    name="major"
                     onChange={handleFilterChange}
-                    value={values.comment}
+                    value={values.major}
+                    variant="outlined"
+                    size="small"
+                  />
+                </TableCell>
+                <TableCell sx={{ width: 300 }}>
+                  <TextField
+                    fullWidth
+                    label="Job"
+                    name="job"
+                    onChange={handleFilterChange}
+                    value={values.job}
+                    variant="outlined"
+                    size="small"
+                  />
+                </TableCell>
+                <TableCell sx={{ width: 300 }}>
+                  <TextField
+                    fullWidth
+                    label="Grade"
+                    name="grade"
+                    onChange={handleFilterChange}
+                    value={values.grade}
                     variant="outlined"
                     size="small"
                   />
@@ -316,15 +367,32 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                       }}
                     >
                       <Avatar src={evaluation.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(evaluation.grade)}
+                        {getInitials(evaluation.major)}
                       </Avatar>
                       <Typography color="textPrimary">
-                        {evaluation.grade}
+                        {evaluation.major}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="left">
-                    {evaluation.comment}
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {evaluation.studentCode}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {evaluation.major}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {evaluation.job}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {evaluation.grade}
+                    </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
                     <Typography color={evaluation.pass ? 'error.main' : 'success.main'} variant="button">

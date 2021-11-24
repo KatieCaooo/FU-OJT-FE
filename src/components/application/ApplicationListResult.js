@@ -100,7 +100,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     job: '',
     company: '',
     companyAccepted: '',
-    studentConfirmed: ''
+    studentConfirmed: '',
+    schoolDenied: ''
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -118,19 +119,20 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   };
 
   const onFilterHandler = () => {
-    const studentCodeFilter = `application.student.studentCode=='*${values.studentCode}*'`;
-    const applicationFilter = `application.application.name=='${values.application}'`;
-    const experienceFilter = `application.application.name=='${values.experience}'`;
-    const jobFilter = `application.job.name=='${values.job}'`;
-    const companyFilter = `application.company.name=='${values.company}'`;
+    const studentCodeFilter = `studentCode=='*${values.studentCode}*'`;
+    const majorFilter = `major=='${values.major}'`;
+    const experienceFilter = `experience=='${values.experience}'`;
+    const jobFilter = `job=='${values.job}'`;
+    const companyFilter = `company=='${values.company}'`;
     const companyStatusFilter = `companyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
     const studentStatusFilter = `studentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
+    const schoolDeniedFilter = `studentConfirmed==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
     const filter = [];
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
     }
-    if (values.application !== '') {
-      filter.push(applicationFilter);
+    if (values.major !== '') {
+      filter.push(majorFilter);
     }
     if (values.experience !== '') {
       filter.push(experienceFilter);
@@ -146,6 +148,9 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     }
     if (values.studentConfirmed !== '') {
       filter.push(studentStatusFilter);
+    }
+    if (values.schoolDenied !== '') {
+      filter.push(schoolDeniedFilter);
     }
     dispatch(applicationActions.setSearch(filter.join(';')));
     dispatch(applicationActions.setPage(0));
@@ -203,7 +208,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
 
   const headerCells = [
     {
-      name: 'StudentCode',
+      name: 'Student Code',
       label: 'Student Code',
       search: 'studentCode',
       sort: 'studentCode',
@@ -224,24 +229,31 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
       align: 'left'
     },
     {
-      name: 'company',
+      name: 'Company',
       label: 'Company',
       search: 'company',
       sort: 'company',
       align: 'center'
     },
     {
-      name: 'studentConfirmed',
+      name: 'Student Confirmed',
       label: 'Student Confirmed',
       search: 'studentConfirmed',
       sort: 'studentConfirmed',
       align: 'center'
     },
     {
-      name: 'companyAccepted',
+      name: 'Company Accepted',
       label: 'Company Accepted',
       search: 'companyAccepted',
       sort: 'companyAccepted',
+      align: 'center'
+    },
+    {
+      name: 'School Denied',
+      label: 'School Denied',
+      search: 'schoolDenied',
+      sort: 'schoolDenied',
       align: 'center'
     }
   ];
@@ -370,6 +382,29 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Select>
                   </FormControl>
                 </TableCell>
+                <TableCell sx={{ maxWidth: 200 }} align="center">
+                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                    <InputLabel id="disabled-label" size="small">
+                      Status
+                    </InputLabel>
+                    <Select
+                      labelId="schoolDeny-label"
+                      id="schoolDeny-dropdown"
+                      value={values.schoolDenied}
+                      onChange={handleFilterChange}
+                      label="Status"
+                      name="schoolDeny"
+                      size="small"
+                    >
+                      <MenuItem value="Accepted">
+                        Accepted
+                      </MenuItem>
+                      <MenuItem value="Denied">
+                        Denied
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </TableCell>
                 <TableCell>
                   <FormControl variant="outlined" sx={{ minWidth: 130 }}>
                     <InputLabel id="disabled-label" size="small">
@@ -426,10 +461,10 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       }}
                     >
                       <Avatar src={application.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(application.studentCode)}
+                        {getInitials(application.major)}
                       </Avatar>
                       <Typography color="textPrimary">
-                        {application.studentCode}
+                        {application.major}
                       </Typography>
                     </Box>
                   </TableCell>
@@ -451,6 +486,11 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                   <TableCell sx={{ maxWidth: 160 }} align="center">
                     <Typography color={application.studentConfirmed ? 'error.main' : 'success.main'} variant="button">
                       {application.studentConfirmed ? 'Accepted' : 'Denied'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
+                      {application.schoolDenied ? 'Accepted' : 'Denied'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
