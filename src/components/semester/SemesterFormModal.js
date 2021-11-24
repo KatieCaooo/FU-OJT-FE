@@ -7,13 +7,15 @@ import {
   TextField,
   Card,
   CardHeader,
-  CardContent,
+  CardContent
   //   FormControl,
   //   InputLabel,
   //   Select,
   //   MenuItem
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { DateRangePicker, LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import PropTypes from 'prop-types';
 
 const style = {
@@ -40,17 +42,23 @@ const SemesterFormModal = (props) => {
         id: semester.id,
         name: semester.name,
         startDate: semester.startDate,
-        endDate: semester.endDate,
+        endDate: semester.endDate
       });
     }
   }, [semester]);
 
-  const handleChange = (event) => {
-    console.log(event.target.name, event.target.value);
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
+  const handleChange = (event, dateValues, fieldName) => {
+    if (!event) {
+      setValues({
+        ...values,
+        [fieldName]: dateValues
+      });
+    } else {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value
+      });
+    }
   };
 
   const onSaveHandler = () => {
@@ -67,28 +75,35 @@ const SemesterFormModal = (props) => {
         <form autoComplete="off" noValidate {...props}>
           <Card>
             <CardHeader
-              subheader={type === 'UPDATE' ? 'The information can be edited' : 'Information of Semester to be Created'}
+              subheader={
+                type === 'UPDATE'
+                  ? 'The information can be edited'
+                  : 'Information of Semester to be Created'
+              }
               title="Semester Information"
             />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                {type === 'UPDATE'
-                && (
-                <Grid item md={3} xs={3}>
-                  <TextField
-                    disabled
-                    fullWidth
-                    label="Id"
-                    name="id"
-                    onChange={handleChange}
-                    required
-                    value={values.id}
-                    variant="outlined"
-                  />
-                </Grid>
+                {type === 'UPDATE' && (
+                  <Grid item md={3} xs={3}>
+                    <TextField
+                      disabled
+                      fullWidth
+                      label="Id"
+                      name="id"
+                      onChange={handleChange}
+                      required
+                      value={values.id}
+                      variant="outlined"
+                    />
+                  </Grid>
                 )}
-                <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
+                <Grid
+                  item
+                  md={type === 'UPDATE' ? 9 : 12}
+                  xs={type === 'UPDATE' ? 9 : 12}
+                >
                   <TextField
                     fullWidth
                     label="Name"
@@ -99,6 +114,70 @@ const SemesterFormModal = (props) => {
                     variant="outlined"
                   />
                 </Grid>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateRangePicker
+                    name="startDate"
+                    value={values.startDate}
+                    minDate={new Date()}
+                    inputFormat="dd-MM-yyyy"
+                    onChange={(newValue) => {
+                      handleChange(null, newValue, 'startDate');
+                    }}
+                    renderInput={(startProps, endProps) => (
+                      <Grid
+                        container
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <TextField
+                          sx={{ maxWidth: 125 }}
+                          variant="outlined"
+                          size="small"
+                          {...startProps}
+                        />
+                        <Box sx={{ mx: 2 }}> to </Box>
+                        <TextField
+                          sx={{ maxWidth: 125 }}
+                          variant="outlined"
+                          size="small"
+                          {...endProps}
+                        />
+                      </Grid>
+                    )}
+                  />
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateRangePicker
+                    name="endDate"
+                    value={values.endDate}
+                    minDate={new Date()}
+                    inputFormat="dd-MM-yyyy"
+                    onChange={(newValue) => {
+                      handleChange(null, newValue, 'endDate');
+                    }}
+                    renderInput={(startProps, endProps) => (
+                      <Grid
+                        container
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <TextField
+                          sx={{ maxWidth: 125 }}
+                          variant="outlined"
+                          size="small"
+                          {...startProps}
+                        />
+                        <Box sx={{ mx: 2 }}> to </Box>
+                        <TextField
+                          sx={{ maxWidth: 125 }}
+                          variant="outlined"
+                          size="small"
+                          {...endProps}
+                        />
+                      </Grid>
+                    )}
+                  />
+                </LocalizationProvider>
               </Grid>
             </CardContent>
             <Divider />
@@ -109,7 +188,11 @@ const SemesterFormModal = (props) => {
                 p: 2
               }}
             >
-              <Button color="primary" variant="contained" onClick={onSaveHandler}>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={onSaveHandler}
+              >
                 {type === 'UPDATE' ? 'Save details' : 'Create'}
               </Button>
             </Box>
