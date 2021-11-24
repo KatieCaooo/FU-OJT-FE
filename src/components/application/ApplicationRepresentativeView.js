@@ -35,6 +35,8 @@ import ApplicationFormModal from './ApplicationFormModal';
 import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
 
 const ApplicationRepresentativeView = ({ applications, totalElements, ...rest }) => {
+  const companyId = useSelector((state) => state.account.account.company.id);
+
   const token = useSelector((state) => state.account.token);
   const {
     limit, page, order, orderBy, sortedBy, search
@@ -102,7 +104,8 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
     company: '',
     companyAccepted: '',
     studentConfirmed: '',
-    schoolDenied: ''
+    schoolDenied: '',
+    major: ''
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -126,9 +129,10 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
     const jobFilter = `job=='${values.job}'`;
     const companyFilter = `company=='${values.company}'`;
     const companyStatusFilter = `companyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
-    const studentStatusFilter = `studentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
+    const studentStatusFilter = `isStudentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
     const schoolDeniedFilter = `studentConfirmed==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
     const filter = [];
+    filter.push(`job.company.id==${companyId}`);
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
     }
@@ -239,8 +243,8 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
     {
       name: 'Student Confirmed',
       label: 'Student Confirmed',
-      search: 'studentConfirmed',
-      sort: 'studentConfirmed',
+      search: 'isStudentConfirmed',
+      sort: 'isStudentConfirmed',
       align: 'center'
     },
     {
