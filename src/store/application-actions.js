@@ -34,7 +34,8 @@ export const fetchApplicationData = (token, pageNo, pageSize, sortBy, search) =>
       company: application.job.company.name,
       companyAccepted: application.companyAccepted,
       studentConfirmed: application.studentConfirmed,
-      schoolDenied: application.schoolDenied
+      schoolDenied: application.schoolDenied,
+      attachments: application.attachments
     }));
     dispatch(
       applicationActions.replaceApplicationList({
