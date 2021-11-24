@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -29,6 +30,7 @@ const style = {
 
 const ApplicationFormModal = (props) => {
   const { application, type } = props;
+  const role = useSelector((state) => state.account.role);
   const [values, setValues] = useState({
     studentCode: '',
     major: '',
@@ -157,6 +159,7 @@ const ApplicationFormModal = (props) => {
                     variant="outlined"
                   />
                 </Grid>
+                {role === 'STUDENT' && (
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <FormControl variant="outlined" sx={{ minWidth: 130 }}>
                     <InputLabel id="disabled-label" size="small">
@@ -180,6 +183,33 @@ const ApplicationFormModal = (props) => {
                     </Select>
                   </FormControl>
                 </Grid>
+                )}
+                {role === 'SYS_ADMIN' && (
+                  <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
+                    <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                      <InputLabel id="disabled-label" size="small">
+                        School Denied
+                      </InputLabel>
+                      <Select
+                        labelId="schoolDeny-label"
+                        id="schoolDeny-dropdown"
+                        value={values.schoolDenied}
+                        onChange={handleChange}
+                        label="Status"
+                        name="schoolDenied"
+                        size="small"
+                      >
+                        <MenuItem value="Accepted">
+                          Accepted
+                        </MenuItem>
+                        <MenuItem value="Denied">
+                          Denied
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+                {role === 'COMPANY_REPRESENTATIVE' && (
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <FormControl variant="outlined" sx={{ minWidth: 130 }}>
                     <InputLabel id="disabled-label" size="small">
@@ -203,6 +233,7 @@ const ApplicationFormModal = (props) => {
                     </Select>
                   </FormControl>
                 </Grid>
+                )}
               </Grid>
             </CardContent>
             <Divider />
