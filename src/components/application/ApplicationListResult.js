@@ -125,9 +125,9 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     const experienceFilter = `experience=='${values.experience}'`;
     const jobFilter = `job=='${values.job}'`;
     const companyFilter = `company=='${values.company}'`;
-    const companyStatusFilter = `companyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
-    const studentStatusFilter = `studentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
-    const schoolDeniedFilter = `schoolDenied==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
+    const companyStatusFilter = `isCompanyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
+    const studentStatusFilter = `isStudentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
+    const schoolDeniedFilter = `isSchoolDenied==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
     const filter = [];
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
