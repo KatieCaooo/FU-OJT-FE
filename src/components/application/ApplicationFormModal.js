@@ -50,7 +50,7 @@ const ApplicationFormModal = (props) => {
         studentCode: application.studentCode,
         major: application.major,
         experience: application.experience,
-        jobId: application.job.id,
+        jobId: application.jobId,
         company: application.company,
         companyAccepted: application.companyAccepted,
         studentConfirmed: application.studentConfirmed,
@@ -146,7 +146,7 @@ const ApplicationFormModal = (props) => {
                     name="job"
                     onChange={handleChange}
                     required
-                    value={values.job}
+                    value={values.jobId}
                     variant="outlined"
                   />
                 </Grid>
