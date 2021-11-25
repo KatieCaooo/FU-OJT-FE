@@ -495,8 +495,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
-                      {application.schoolDenied ? 'Denied' : 'Accepted'}
+                    <Typography color={application.schoolDenied ? 'success.main' : 'error.main'} variant="button">
+                      {application.schoolDenied ? 'Accepted' : 'Denied'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
