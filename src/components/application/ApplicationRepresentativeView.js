@@ -482,17 +482,17 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
                     </List>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.studentConfirmed ? 'error.main' : 'success.main'} variant="button">
+                    <Typography color={application.studentConfirmed ? 'success.main' : 'error.main'} variant="button">
                       {application.studentConfirmed ? 'Accepted' : 'Denied'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
+                    <Typography color={application.schoolDenied ? 'success.main' : 'error.main'} variant="button">
                       {application.schoolDenied ? 'Accepted' : 'Denied'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.companyAccepted ? 'error.main' : 'success.main'} variant="button">
+                    <Typography color={application.companyAccepted ? 'success.main' : 'error.main'} variant="button">
                       {application.companyAccepted ? 'Accepted' : 'Denied'}
                     </Typography>
                   </TableCell>

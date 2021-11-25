@@ -102,7 +102,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     company: '',
     companyAccepted: '',
     studentConfirmed: '',
-    schoolDenied: ''
+    schoolDenied: '',
+    acceptedAt: '',
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -201,6 +202,20 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   const handlePageChange = (event, newPage) => {
     dispatch(applicationActions.setPage(newPage));
     dispatch(fetchApplicationData(token, newPage, limit, sortedBy, search));
+  };
+
+  const isAccepted = (acceptedAt, companyAccepted) => {
+    if (!acceptedAt) {
+      return 'Not yet';
+    }
+    return companyAccepted ? 'Accepted' : 'Denied';
+  };
+
+  const textColor = (acceptedAt, companyAccepted) => {
+    if (!acceptedAt) {
+      return 'primary.main';
+    }
+    return companyAccepted ? 'success.main' : 'error.main';
   };
 
   const headerCells = [
@@ -490,8 +505,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.studentConfirmed ? 'success.main' : 'error.main'} variant="button">
-                      {application.studentConfirmed ? 'Accepted' : 'Denied'}
+                    <Typography color={textColor(application.acceptedAt, application.studentConfirmed)} variant="button">
+                      {isAccepted(application.acceptedAt, application.studentConfirmed)}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
@@ -500,8 +515,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.companyAccepted ? 'success.main' : 'error.main'} variant="button">
-                      {application.companyAccepted ? 'Accepted' : 'Denied'}
+                    <Typography color={textColor(application.acceptedAt, application.companyAccepted)} variant="button">
+                      {isAccepted(application.acceptedAt, application.companyAccepted)}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

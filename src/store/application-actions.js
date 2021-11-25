@@ -60,7 +60,9 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
         jobId: application.jobId,
         companyAccepted: application.companyAccepted === 'Accepted',
         schoolDenied: application.schoolDenied === 'Denied',
-        studentConfirmed: application.studentConfirmed === 'Accepted'
+        studentConfirmed: application.studentConfirmed === 'Accepted',
+        acceptedAt: application.acceptedAt,
+        confirmedAt: application.confirmedAt
       },
       {
         headers: getRequiredAuthenHeader(token)
@@ -108,7 +110,9 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
         companyAccepted: singleApplication.companyAccepted,
         studentConfirmed: singleApplication.studentConfirmed,
         schoolDenied: singleApplication.schoolDenied,
-        attachments: singleApplication.attachments
+        attachments: singleApplication.attachments,
+        confirmedAt: singleApplication.confirmedAt,
+        acceptedAt: singleApplication.acceptedAt
       }));
       dispatch(
         applicationActions.replaceApplicationList({
