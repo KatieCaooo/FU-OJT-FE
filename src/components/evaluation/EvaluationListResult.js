@@ -395,8 +395,8 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={evaluation.pass ? 'error.main' : 'success.main'} variant="button">
-                      {evaluation.pass ? 'Not Passed' : 'Passed'}
+                    <Typography color={evaluation.pass ? 'success.main' : 'error.main'} variant="button">
+                      {evaluation.pass ? 'Passed' : 'Not Passed'}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

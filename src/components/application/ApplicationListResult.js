@@ -95,6 +95,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
 
   const [values, setValues] = useState({
     studentCode: '',
+    major: '',
     application: '',
     experience: '',
     job: '',
@@ -126,7 +127,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     const companyFilter = `company=='${values.company}'`;
     const companyStatusFilter = `companyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
     const studentStatusFilter = `studentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
-    const schoolDeniedFilter = `studentConfirmed==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
+    const schoolDeniedFilter = `schoolDenied==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
     const filter = [];
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
@@ -243,17 +244,17 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
       align: 'center'
     },
     {
-      name: 'Company Accepted',
-      label: 'Company Accepted',
-      search: 'companyAccepted',
-      sort: 'companyAccepted',
-      align: 'center'
-    },
-    {
       name: 'School Denied',
       label: 'School Denied',
       search: 'schoolDenied',
       sort: 'schoolDenied',
+      align: 'center'
+    },
+    {
+      name: 'Company Accepted',
+      label: 'Company Accepted',
+      search: 'companyAccepted',
+      sort: 'companyAccepted',
       align: 'center'
     }
   ];
@@ -393,7 +394,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       value={values.schoolDenied}
                       onChange={handleFilterChange}
                       label="Status"
-                      name="schoolDeny"
+                      name="schoolDenied"
                       size="small"
                     >
                       <MenuItem value="Accepted">
@@ -464,7 +465,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                         {getInitials(application.major)}
                       </Avatar>
                       <Typography color="textPrimary">
-                        {application.major}
+                        {application.studentCode}
                       </Typography>
                     </Box>
                   </TableCell>
@@ -484,17 +485,17 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.studentConfirmed ? 'error.main' : 'success.main'} variant="button">
+                    <Typography color={application.studentConfirmed ? 'success.main' : 'error.main'} variant="button">
                       {application.studentConfirmed ? 'Accepted' : 'Denied'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
                     <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
-                      {application.schoolDenied ? 'Accepted' : 'Denied'}
+                      {application.schoolDenied ? 'Denied' : 'Accepted'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.companyAccepted ? 'error.main' : 'success.main'} variant="button">
+                    <Typography color={application.companyAccepted ? 'success.main' : 'error.main'} variant="button">
                       {application.companyAccepted ? 'Accepted' : 'Denied'}
                     </Typography>
                   </TableCell>
