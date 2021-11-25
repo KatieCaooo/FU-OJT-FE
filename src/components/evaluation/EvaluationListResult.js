@@ -390,7 +390,7 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                       {evaluation.pass ? 'Passed' : 'Not Passed'}
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     <Fab
                       color="secondary"
                       aria-label="edit"

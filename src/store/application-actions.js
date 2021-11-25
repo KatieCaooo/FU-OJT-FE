@@ -36,7 +36,9 @@ export const fetchApplicationData = (token, pageNo, pageSize, sortBy, search) =>
       companyAccepted: application.companyAccepted,
       studentConfirmed: application.studentConfirmed,
       schoolDenied: application.schoolDenied,
-      attachments: application.attachments
+      attachments: application.attachments,
+      acceptedAt: application.acceptedAt,
+      confirmedAt: application.confirmedAt
     }));
     dispatch(
       applicationActions.replaceApplicationList({
@@ -182,7 +184,9 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
         companyAccepted: singleApplication.companyAccepted,
         studentConfirmed: singleApplication.studentConfirmed,
         schoolDenied: singleApplication.schoolDenied,
-        attachments: singleApplication.attachments
+        attachments: singleApplication.attachments,
+        acceptedAt: singleApplication.acceptedAt,
+        confirmedAt: singleApplication.confirmedAt
       }));
       dispatch(
         applicationActions.replaceApplicationList({
@@ -247,7 +251,9 @@ export const deleteApplication = (token, application, pageNo, pageSize, sortBy, 
         companyAccepted: singleApplication.companyAccepted,
         studentConfirmed: singleApplication.studentConfirmed,
         schoolDenied: singleApplication.schoolDenied,
-        attachments: singleApplication.attachments
+        attachments: singleApplication.attachments,
+        acceptedAt: singleApplication.acceptedAt,
+        confirmedAt: singleApplication.confirmedAt
       }));
       dispatch(
         applicationActions.replaceApplicationList({
