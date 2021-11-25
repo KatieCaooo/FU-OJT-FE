@@ -51,7 +51,11 @@ export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
   const postData = async () => {
     const response = await axios.put(
       url,
-      { comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass === 'Passed' },
+      {
+        comment: evaluation.comment,
+        grade: evaluation.grade,
+        pass: evaluation.pass === 'Passed'
+      },
       {
         headers: getRequiredAuthenHeader(token)
       }

@@ -7,11 +7,11 @@ import {
   TextField,
   Card,
   CardHeader,
-  CardContent, InputLabel, Select, MenuItem, FormControl
-  //   FormControl,
-  //   InputLabel,
-  //   Select,
-  //   MenuItem
+  CardContent,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -33,10 +33,10 @@ const EvaluationFormModal = (props) => {
     id: '',
     grade: '',
     comment: '',
-    pass: '',
+    pass: ''
   });
   useEffect(() => {
-    if (evaluation.name) {
+    if (evaluation.id) {
       setValues({
         id: evaluation.id,
         grade: evaluation.grade,
@@ -128,7 +128,7 @@ const EvaluationFormModal = (props) => {
                       <MenuItem value="Passed">
                         Passed
                       </MenuItem>
-                      <MenuItem value="Not Passed">
+                      <MenuItem value='"Not Passed'>
                         Not Passed
                       </MenuItem>
                     </Select>

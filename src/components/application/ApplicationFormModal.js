@@ -36,24 +36,26 @@ const ApplicationFormModal = (props) => {
     studentCode: '',
     major: '',
     experience: '',
-    job: '',
+    jobId: '',
     company: '',
     companyAccepted: '',
     studentConfirmed: '',
-    schoolDenied: ''
+    schoolDenied: '',
+    attachment: []
   });
   useEffect(() => {
-    if (application.name) {
+    if (application.id) {
       setValues({
         id: application.id,
-        studentCode: application.student.studentCode,
-        major: application.student.major.name,
+        studentCode: application.studentCode,
+        major: application.major,
         experience: application.experience,
-        job: application.job.name,
-        company: application.job.company.name,
+        jobId: application.job.id,
+        company: application.company,
         companyAccepted: application.companyAccepted,
         studentConfirmed: application.studentConfirmed,
-        schoolDenied: application.schoolDenied
+        schoolDenied: application.schoolDenied,
+        attachment: application.attachment
       });
     }
   }, [application]);

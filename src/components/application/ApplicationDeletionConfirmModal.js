@@ -37,7 +37,7 @@ const ApplicationDeletionConfirmModal = (props) => {
     studentConfirmed: ''
   });
   useEffect(() => {
-    if (application.name) {
+    if (application.id) {
       setValues({
         id: application.id,
         studentCode: application.studentCode,
