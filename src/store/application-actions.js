@@ -59,7 +59,7 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
         attachments: application.attachments,
         jobId: application.jobId,
         companyAccepted: application.companyAccepted === 'Accepted',
-        schoolDenied: application.schoolDenied === 'Accepted',
+        schoolDenied: application.schoolDenied === 'Denied',
         studentConfirmed: application.studentConfirmed === 'Accepted'
       },
       {
