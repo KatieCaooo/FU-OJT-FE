@@ -33,8 +33,8 @@ const SemesterFormModal = (props) => {
   const { semester, type } = props;
   const [values, setValues] = useState({
     name: '',
-    startDate: '',
-    endDate: ''
+    startDate: [null, null],
+    endDate: [null, null]
   });
   useEffect(() => {
     if (semester.name) {
