@@ -123,14 +123,13 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
   };
 
   const onFilterHandler = () => {
-    const studentCodeFilter = `studentCode=='*${values.studentCode}*'`;
-    const majorFilter = `major=='${values.major}'`;
-    const experienceFilter = `experience=='${values.experience}'`;
-    const jobFilter = `job=='${values.job}'`;
-    const companyFilter = `company=='${values.company}'`;
-    const companyStatusFilter = `companyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
+    const studentCodeFilter = `student.studentCode=='*${values.studentCode}*'`;
+    const majorFilter = `student.major.name=='*${values.major}*'`;
+    const jobFilter = `job.name=='*${values.job}*'`;
+    const companyFilter = `job.company.name=='*${values.company}*'`;
+    const companyStatusFilter = `isCompanyAccepted==${values.companyAccepted === 'Accepted' ? 'True' : 'False'}`;
     const studentStatusFilter = `isStudentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
-    const schoolDeniedFilter = `studentConfirmed==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
+    const schoolDeniedFilter = `isSchoolDenied==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
     const filter = [];
     filter.push(`job.company.id==${companyId}`);
     if (values.studentCode !== '') {
@@ -138,9 +137,6 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
     }
     if (values.major !== '') {
       filter.push(majorFilter);
-    }
-    if (values.experience !== '') {
-      filter.push(experienceFilter);
     }
     if (values.job !== '') {
       filter.push(jobFilter);

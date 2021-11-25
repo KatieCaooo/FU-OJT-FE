@@ -27,10 +27,10 @@ export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => 
     let evaluations = response.data;
     evaluations = evaluations.map((evaluation) => ({
       id: evaluation.id,
-      studentCode: evaluation.applicationDTO.student.studentCode,
-      major: evaluation.applicationDTO.student.major.name,
-      job: evaluation.applicationDTO.job.name,
-      company: evaluation.applicationDTO.job.company.name,
+      studentCode: evaluation.application.student.studentCode,
+      major: evaluation.application.student.major.name,
+      job: evaluation.application.job.name,
+      company: evaluation.application.job.company.name,
       comment: evaluation.comment,
       grade: evaluation.grade,
       pass: evaluation.pass
@@ -89,10 +89,10 @@ export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
       let evaluations = response.data;
       evaluations = evaluations.map((singleEvaluation) => ({
         id: singleEvaluation.id,
-        studentCode: singleEvaluation.applicationDTO.student.studentCode,
-        major: singleEvaluation.applicationDTO.student.major.name,
-        job: singleEvaluation.applicationDTO.job.name,
-        company: singleEvaluation.applicationDTO.job.company.name,
+        studentCode: singleEvaluation.application.student.studentCode,
+        major: singleEvaluation.application.student.major.name,
+        job: singleEvaluation.application.job.name,
+        company: singleEvaluation.application.job.company.name,
         comment: singleEvaluation.comment,
         grade: singleEvaluation.grade,
         pass: singleEvaluation.pass
@@ -152,10 +152,10 @@ export const createEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
       let evaluations = response.data;
       evaluations = evaluations.map((singleEvaluation) => ({
         id: singleEvaluation.id,
-        studentCode: singleEvaluation.applicationDTO.student.studentCode,
-        major: singleEvaluation.applicationDTO.student.major.name,
-        job: singleEvaluation.applicationDTO.job.name,
-        company: singleEvaluation.applicationDTO.job.company.name,
+        studentCode: singleEvaluation.application.student.studentCode,
+        major: singleEvaluation.application.student.major.name,
+        job: singleEvaluation.application.job.name,
+        company: singleEvaluation.application.job.company.name,
         comment: singleEvaluation.comment,
         grade: singleEvaluation.grade,
         pass: singleEvaluation.pass

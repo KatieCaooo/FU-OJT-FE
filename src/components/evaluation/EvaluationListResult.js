@@ -96,12 +96,11 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   };
 
   const onFilterHandler = () => {
-    const studentCodeFilter = `studentCode=='*${values.studentCode}*'`;
-    const majorFilter = `major=='${values.major}'`;
-    const jobFilter = `job=='${values.job}'`;
+    const studentCodeFilter = `application.student.studentCode=='*${values.studentCode}*'`;
+    const majorFilter = `application.student.major.name=='*${values.major}*'`;
+    const jobFilter = `application.job.name=='*${values.job}*'`;
     const gradeFilter = `grade==${values.grade ? values.grade : ''}`;
-    const commentFilter = `comment=='*${values.comment}*'`;
-    const statusFilter = `pass==${values.pass === 'Passed' ? 'True' : 'False'}`;
+    const statusFilter = `isPass==${values.pass === 'Passed' ? 'True' : 'False'}`;
     const filter = [];
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
@@ -114,9 +113,6 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
     }
     if (values.grade !== '') {
       filter.push(gradeFilter);
-    }
-    if (values.comment !== '') {
-      filter.push(commentFilter);
     }
     if (values.pass !== '') {
       filter.push(statusFilter);
@@ -370,14 +366,9 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                         {getInitials(evaluation.major)}
                       </Avatar>
                       <Typography color="textPrimary">
-                        {evaluation.major}
+                        {evaluation.studentCode}
                       </Typography>
                     </Box>
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color="textPrimary">
-                      {evaluation.studentCode}
-                    </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
                     <Typography color="textPrimary">
