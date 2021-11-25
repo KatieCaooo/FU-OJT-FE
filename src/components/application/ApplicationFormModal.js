@@ -32,6 +32,7 @@ const ApplicationFormModal = (props) => {
   const { application, type } = props;
   const role = useSelector((state) => state.account.role);
   const [values, setValues] = useState({
+    id: '',
     studentCode: '',
     major: '',
     experience: '',

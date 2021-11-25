@@ -47,7 +47,7 @@ export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => 
 };
 
 export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, search) => async (dispatch) => {
-  const url = `${BASE_URL}/semesters/${evaluation.id}`;
+  const url = `${BASE_URL}/evaluations/${evaluation.id}`;
   const postData = async () => {
     const response = await axios.put(
       url,

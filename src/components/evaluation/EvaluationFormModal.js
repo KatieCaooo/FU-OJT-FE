@@ -30,6 +30,7 @@ const style = {
 const EvaluationFormModal = (props) => {
   const { evaluation, type } = props;
   const [values, setValues] = useState({
+    id: '',
     grade: '',
     comment: '',
     pass: '',

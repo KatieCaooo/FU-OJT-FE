@@ -27,6 +27,7 @@ const style = {
 const ApplicationDeletionConfirmModal = (props) => {
   const { application, operation } = props;
   const [values, setValues] = useState({
+    id: '',
     studentCode: '',
     major: '',
     experience: '',
