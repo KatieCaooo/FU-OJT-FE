@@ -180,8 +180,8 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
 
   const headerCells = [
     {
-      name: 'Name',
-      label: 'Name',
+      name: 'Job Name',
+      label: 'Job Name',
       search: 'name',
       sort: 'name',
       align: 'left'

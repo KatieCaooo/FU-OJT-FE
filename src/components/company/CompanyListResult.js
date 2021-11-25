@@ -34,13 +34,6 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
   } = useSelector((state) => state.companies.filter);
   const dispatch = useDispatch();
   const [selectedCompanyIds, setSelectedCompanyIds] = useState([]);
-  // const [limit, setLimit] = useState(10);
-  // const [page, setPage] = useState(0);
-  // const [order, setOrder] = useState('asc');
-  // const [orderBy, setOrderBy] = useState('id');
-  // const [sortedBy, setSortedBy] = useState('id asc');
-  // const [search, setSearch] = useState('');
-
   const [currentCompany, setCurrentCompany] = useState({});
   const [updateFormOpen, setUpdateFormOpen] = useState(false);
   const handleUpdateFormOpen = (event, selectedCompany) => {
@@ -170,8 +163,8 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
 
   const headerCells = [
     {
-      name: 'Name',
-      label: 'Name',
+      name: 'Company Name',
+      label: 'Company Name',
       search: 'name',
       sort: 'name',
       align: 'left'

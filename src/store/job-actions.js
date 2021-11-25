@@ -42,7 +42,17 @@ export const updateJob = (token, job, pageNo, pageSize, sortBy, search) => async
         name: job.name,
         title: job.title,
         salary: job.salary,
+        topReasons: job.topReasons,
         description: job.description,
+        descriptionItems: job.descriptionItems,
+        aboutOurTeam: job.aboutOurTeam,
+        responsibilities: job.responsibilities,
+        mustHaveSkills: job.mustHaveSkills,
+        niceToHaveSkills: job.niceToHaveSkills,
+        whyYouWillLove: job.whyYouWillLove,
+        benefits: job.benefits,
+        semesterIds: job.semesterIds,
+        majorIds: job.majorIds,
       },
       {
         headers: getRequiredAuthenHeader(token)
@@ -84,7 +94,17 @@ export const updateJob = (token, job, pageNo, pageSize, sortBy, search) => async
         name: singleJob.name,
         title: singleJob.title,
         salary: singleJob.salary,
+        topReasons: singleJob.topReasons,
         description: singleJob.description,
+        descriptionItems: singleJob.descriptionItems,
+        aboutOurTeam: singleJob.aboutOurTeam,
+        responsibilities: singleJob.responsibilities,
+        mustHaveSkills: singleJob.mustHaveSkills,
+        niceToHaveSkills: singleJob.niceToHaveSkills,
+        whyYouWillLove: singleJob.whyYouWillLove,
+        benefits: singleJob.benefits,
+        semesterIds: singleJob.semesterIds,
+        majorIds: singleJob.majorIds,
       }));
       dispatch(
         jobActions.replaceJobList({
@@ -144,14 +164,15 @@ export const deleteJob = (token, job, pageNo, pageSize, sortBy, search) => async
         salary: singleJob.salary,
         topReasons: singleJob.topReasons,
         description: singleJob.description,
+        descriptionItems: singleJob.descriptionItems,
         aboutOurTeam: singleJob.aboutOurTeam,
         responsibilities: singleJob.responsibilities,
         mustHaveSkills: singleJob.mustHaveSkills,
         niceToHaveSkills: singleJob.niceToHaveSkills,
         whyYouWillLove: singleJob.whyYouWillLove,
         benefits: singleJob.benefits,
-        semesters: singleJob.semestersId,
-        majors: singleJob.majors.id,
+        semesterId: singleJob.semestersIds,
+        majorId: singleJob.majorId,
       }));
       dispatch(
         jobActions.replaceJobList({

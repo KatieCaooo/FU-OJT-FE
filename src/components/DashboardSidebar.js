@@ -11,7 +11,7 @@ import {
   Typography
 } from '@material-ui/core';
 import {
-  AlertCircle as AlertCircleIcon,
+  // AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
   Compass as CompassIcon,
@@ -92,12 +92,12 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       title: 'Settings',
       roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
-    {
-      href: '/404',
-      icon: AlertCircleIcon,
-      title: 'Error',
-      roles: []
-    }
+    // {
+    //   href: '/404',
+    //   icon: AlertCircleIcon,
+    //   title: 'Error',
+    //   roles: []
+    // }
   ];
 
   items = items.filter(

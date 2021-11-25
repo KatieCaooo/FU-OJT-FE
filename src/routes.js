@@ -30,7 +30,7 @@ const routes = (isLoggedIn, isAdmin) => [
       { path: 'majors', element: <MajorList /> },
       { path: 'evaluations', element: <EvaluationList /> },
       { path: 'settings', element: <Settings /> },
-      { path: '*', element: <Navigate to="/404" /> }
+      // { path: '*', element: <Navigate to="/404" /> }
     ]
   },
   {
@@ -41,7 +41,7 @@ const routes = (isLoggedIn, isAdmin) => [
       { path: 'register', element: <Register /> },
       { path: '404', element: <NotFound /> },
       { path: '/', element: <Navigate to="/app/dashboard" /> },
-      { path: '*', element: <Navigate to="/404" /> }
+      // { path: '*', element: <Navigate to="/404" /> }
     ]
   }
 ];

@@ -225,8 +225,8 @@ const MajorListResult = ({ majors, totalElements, ...rest }) => {
 
   const headerCells = [
     {
-      name: 'Name',
-      label: 'Name',
+      name: 'Major Name',
+      label: 'Major Name',
       search: 'name',
       sort: 'name',
       align: 'left'

@@ -91,3 +91,76 @@ export const updateCompany = (token, company, pageNo, pageSize, sortBy, search) 
     console.log(error);
   }
 };
+// export const createRepresentative = (token, representative, pageNo, pageSize, sortBy, search) => async (dispatch) => {
+//   const url = `${BASE_URL}/api/auth/signup`;
+//   const postData = async () => {
+//     const response = await axios.post(
+//       url,
+//       {
+//         email: representative.email,
+//         password: representative.password,
+//         avatar: representative.avatar,
+//         name: representative.name,
+//         role: representative.role,
+//         phone: representative.phone,
+//         companyName: representative.companyName,
+//         description: representative.description,
+//         companyAddress: representative.companyAddress,
+//       },
+//       {
+//         headers: getRequiredAuthenHeader(token)
+//       }
+//     );
+
+//     if (response.status !== 200) {
+//       throw new Error('Could not create representative');
+//     }
+
+//     return response.data;
+//   };
+
+//   try {
+//     await postData().then(async () => {
+//       const fetchData = async () => {
+//         const fetchUrl = `${BASE_URL}/api/auth/signup`;
+//         const response = await axios.get(fetchUrl, {
+//           params: {
+//             search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+//             pageSize,
+//             pageNo,
+//             sortBy
+//           },
+//           headers: getRequiredAuthenHeader(token)
+//         });
+
+//         if (response.status !== 200) {
+//           throw new Error('Could not fetch data');
+//         }
+
+//         return response.data;
+//       };
+//       const response = await fetchData();
+//       let representatives = response.data;
+//       representatives = representatives.map((singleRepresentative) => ({
+//         id: singleRepresentative.id,
+//         email: singleRepresentative.email,
+//         password: singleRepresentative.password,
+//         avatar: singleRepresentative.avatar,
+//         name: singleRepresentative.name,
+//         role: singleRepresentative.role,
+//         phone: singleRepresentative.phone,
+//         companyName: singleRepresentative.companyName,
+//         description: singleRepresentative.description,
+//         companyAddress: singleRepresentative.companyAddress,
+//       }));
+//       dispatch(
+//         companyActions.replaceCompanyList({
+//           representatives: representatives || [],
+//           totalQuantity: response.totalElements
+//         })
+//       );
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
