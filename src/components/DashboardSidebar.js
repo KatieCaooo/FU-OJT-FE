@@ -54,7 +54,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       href: '/app/companies',
       icon: CompassIcon,
       title: 'Companies',
-      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+      roles: ['SYS_ADMIN']
     },
     {
       href: '/app/students',
@@ -77,7 +77,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
     {
       href: '/app/evaluations',
       icon: ClipboardIcon,
-      title: 'Evaluations Test',
+      title: 'Evaluations',
       roles: ['STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {

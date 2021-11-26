@@ -27,11 +27,14 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
+// import { BASE_URL, getRequiredAuthenHeader } from 'src/api/config';
+// import axios from 'axios';
 import { fetchApplicationData, updateApplication, deleteApplication } from '../../store/application-actions';
 import { applicationActions } from '../../store/application-slice';
 import ApplicationFormModal from './ApplicationFormModal';
 import getInitials from '../../utils/getInitials';
 import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
+// import { evaluationActions } from '../../store/evaluation-slice';
 
 const applicationListResult = ({ applications, totalElements, ...rest }) => {
   const role = useSelector((state) => state.account.role);
@@ -43,7 +46,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   const dispatch = useDispatch();
   const [selectedApplicationIds, setSelectedApplicationIds] = useState([]);
   const [currentApplication, setCurrentApplication] = useState({});
-
+  // const [evaluationFormOpen, setEvaluationFormOpen] = useState(false);
   const [updateFormOpen, setUpdateFormOpen] = useState(false);
   const handleUpdateFormOpen = (event, selectedApplication) => {
     setUpdateFormOpen(true);
@@ -107,7 +110,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     companyAccepted: '',
     studentConfirmed: '',
     schoolDenied: '',
-    acceptedAt: '',
+    acceptedAt: ''
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -207,6 +210,49 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     dispatch(applicationActions.setPage(newPage));
     dispatch(fetchApplicationData(token, newPage, limit, sortedBy, search));
   };
+
+  // const createEvaluation = (payload) => async () => {
+  //   const url = `${BASE_URL}/evaluations`;
+  //   const postData = async () => {
+  //     const response = await axios.post(
+  //       url,
+  //       payload,
+  //       {
+  //         headers: getRequiredAuthenHeader(token)
+  //       }
+  //     );
+
+  //     if (response.status !== 200) {
+  //       throw new Error('Could not create evaluation');
+  //     }
+
+  //     return response.data;
+  //   };
+
+  //   try {
+  //     await postData().then(async (evaluationRes) => {
+  //       console.log(evaluationRes);
+  //       dispatch(evaluationActions.replaceEvaluationList({ evaluation: '', page: 'evaluation' }));
+  //       setEvaluationFormOpen(false);
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const handleEvaluationFormClose = (type, formValues) => {
+  //   if (type == 'Create') {
+  //     const payload = {
+  //       comment: formValues.comment,
+  //       grade: formValues.grade,
+  //       applicationId: formValues.applicationId,
+  //       pass: formValues.pass === 'Passed'
+  //     };
+  //   } else {
+  //     setEvaluationFormOpen(false);
+  //     dispatch(evaluationActions.replaceEvaluationList({ evaluation: '', page: 'evaluation' }));
+  //   }
+  // };
 
   const isAccepted = (time, status) => {
     if (!time) {
@@ -509,7 +555,10 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={textColor(application.confirmedAt, application.studentConfirmed)} variant="button">
+                    <Typography
+                      color={textColor(application.confirmedAt, application.studentConfirmed)}
+                      variant="button"
+                    >
                       {isAccepted(application.confirmedAt, application.studentConfirmed)}
                     </Typography>
                   </TableCell>

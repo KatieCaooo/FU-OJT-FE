@@ -26,15 +26,18 @@ import {
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import GradingIcon from '@mui/icons-material/Grading';
 import { useDispatch, useSelector } from 'react-redux';
-import { BASE_URL } from 'src/api/config';
-import { fetchApplicationData, updateApplication, deleteApplication } from '../../store/application-actions';
+import { BASE_URL, getRequiredAuthenHeader } from 'src/api/config';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { fetchApplicationData, updateApplication } from '../../store/application-actions';
 import { applicationActions } from '../../store/application-slice';
 import ApplicationFormModal from './ApplicationFormModal';
-import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
+import GradingFormModal from './GradingFormModal';
 
 const ApplicationRepresentativeView = ({ applications, totalElements, ...rest }) => {
+  const navigate = useNavigate();
   const companyId = useSelector((state) => state.account.account.company.id);
 
   const token = useSelector((state) => state.account.token);
@@ -58,17 +61,50 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
     setUpdateFormOpen(false);
   };
 
-  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
-  const handleDeleteFormOpen = (event, selectedApplication) => {
-    setDeleteFormOpen(true);
+  const [gradingFormOpen, setGradingFormOpen] = useState(false);
+  const handleGradingFormOpen = (event, selectedApplication) => {
+    setGradingFormOpen(true);
     setCurrentApplication(selectedApplication);
   };
 
-  const handleDeleteFormClose = (type, application) => {
-    if (type === 'DELETE') {
-      dispatch(deleteApplication(token, application, page, limit, sortedBy, search));
+  const evaluateApplication = (payload) => async () => {
+    const url = `${BASE_URL}/evaluations`;
+    const postData = async () => {
+      const response = await axios.post(
+        url,
+        payload,
+        {
+          headers: getRequiredAuthenHeader(token)
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error('Could not post application');
+      }
+
+      return response.data;
+    };
+
+    try {
+      await postData().then(async (applicationRes) => {
+        console.log(applicationRes);
+        setGradingFormOpen(false);
+        navigate('../evaluations', { replace: false });
+      });
+    } catch (error) {
+      console.log(error);
     }
-    setDeleteFormOpen(false);
+  };
+
+  const handleGradingFormClose = (type, evaluation) => {
+    if (type === 'EVALUATE') {
+      const payload = {
+        ...evaluation, pass: evaluation.pass === 'Passed', grade: parseInt(evaluation.grade, 10), applicationId: parseInt(evaluation.applicationId, 10)
+      };
+      dispatch(evaluateApplication(payload));
+    } else {
+      setGradingFormOpen(false);
+    }
   };
 
   const handleRequestSort = (event, property, sortField) => {
@@ -281,11 +317,11 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
         onClose={handleUpdateFormClose}
         type="UPDATE"
       />
-      <ApplicationDeletionConfirmModal
+      <GradingFormModal
         application={currentApplication}
-        open={deleteFormOpen}
-        onClose={handleDeleteFormClose}
-        operation="DELETE"
+        open={gradingFormOpen}
+        onClose={handleGradingFormClose}
+        type="EVALUATE"
       />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
@@ -525,17 +561,17 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
                       color="error"
                       sx={{
                         color: 'white',
-                        backgroundColor: 'error.main',
+                        backgroundColor: 'success.main',
                         '&:hover': {
                           cursor: 'pointer',
-                          backgroundColor: 'error.dark'
+                          backgroundColor: 'success.dark'
                         }
                       }}
                       arial-label="remove"
                       size="small"
-                      onClick={(e) => handleDeleteFormOpen(e, application)}
+                      onClick={(e) => handleGradingFormOpen(e, application)}
                     >
-                      <DeleteForeverIcon />
+                      <GradingIcon />
                     </Fab>
                   </TableCell>
                 </TableRow>
