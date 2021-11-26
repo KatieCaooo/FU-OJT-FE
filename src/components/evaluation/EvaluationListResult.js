@@ -25,7 +25,6 @@ import {
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-// import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEvaluationData, updateEvaluation } from 'src/store/evaluation-actions';
 import { evaluationActions } from 'src/store/evaluation-slice';
