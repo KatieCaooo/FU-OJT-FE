@@ -26,7 +26,14 @@ export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => 
     const response = await fetchData();
     let evaluations = response.data;
     evaluations = evaluations.map((evaluation) => ({
-      id: evaluation.id, comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass
+      id: evaluation.id,
+      studentCode: evaluation.application ? evaluation.application.student.studentCode : '',
+      major: evaluation.application.student.major.name,
+      job: evaluation.application.job.name,
+      company: evaluation.application.job.company.name,
+      comment: evaluation.comment,
+      grade: evaluation.grade,
+      pass: evaluation.pass
     }));
     dispatch(
       evaluationActions.replaceEvaluationList({
@@ -40,11 +47,15 @@ export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => 
 };
 
 export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, search) => async (dispatch) => {
-  const url = `${BASE_URL}/semesters/${evaluation.id}`;
+  const url = `${BASE_URL}/evaluations/${evaluation.id}`;
   const postData = async () => {
     const response = await axios.put(
       url,
-      { comment: evaluation.comment, grade: evaluation.grade, pass: evaluation.pass === 'Passed' },
+      {
+        comment: evaluation.comment,
+        grade: evaluation.grade,
+        pass: evaluation.pass === 'Passed'
+      },
       {
         headers: getRequiredAuthenHeader(token)
       }
@@ -81,7 +92,14 @@ export const updateEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
       const response = await fetchData();
       let evaluations = response.data;
       evaluations = evaluations.map((singleEvaluation) => ({
-        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, pass: singleEvaluation.pass
+        id: singleEvaluation.id,
+        studentCode: singleEvaluation.application.student.studentCode,
+        major: singleEvaluation.application.student.major.name,
+        job: singleEvaluation.application.job.name,
+        company: singleEvaluation.application.job.company.name,
+        comment: singleEvaluation.comment,
+        grade: singleEvaluation.grade,
+        pass: singleEvaluation.pass
       }));
       dispatch(
         evaluationActions.replaceEvaluationList({
@@ -137,7 +155,14 @@ export const createEvaluation = (token, evaluation, pageNo, pageSize, sortBy, se
       const response = await fetchData();
       let evaluations = response.data;
       evaluations = evaluations.map((singleEvaluation) => ({
-        id: singleEvaluation.id, comment: singleEvaluation.comment, grade: singleEvaluation.grade, pass: singleEvaluation.pass
+        id: singleEvaluation.id,
+        studentCode: singleEvaluation.application.student.studentCode,
+        major: singleEvaluation.application.student.major.name,
+        job: singleEvaluation.application.job.name,
+        company: singleEvaluation.application.job.company.name,
+        comment: singleEvaluation.comment,
+        grade: singleEvaluation.grade,
+        pass: singleEvaluation.pass
       }));
       dispatch(
         evaluationActions.replaceEvaluationList({

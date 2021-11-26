@@ -24,29 +24,43 @@ const style = {
   boxShadow: 24
 };
 
-const StudentDeletionConfirmModal = (props) => {
-  const { student, operation } = props;
+const JobDeletionConfirmModal = (props) => {
+  const { job, operation } = props;
   const [values, setValues] = useState({
     name: '',
-    studentCode: '',
-    email: '',
-    address: '',
-    phone: '',
-    major: ''
+    title: '',
+    salary: '',
+    topReasons: '',
+    description: '',
+    aboutOurTeam: '',
+    responsibilities: '',
+    mustHaveSkills: '',
+    niceToHaveSkills: '',
+    whyYouWillLove: '',
+    benefits: '',
+    semestersId: '',
+    majors: '',
   });
   useEffect(() => {
-    if (student.name) {
+    if (job.name) {
       setValues({
-        id: student.id,
-        name: student.name,
-        studentCode: student.studentCode,
-        email: student.email,
-        address: student.address,
-        phone: student.phone,
-        major: student.major,
+        id: job.id,
+        name: job.name,
+        title: job.title,
+        salary: job.salary,
+        topReasons: job.topReasons,
+        description: job.description,
+        aboutOurTeam: job.aboutOurTeam,
+        responsibilities: job.responsibilities,
+        mustHaveSkills: job.mustHaveSkills,
+        niceToHaveSkills: job.niceToHaveSkills,
+        whyYouWillLove: job.whyYouWillLove,
+        benefits: job.benefits,
+        semesters: job.semestersId,
+        majors: job.majors.id,
       });
     }
-  }, [student]);
+  }, [job]);
 
   const onSaveHandler = (event, type) => {
     props.onClose(type, values);
@@ -100,8 +114,10 @@ const StudentDeletionConfirmModal = (props) => {
             </Grid>
             <Grid item sx={10}>
               <Typography>
-                {operation === 'DELETE' && 'Are you sure you want to archive this student?'}
-                {operation === 'RECOVER' && 'Are you sure you want to recover this student?'}
+                {operation === 'DELETE'
+                && 'Are you sure you want to archive this job?'}
+                {operation === 'RECOVER'
+                && 'Are you sure you want to recover this job?'}
               </Typography>
             </Grid>
           </Grid>
@@ -140,10 +156,10 @@ const StudentDeletionConfirmModal = (props) => {
   );
 };
 
-export default StudentDeletionConfirmModal;
+export default JobDeletionConfirmModal;
 
-StudentDeletionConfirmModal.propTypes = {
-  student: PropTypes.object,
+JobDeletionConfirmModal.propTypes = {
+  job: PropTypes.object,
   onClose: PropTypes.func,
   operation: PropTypes.string
 };

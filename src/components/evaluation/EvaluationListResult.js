@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -25,7 +25,6 @@ import {
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-// import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEvaluationData, updateEvaluation } from 'src/store/evaluation-actions';
 import { evaluationActions } from 'src/store/evaluation-slice';
@@ -37,6 +36,8 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   const {
     limit, page, order, orderBy, sortedBy, search
   } = useSelector((state) => state.evaluations.filter);
+  const role = useSelector((state) => state.account.role);
+  const companyId = role === 'COMPANY_REPRESENTATIVE' ? useSelector((state) => state.account.account.company.id) : null;
   const dispatch = useDispatch();
   const [selectedEvaluationIds, setSelectedEvaluationIds] = useState([]);
   const [currentEvaluation, setCurrentEvaluation] = useState({});
@@ -80,9 +81,12 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   };
 
   const [values, setValues] = useState({
+    studentCode: '',
+    major: '',
+    job: '',
     grade: '',
     comment: '',
-    pass: ''
+    pass: '',
   });
 
   const handleFilterChange = (event) => {
@@ -93,15 +97,24 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   };
 
   const onFilterHandler = () => {
+    const studentCodeFilter = `application.student.studentCode=='*${values.studentCode}*'`;
+    const majorFilter = `application.student.major.name=='*${values.major}*'`;
+    const jobFilter = `application.job.name=='*${values.job}*'`;
     const gradeFilter = `grade==${values.grade ? values.grade : ''}`;
-    const commentFilter = `comment=='*${values.comment}*'`;
-    const statusFilter = `pass==${values.pass === 'Passed' ? 'True' : 'False'}`;
+    const statusFilter = `isPass==${values.pass === 'Passed' ? 'True' : 'False'}`;
     const filter = [];
+    if (filter.push(`job.company.id==${companyId}`));
+    if (values.studentCode !== '') {
+      filter.push(studentCodeFilter);
+    }
+    if (values.major !== '') {
+      filter.push(majorFilter);
+    }
+    if (values.job !== '') {
+      filter.push(jobFilter);
+    }
     if (values.grade !== '') {
       filter.push(gradeFilter);
-    }
-    if (values.comment !== '') {
-      filter.push(commentFilter);
     }
     if (values.pass !== '') {
       filter.push(statusFilter);
@@ -162,18 +175,32 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
 
   const headerCells = [
     {
+      name: 'Student Code',
+      label: 'Student Code',
+      search: 'studentCode',
+      sort: 'studentCode',
+      align: 'center'
+    },
+    {
+      name: 'Major',
+      label: 'Major',
+      search: 'major',
+      sort: 'major',
+      align: 'center'
+    },
+    {
+      name: 'Job',
+      label: 'Job',
+      search: 'job',
+      sort: 'job',
+      align: 'center'
+    },
+    {
       name: 'Grade',
       label: 'Grade',
       search: 'grade',
       sort: 'grade',
       align: 'center'
-    },
-    {
-      name: 'Comment',
-      label: 'Comment',
-      search: 'comment',
-      sort: 'comment',
-      align: 'left'
     },
     {
       name: 'pass',
@@ -238,10 +265,10 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label="Grade"
-                    name="grade"
+                    label="Student code"
+                    name="studentCode"
                     onChange={handleFilterChange}
-                    value={values.grade}
+                    value={values.studentCode}
                     variant="outlined"
                     size="small"
                   />
@@ -249,10 +276,32 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label="Comment"
-                    name="comment"
+                    label="Major"
+                    name="major"
                     onChange={handleFilterChange}
-                    value={values.comment}
+                    value={values.major}
+                    variant="outlined"
+                    size="small"
+                  />
+                </TableCell>
+                <TableCell sx={{ width: 300 }}>
+                  <TextField
+                    fullWidth
+                    label="Job"
+                    name="job"
+                    onChange={handleFilterChange}
+                    value={values.job}
+                    variant="outlined"
+                    size="small"
+                  />
+                </TableCell>
+                <TableCell sx={{ width: 300 }}>
+                  <TextField
+                    fullWidth
+                    label="Grade"
+                    name="grade"
+                    onChange={handleFilterChange}
+                    value={values.grade}
                     variant="outlined"
                     size="small"
                   />
@@ -316,22 +365,34 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
                       }}
                     >
                       <Avatar src={evaluation.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(evaluation.grade)}
+                        {getInitials(evaluation.major)}
                       </Avatar>
                       <Typography color="textPrimary">
-                        {evaluation.grade}
+                        {evaluation.studentCode}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="left">
-                    {evaluation.comment}
-                  </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={evaluation.pass ? 'error.main' : 'success.main'} variant="button">
-                      {evaluation.pass ? 'Not Passed' : 'Passed'}
+                    <Typography color="textPrimary">
+                      {evaluation.major}
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {evaluation.job}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color="textPrimary">
+                      {evaluation.grade}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color={evaluation.pass ? 'success.main' : 'error.main'} variant="button">
+                      {evaluation.pass ? 'Passed' : 'Not Passed'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
                     <Fab
                       color="secondary"
                       aria-label="edit"

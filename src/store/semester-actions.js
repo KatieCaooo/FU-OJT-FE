@@ -9,7 +9,7 @@ export const fetchSemestersData = (token, pageNo, pageSize, sortBy, search) => a
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: `id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
+        search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
       },
       headers: getRequiredAuthenHeader(token)
     });
@@ -62,7 +62,7 @@ export const updateSemester = (token, semester, pageNo, pageSize, sortBy, search
         const fetchUrl = `${BASE_URL}/semesters`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -117,7 +117,7 @@ export const createSemester = (token, semester, pageNo, pageSize, sortBy, search
         const fetchUrl = `${BASE_URL}/semesters`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -172,7 +172,7 @@ export const deleteSemester = (token, semester, pageNo, pageSize, sortBy, search
         const fetchUrl = `${BASE_URL}/semesters`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -228,7 +228,7 @@ export const recoverSemester = (token, semester, pageNo, pageSize, sortBy, searc
         const fetchUrl = `${BASE_URL}/semesters`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy

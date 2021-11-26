@@ -7,7 +7,7 @@ export const fetchApplicationData = (token, pageNo, pageSize, sortBy, search) =>
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+        search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
         pageSize,
         pageNo,
         sortBy
@@ -30,10 +30,16 @@ export const fetchApplicationData = (token, pageNo, pageSize, sortBy, search) =>
       studentCode: application.student.studentCode,
       major: application.student.major.name,
       experience: application.experience,
+      jobId: application.job.id,
       job: application.job.name,
       company: application.job.company.name,
       companyAccepted: application.companyAccepted,
-      studentConfirmed: application.studentConfirmed
+      studentConfirmed: application.studentConfirmed,
+      schoolDenied: application.schoolDenied,
+      attachments: application.attachments,
+      acceptedAt: application.acceptedAt,
+      confirmedAt: application.confirmedAt,
+      account: application.account
     }));
     dispatch(
       applicationActions.replaceApplicationList({
@@ -53,10 +59,13 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
       url,
       {
         experience: application.experience,
-        jobId: application.job.id,
-        accountId: application.student.id,
+        attachments: application.attachments,
+        jobId: application.jobId,
         companyAccepted: application.companyAccepted === 'Accepted',
-        studentConfirmed: application.studentConfirmed === 'Accepted'
+        schoolDenied: application.schoolDenied === 'Denied',
+        studentConfirmed: application.studentConfirmed === 'Accepted',
+        acceptedAt: application.acceptedAt,
+        confirmedAt: application.confirmedAt
       },
       {
         headers: getRequiredAuthenHeader(token)
@@ -76,7 +85,7 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
         const fetchUrl = `${BASE_URL}/applications`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -98,10 +107,16 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
         studentCode: singleApplication.student.studentCode,
         major: singleApplication.student.major.name,
         experience: singleApplication.experience,
+        jobId: singleApplication.job.id,
         job: singleApplication.job.name,
         company: singleApplication.job.company.name,
         companyAccepted: singleApplication.companyAccepted,
-        studentConfirmed: singleApplication.studentConfirmed
+        studentConfirmed: singleApplication.studentConfirmed,
+        schoolDenied: singleApplication.schoolDenied,
+        attachments: singleApplication.attachments,
+        confirmedAt: singleApplication.confirmedAt,
+        acceptedAt: singleApplication.acceptedAt,
+        account: application.account
       }));
       dispatch(
         applicationActions.replaceApplicationList({
@@ -143,7 +158,7 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
         const fetchUrl = `${BASE_URL}/applications`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -165,10 +180,16 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
         studentCode: singleApplication.student.studentCode,
         major: singleApplication.student.major.name,
         experience: singleApplication.experience,
+        jobId: singleApplication.job.id,
         job: singleApplication.job.name,
         company: singleApplication.job.company.name,
         companyAccepted: singleApplication.companyAccepted,
-        studentConfirmed: singleApplication.studentConfirmed
+        studentConfirmed: singleApplication.studentConfirmed,
+        schoolDenied: singleApplication.schoolDenied,
+        attachments: singleApplication.attachments,
+        acceptedAt: singleApplication.acceptedAt,
+        confirmedAt: singleApplication.confirmedAt,
+        account: application.account
       }));
       dispatch(
         applicationActions.replaceApplicationList({
@@ -205,7 +226,7 @@ export const deleteApplication = (token, application, pageNo, pageSize, sortBy, 
         const fetchUrl = `${BASE_URL}/applications`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -227,10 +248,16 @@ export const deleteApplication = (token, application, pageNo, pageSize, sortBy, 
         studentCode: singleApplication.student.studentCode,
         major: singleApplication.student.major.name,
         experience: singleApplication.experience,
+        jobId: singleApplication.job.id,
         job: singleApplication.job.name,
         company: singleApplication.job.company.name,
         companyAccepted: singleApplication.companyAccepted,
-        studentConfirmed: singleApplication.studentConfirmed
+        studentConfirmed: singleApplication.studentConfirmed,
+        schoolDenied: singleApplication.schoolDenied,
+        attachments: singleApplication.attachments,
+        acceptedAt: singleApplication.acceptedAt,
+        confirmedAt: singleApplication.confirmedAt,
+        account: application.account
       }));
       dispatch(
         applicationActions.replaceApplicationList({

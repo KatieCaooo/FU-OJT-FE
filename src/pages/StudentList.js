@@ -17,7 +17,7 @@ const StudentList = () => {
   return (
     <>
       <Helmet>
-        <title>Students | Material Kit</title>
+        <title> Students | Material Kit </title>
       </Helmet>
       <Box
         sx={{

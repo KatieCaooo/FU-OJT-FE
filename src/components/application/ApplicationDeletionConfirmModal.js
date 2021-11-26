@@ -27,6 +27,7 @@ const style = {
 const ApplicationDeletionConfirmModal = (props) => {
   const { application, operation } = props;
   const [values, setValues] = useState({
+    id: '',
     studentCode: '',
     major: '',
     experience: '',
@@ -36,7 +37,7 @@ const ApplicationDeletionConfirmModal = (props) => {
     studentConfirmed: ''
   });
   useEffect(() => {
-    if (application.name) {
+    if (application.id) {
       setValues({
         id: application.id,
         studentCode: application.studentCode,

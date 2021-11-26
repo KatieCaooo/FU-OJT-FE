@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -29,26 +30,32 @@ const style = {
 
 const ApplicationFormModal = (props) => {
   const { application, type } = props;
+  const role = useSelector((state) => state.account.role);
   const [values, setValues] = useState({
+    id: '',
     studentCode: '',
     major: '',
     experience: '',
-    job: '',
+    jobId: '',
     company: '',
     companyAccepted: '',
-    studentConfirmed: ''
+    studentConfirmed: '',
+    schoolDenied: '',
+    attachment: []
   });
   useEffect(() => {
-    if (application.name) {
+    if (application.id) {
       setValues({
         id: application.id,
-        studentCode: application.student.studentCode,
-        major: application.student.major.name,
+        studentCode: application.studentCode,
+        major: application.major,
         experience: application.experience,
-        job: application.job.name,
-        company: application.job.company.name,
+        jobId: application.jobId,
+        company: application.company,
         companyAccepted: application.companyAccepted,
-        studentConfirmed: application.studentConfirmed
+        studentConfirmed: application.studentConfirmed,
+        schoolDenied: application.schoolDenied,
+        attachment: application.attachment
       });
     }
   }, [application]);
@@ -98,6 +105,7 @@ const ApplicationFormModal = (props) => {
                 )}
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
+                    disabled
                     fullWidth
                     label="Student Code"
                     name="studentCode"
@@ -109,6 +117,7 @@ const ApplicationFormModal = (props) => {
                 </Grid>
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
+                    disabled
                     fullWidth
                     label="Major"
                     name="major"
@@ -131,17 +140,19 @@ const ApplicationFormModal = (props) => {
                 </Grid>
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
+                    disabled
                     fullWidth
                     label="Job"
                     name="job"
                     onChange={handleChange}
                     required
-                    value={values.job}
+                    value={values.jobId}
                     variant="outlined"
                   />
                 </Grid>
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <TextField
+                    disabled
                     fullWidth
                     label="Company"
                     name="company"
@@ -151,18 +162,20 @@ const ApplicationFormModal = (props) => {
                     variant="outlined"
                   />
                 </Grid>
+                {role === 'STUDENT' && (
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <FormControl variant="outlined" sx={{ minWidth: 130 }}>
                     <InputLabel id="disabled-label" size="small">
-                      Status
+                      Student Confirmed
                     </InputLabel>
                     <Select
                       labelId="studentConfirm-label"
                       id="studentConfirm-dropdown"
+                      disabled={!values.companyAccepted && !values.schoolDenied}
                       value={values.studentConfirmed}
                       onChange={handleChange}
                       label="Status"
-                      name="studentConfirm"
+                      name="studentConfirmed"
                       size="small"
                     >
                       <MenuItem value="Accepted">
@@ -174,15 +187,43 @@ const ApplicationFormModal = (props) => {
                     </Select>
                   </FormControl>
                 </Grid>
+                )}
+                {role === 'SYS_ADMIN' && (
+                  <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
+                    <FormControl variant="outlined" sx={{ minWidth: 130 }}>
+                      <InputLabel id="disabled-label" size="small">
+                        School Denied
+                      </InputLabel>
+                      <Select
+                        labelId="schoolDeny-label"
+                        id="schoolDeny-dropdown"
+                        value={values.schoolDenied}
+                        onChange={handleChange}
+                        label="Status"
+                        name="schoolDenied"
+                        size="small"
+                      >
+                        <MenuItem value="Accepted">
+                          Accepted
+                        </MenuItem>
+                        <MenuItem value="Denied">
+                          Denied
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+                {role === 'COMPANY_REPRESENTATIVE' && (
                 <Grid item md={type === 'UPDATE' ? 9 : 12} xs={type === 'UPDATE' ? 9 : 12}>
                   <FormControl variant="outlined" sx={{ minWidth: 130 }}>
                     <InputLabel id="disabled-label" size="small">
-                      Status
+                      Company Accepted
                     </InputLabel>
                     <Select
                       labelId="companyAccepted-label"
                       id="companyAccepted-dropdown"
                       value={values.companyAccepted}
+                      disabled={values.schoolDenied || values.studentConfirmed}
                       onChange={handleChange}
                       label="Status"
                       name="companyAccepted"
@@ -197,6 +238,7 @@ const ApplicationFormModal = (props) => {
                     </Select>
                   </FormControl>
                 </Grid>
+                )}
               </Grid>
             </CardContent>
             <Divider />

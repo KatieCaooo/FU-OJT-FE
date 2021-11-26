@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -11,6 +10,8 @@ import {
   FormControl,
   // Grid,
   InputLabel,
+  List,
+  ListItem,
   MenuItem,
   Select,
   Table,
@@ -25,20 +26,20 @@ import {
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import GradingIcon from '@mui/icons-material/Grading';
 import { useDispatch, useSelector } from 'react-redux';
-// import { BASE_URL, getRequiredAuthenHeader } from 'src/api/config';
-// import axios from 'axios';
-import { fetchApplicationData, updateApplication, deleteApplication } from '../../store/application-actions';
+import { BASE_URL, getRequiredAuthenHeader } from 'src/api/config';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { fetchApplicationData, updateApplication } from '../../store/application-actions';
 import { applicationActions } from '../../store/application-slice';
 import ApplicationFormModal from './ApplicationFormModal';
-import getInitials from '../../utils/getInitials';
-import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
-// import { evaluationActions } from '../../store/evaluation-slice';
+import GradingFormModal from './GradingFormModal';
 
-const applicationListResult = ({ applications, totalElements, ...rest }) => {
-  const role = useSelector((state) => state.account.role);
-  const studentId = role === 'STUDENT' ? useSelector((state) => state.account.account.student.id) : null;
+const ApplicationRepresentativeView = ({ applications, totalElements, ...rest }) => {
+  const navigate = useNavigate();
+  const companyId = useSelector((state) => state.account.account.company.id);
+
   const token = useSelector((state) => state.account.token);
   const {
     limit, page, order, orderBy, sortedBy, search
@@ -46,7 +47,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   const dispatch = useDispatch();
   const [selectedApplicationIds, setSelectedApplicationIds] = useState([]);
   const [currentApplication, setCurrentApplication] = useState({});
-  // const [evaluationFormOpen, setEvaluationFormOpen] = useState(false);
+
   const [updateFormOpen, setUpdateFormOpen] = useState(false);
   const handleUpdateFormOpen = (event, selectedApplication) => {
     setUpdateFormOpen(true);
@@ -54,25 +55,56 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   };
 
   const handleUpdateFormClose = (type, application) => {
-    const tmpSearch = role === 'STUDENT' ? `${search}student.id==${studentId}` : search;
     if (type === 'UPDATE') {
-      dispatch(updateApplication(token, application, page, limit, sortedBy, tmpSearch));
+      dispatch(updateApplication(token, application, page, limit, sortedBy, search));
     }
     setUpdateFormOpen(false);
   };
 
-  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
-  const handleDeleteFormOpen = (event, selectedApplication) => {
-    setDeleteFormOpen(true);
+  const [gradingFormOpen, setGradingFormOpen] = useState(false);
+  const handleGradingFormOpen = (event, selectedApplication) => {
+    setGradingFormOpen(true);
     setCurrentApplication(selectedApplication);
   };
 
-  const handleDeleteFormClose = (type, application) => {
-    const tmpSearch = role === 'STUDENT' ? `${search}student.id==${studentId}` : search;
-    if (type === 'DELETE') {
-      dispatch(deleteApplication(token, application, page, limit, sortedBy, tmpSearch));
+  const evaluateApplication = (payload) => async () => {
+    const url = `${BASE_URL}/evaluations`;
+    const postData = async () => {
+      const response = await axios.post(
+        url,
+        payload,
+        {
+          headers: getRequiredAuthenHeader(token)
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error('Could not post application');
+      }
+
+      return response.data;
+    };
+
+    try {
+      await postData().then(async (applicationRes) => {
+        console.log(applicationRes);
+        setGradingFormOpen(false);
+        navigate('../evaluations', { replace: false });
+      });
+    } catch (error) {
+      console.log(error);
     }
-    setDeleteFormOpen(false);
+  };
+
+  const handleGradingFormClose = (type, evaluation) => {
+    if (type === 'EVALUATE') {
+      const payload = {
+        ...evaluation, pass: evaluation.pass === 'Passed', grade: parseInt(evaluation.grade, 10), applicationId: parseInt(evaluation.applicationId, 10)
+      };
+      dispatch(evaluateApplication(payload));
+    } else {
+      setGradingFormOpen(false);
+    }
   };
 
   const handleRequestSort = (event, property, sortField) => {
@@ -102,7 +134,6 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
 
   const [values, setValues] = useState({
     studentCode: '',
-    major: '',
     application: '',
     experience: '',
     job: '',
@@ -110,7 +141,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     companyAccepted: '',
     studentConfirmed: '',
     schoolDenied: '',
-    acceptedAt: ''
+    major: ''
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -136,6 +167,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     const studentStatusFilter = `isStudentConfirmed==${values.studentConfirmed === 'Accepted' ? 'True' : 'False'}`;
     const schoolDeniedFilter = `isSchoolDenied==${values.schoolDenied === 'Denied' ? 'True' : 'False'}`;
     const filter = [];
+    filter.push(`job.company.id==${companyId}`);
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
     }
@@ -211,63 +243,6 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     dispatch(fetchApplicationData(token, newPage, limit, sortedBy, search));
   };
 
-  // const createEvaluation = (payload) => async () => {
-  //   const url = `${BASE_URL}/evaluations`;
-  //   const postData = async () => {
-  //     const response = await axios.post(
-  //       url,
-  //       payload,
-  //       {
-  //         headers: getRequiredAuthenHeader(token)
-  //       }
-  //     );
-
-  //     if (response.status !== 200) {
-  //       throw new Error('Could not create evaluation');
-  //     }
-
-  //     return response.data;
-  //   };
-
-  //   try {
-  //     await postData().then(async (evaluationRes) => {
-  //       console.log(evaluationRes);
-  //       dispatch(evaluationActions.replaceEvaluationList({ evaluation: '', page: 'evaluation' }));
-  //       setEvaluationFormOpen(false);
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const handleEvaluationFormClose = (type, formValues) => {
-  //   if (type == 'Create') {
-  //     const payload = {
-  //       comment: formValues.comment,
-  //       grade: formValues.grade,
-  //       applicationId: formValues.applicationId,
-  //       pass: formValues.pass === 'Passed'
-  //     };
-  //   } else {
-  //     setEvaluationFormOpen(false);
-  //     dispatch(evaluationActions.replaceEvaluationList({ evaluation: '', page: 'evaluation' }));
-  //   }
-  // };
-
-  const isAccepted = (time, status) => {
-    if (!time) {
-      return 'Not yet';
-    }
-    return status ? 'Accepted' : 'Denied';
-  };
-
-  const textColor = (time, status) => {
-    if (!time) {
-      return 'primary.main';
-    }
-    return status ? 'success.main' : 'error.main';
-  };
-
   const headerCells = [
     {
       name: 'Student Code',
@@ -292,7 +267,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     },
     {
       name: 'Company',
-      label: 'Company',
+      label: 'Attachments',
       search: 'company',
       sort: 'company',
       align: 'center'
@@ -300,15 +275,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     {
       name: 'Student Confirmed',
       label: 'Student Confirmed',
-      search: 'studentConfirmed',
-      sort: 'studentConfirmed',
-      align: 'center'
-    },
-    {
-      name: 'School Denied',
-      label: 'School Denied',
-      search: 'schoolDenied',
-      sort: 'schoolDenied',
+      search: 'isStudentConfirmed',
+      sort: 'isStudentConfirmed',
       align: 'center'
     },
     {
@@ -317,8 +285,29 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
       search: 'companyAccepted',
       sort: 'companyAccepted',
       align: 'center'
+    },
+    {
+      name: 'School Denied',
+      label: 'School Denied',
+      search: 'schoolDenied',
+      sort: 'schoolDenied',
+      align: 'center'
     }
   ];
+
+  const isAccepted = (time, status) => {
+    if (!time) {
+      return 'Not yet';
+    }
+    return status ? 'Accepted' : 'Denied';
+  };
+
+  const textColor = (time, status) => {
+    if (!time) {
+      return 'primary.main';
+    }
+    return status ? 'success.main' : 'error.main';
+  };
 
   return (
     <Card {...rest}>
@@ -328,11 +317,11 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
         onClose={handleUpdateFormClose}
         type="UPDATE"
       />
-      <ApplicationDeletionConfirmModal
+      <GradingFormModal
         application={currentApplication}
-        open={deleteFormOpen}
-        onClose={handleDeleteFormClose}
-        operation="DELETE"
+        open={gradingFormOpen}
+        onClose={handleGradingFormClose}
+        type="EVALUATE"
       />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
@@ -377,7 +366,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell sx={{ width: 300 }}>
+                <TableCell sx={{ width: 170 }}>
                   <TextField
                     fullWidth
                     label="Student Code"
@@ -411,7 +400,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell sx={{ width: 300 }}>
-                  <TextField
+                  {/* <TextField
                     fullWidth
                     label="Company"
                     name="company"
@@ -419,7 +408,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     value={values.company}
                     variant="outlined"
                     size="small"
-                  />
+                  /> */}
                 </TableCell>
                 <TableCell sx={{ maxWidth: 200 }} align="center">
                   <FormControl variant="outlined" sx={{ minWidth: 130 }}>
@@ -435,9 +424,6 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       name="studentConfirmed"
                       size="small"
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
                       <MenuItem value="Accepted">
                         Accepted
                       </MenuItem>
@@ -458,12 +444,9 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       value={values.schoolDenied}
                       onChange={handleFilterChange}
                       label="Status"
-                      name="schoolDenied"
+                      name="schoolDeny"
                       size="small"
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
                       <MenuItem value="Accepted">
                         Accepted
                       </MenuItem>
@@ -487,9 +470,6 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       name="companyAccepted"
                       size="small"
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
                       <MenuItem value="Accepted">
                         Accepted
                       </MenuItem>
@@ -524,16 +504,13 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       value="true"
                     />
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 405 }}>
+                  <TableCell sx={{ maxWidth: 170 }}>
                     <Box
                       sx={{
                         alignItems: 'center',
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={application.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(application.major)}
-                      </Avatar>
                       <Typography color="textPrimary">
                         {application.studentCode}
                       </Typography>
@@ -550,26 +527,23 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color="textPrimary">
-                      {application.company}
-                    </Typography>
+                    <List>
+                      {application.attachments.map((attachment) => (<ListItem><a href={`${BASE_URL}/storage/${attachment.key}`}>{attachment.name}</a></ListItem>))}
+                    </List>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography
-                      color={textColor(application.confirmedAt, application.studentConfirmed)}
-                      variant="button"
-                    >
+                    <Typography color={textColor(application.confirmedAt, application.studentConfirmed)} variant="button">
                       {isAccepted(application.confirmedAt, application.studentConfirmed)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
-                      {application.schoolDenied ? 'Denied' : 'Accepted'}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
                     <Typography color={textColor(application.acceptedAt, application.companyAccepted)} variant="button">
                       {isAccepted(application.acceptedAt, application.companyAccepted)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
+                      {application.schoolDenied ? 'Denied' : 'Accepted'}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
@@ -587,17 +561,17 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       color="error"
                       sx={{
                         color: 'white',
-                        backgroundColor: 'error.main',
+                        backgroundColor: 'success.main',
                         '&:hover': {
                           cursor: 'pointer',
-                          backgroundColor: 'error.dark'
+                          backgroundColor: 'success.dark'
                         }
                       }}
                       arial-label="remove"
                       size="small"
-                      onClick={(e) => handleDeleteFormOpen(e, application)}
+                      onClick={(e) => handleGradingFormOpen(e, application)}
                     >
-                      <DeleteForeverIcon />
+                      <GradingIcon />
                     </Fab>
                   </TableCell>
                 </TableRow>
@@ -619,9 +593,9 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   );
 };
 
-applicationListResult.propTypes = {
+ApplicationRepresentativeView.propTypes = {
   applications: PropTypes.array.isRequired,
   totalElements: PropTypes.number.isRequired
 };
 
-export default applicationListResult;
+export default ApplicationRepresentativeView;

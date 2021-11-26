@@ -27,14 +27,23 @@ const style = {
   p: 4
 };
 
-const CompanyFormModal = (props) => {
+const JobFormModal = (props) => {
   const { job, type } = props;
   const [values, setValues] = useState({
     name: '',
     title: '',
+    salary: '',
+    topReasons: [],
     description: '',
-    skills: '',
-    benefits: ''
+    descriptionItems: [],
+    aboutOurTeam: '',
+    responsibilities: [],
+    mustHaveSkills: [],
+    niceToHaveSkills: [],
+    whyYouWillLove: '',
+    benefits: [],
+    semesterIds: [],
+    major: [],
   });
   useEffect(() => {
     if (job.name) {
@@ -43,7 +52,17 @@ const CompanyFormModal = (props) => {
         name: job.name,
         title: job.title,
         salary: job.salary,
+        topReasons: job.topReasons,
         description: job.description,
+        descriptionItems: job.descriptionItems,
+        aboutOurTeam: job.aboutOurTeam,
+        responsibilities: job.responsibilities,
+        mustHaveSkills: job.mustHaveSkills,
+        niceToHaveSkills: job.niceToHaveSkills,
+        whyYouWillLove: job.whyYouWillLove,
+        benefits: job.benefits,
+        semesterIds: job.semesterIds,
+        major: job.major,
       });
     }
   }, [job]);
@@ -107,7 +126,7 @@ const CompanyFormModal = (props) => {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item md={12} xs={12}>
+                <Grid item md={6} xs={6}>
                   <TextField
                     fullWidth
                     label="Title"
@@ -118,7 +137,7 @@ const CompanyFormModal = (props) => {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item md={12} xs={12}>
+                <Grid item md={6} xs={6}>
                   <TextField
                     fullWidth
                     label="Salary"
@@ -132,11 +151,121 @@ const CompanyFormModal = (props) => {
                 <Grid item md={12} xs={12}>
                   <TextField
                     fullWidth
+                    label="TopReasons"
+                    name="topReasons"
+                    onChange={handleChange}
+                    required
+                    value={values.topReasons}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
                     label="Description"
                     name="description"
                     onChange={handleChange}
                     required
                     value={values.description}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="DescriptionItems"
+                    name="descriptionItems"
+                    onChange={handleChange}
+                    required
+                    value={values.descriptionItems}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="About Our Team"
+                    name="aboutOurTeam"
+                    onChange={handleChange}
+                    required
+                    value={values.aboutOurTeam}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Responsibilities"
+                    name="responsibilities"
+                    onChange={handleChange}
+                    required
+                    value={values.responsibilities}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Must Have Skills"
+                    name="mustHaveSkills"
+                    onChange={handleChange}
+                    required
+                    value={values.mustHaveSkills}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Nice to Have Skills"
+                    name="niceToHaveSkills"
+                    onChange={handleChange}
+                    required
+                    value={values.niceToHaveSkills}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Why you will love"
+                    name="whyYouWillLove"
+                    onChange={handleChange}
+                    required
+                    value={values.whyYouWillLove}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Benefits"
+                    name="benefits"
+                    onChange={handleChange}
+                    required
+                    value={values.benefits}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={6} xs={6}>
+                  <TextField
+                    fullWidth
+                    label="SemesterId"
+                    name="semesterIds"
+                    onChange={handleChange}
+                    required
+                    value={values.semesterIds}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={6} xs={6}>
+                  <TextField
+                    fullWidth
+                    label="MajorId"
+                    name="majorId"
+                    onChange={handleChange}
+                    required
+                    value={values.major}
                     variant="outlined"
                   />
                 </Grid>
@@ -165,9 +294,9 @@ const CompanyFormModal = (props) => {
   );
 };
 
-export default CompanyFormModal;
+export default JobFormModal;
 
-CompanyFormModal.propTypes = {
+JobFormModal.propTypes = {
   job: PropTypes.object,
   onClose: PropTypes.func,
   type: PropTypes.string
