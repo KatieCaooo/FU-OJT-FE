@@ -32,6 +32,9 @@ import { applicationActions } from '../../store/application-slice';
 import ApplicationFormModal from './ApplicationFormModal';
 import getInitials from '../../utils/getInitials';
 import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
+import { BASE_URL, getRequiredAuthenHeader } from 'src/api/config';
+import axios from 'axios';
+import { evaluationActions } from '../../store/evaluation-slice';
 
 const applicationListResult = ({ applications, totalElements, ...rest }) => {
   const role = useSelector((state) => state.account.role);
@@ -43,7 +46,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   const dispatch = useDispatch();
   const [selectedApplicationIds, setSelectedApplicationIds] = useState([]);
   const [currentApplication, setCurrentApplication] = useState({});
-
+  const [evaluationFormOpen, setEvaluationFormOpen] = useState(false);
   const [updateFormOpen, setUpdateFormOpen] = useState(false);
   const handleUpdateFormOpen = (event, selectedApplication) => {
     setUpdateFormOpen(true);
@@ -107,7 +110,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     companyAccepted: '',
     studentConfirmed: '',
     schoolDenied: '',
-    acceptedAt: '',
+    acceptedAt: ''
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -208,6 +211,49 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     dispatch(fetchApplicationData(token, newPage, limit, sortedBy, search));
   };
 
+  const createEvaluation = (payload) => async () => {
+    const url = `${BASE_URL}/evaluations`;
+    const postData = async () => {
+      const response = await axios.post(
+        url,
+        payload,
+        {
+          headers: getRequiredAuthenHeader(token)
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error('Could not create evaluation');
+      }
+
+      return response.data;
+    };
+
+    try {
+      await postData().then(async (evaluationRes) => {
+        console.log(evaluationRes);
+        dispatch(evaluationActions.replaceEvaluationList({ evaluation: '', page: 'evaluation' }));
+        setEvaluationFormOpen(false);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEvaluationFormClose = (type, formValues) => {
+    if (type == 'Create') {
+      const payload = {
+        comment: formValues.comment,
+        grade: formValues.grade,
+        applicationId: formValues.applicationId,
+        pass: formValues.pass === 'Passed'
+      };
+    } else {
+      setEvaluationFormOpen(false);
+      dispatch(evaluationActions.replaceEvaluationList({ evaluation: '', page: 'evaluation' }));
+    }
+  };
+
   const isAccepted = (time, status) => {
     if (!time) {
       return 'Not yet';
@@ -280,22 +326,22 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
         application={currentApplication}
         open={updateFormOpen}
         onClose={handleUpdateFormClose}
-        type="UPDATE"
+        type='UPDATE'
       />
       <ApplicationDeletionConfirmModal
         application={currentApplication}
         open={deleteFormOpen}
         onClose={handleDeleteFormClose}
-        operation="DELETE"
+        operation='DELETE'
       />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox" />
+                <TableCell padding='checkbox' />
                 {headerCells.map((headerCell) => (
-                  <TableCell key={headerCell.name} align={headerCell.align} margin="inherit">
+                  <TableCell key={headerCell.name} align={headerCell.align} margin='inherit'>
                     <TableSortLabel
                       active={orderBy === headerCell.name}
                       direction={orderBy === headerCell.name ? order : 'asc'}
@@ -306,7 +352,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     >
                       {headerCell.label}
                       {orderBy === headerCell.name ? (
-                        <Box component="span" sx={visuallyHidden}>
+                        <Box component='span' sx={visuallyHidden}>
                           {order === 'desc'
                             ? 'sorted descending'
                             : 'sorted ascending'}
@@ -315,15 +361,15 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </TableSortLabel>
                   </TableCell>
                 ))}
-                <TableCell colSpan={2} align="center">
+                <TableCell colSpan={2} align='center'>
                   Actions
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell padding="checkbox">
+                <TableCell padding='checkbox'>
                   <Checkbox
                     checked={selectedApplicationIds.length === applications.length}
-                    color="primary"
+                    color='primary'
                     indeterminate={
                       selectedApplicationIds.length > 0
                       && selectedApplicationIds.length < applications.length
@@ -334,129 +380,129 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label="Student Code"
-                    name="studentCode"
+                    label='Student Code'
+                    name='studentCode'
                     onChange={handleFilterChange}
                     value={values.studentCode}
-                    variant="outlined"
-                    size="small"
+                    variant='outlined'
+                    size='small'
                   />
                 </TableCell>
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label="Major"
-                    name="major"
+                    label='Major'
+                    name='major'
                     onChange={handleFilterChange}
                     value={values.major}
-                    variant="outlined"
-                    size="small"
+                    variant='outlined'
+                    size='small'
                   />
                 </TableCell>
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label="Job"
-                    name="job"
+                    label='Job'
+                    name='job'
                     onChange={handleFilterChange}
                     value={values.job}
-                    variant="outlined"
-                    size="small"
+                    variant='outlined'
+                    size='small'
                   />
                 </TableCell>
                 <TableCell sx={{ width: 300 }}>
                   <TextField
                     fullWidth
-                    label="Company"
-                    name="company"
+                    label='Company'
+                    name='company'
                     onChange={handleFilterChange}
                     value={values.company}
-                    variant="outlined"
-                    size="small"
+                    variant='outlined'
+                    size='small'
                   />
                 </TableCell>
-                <TableCell sx={{ maxWidth: 200 }} align="center">
-                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
-                    <InputLabel id="disabled-label" size="small">
+                <TableCell sx={{ maxWidth: 200 }} align='center'>
+                  <FormControl variant='outlined' sx={{ minWidth: 130 }}>
+                    <InputLabel id='disabled-label' size='small'>
                       Status
                     </InputLabel>
                     <Select
-                      labelId="studentConfirm-label"
-                      id="studentConfirm-dropdown"
+                      labelId='studentConfirm-label'
+                      id='studentConfirm-dropdown'
                       value={values.studentConfirmed}
                       onChange={handleFilterChange}
-                      label="Status"
-                      name="studentConfirmed"
-                      size="small"
+                      label='Status'
+                      name='studentConfirmed'
+                      size='small'
                     >
-                      <MenuItem value="">
+                      <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value="Accepted">
+                      <MenuItem value='Accepted'>
                         Accepted
                       </MenuItem>
-                      <MenuItem value="Denied">
+                      <MenuItem value='Denied'>
                         Denied
                       </MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>
-                <TableCell sx={{ maxWidth: 200 }} align="center">
-                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
-                    <InputLabel id="disabled-label" size="small">
+                <TableCell sx={{ maxWidth: 200 }} align='center'>
+                  <FormControl variant='outlined' sx={{ minWidth: 130 }}>
+                    <InputLabel id='disabled-label' size='small'>
                       Status
                     </InputLabel>
                     <Select
-                      labelId="schoolDeny-label"
-                      id="schoolDeny-dropdown"
+                      labelId='schoolDeny-label'
+                      id='schoolDeny-dropdown'
                       value={values.schoolDenied}
                       onChange={handleFilterChange}
-                      label="Status"
-                      name="schoolDenied"
-                      size="small"
+                      label='Status'
+                      name='schoolDenied'
+                      size='small'
                     >
-                      <MenuItem value="">
+                      <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value="Accepted">
+                      <MenuItem value='Accepted'>
                         Accepted
                       </MenuItem>
-                      <MenuItem value="Denied">
+                      <MenuItem value='Denied'>
                         Denied
                       </MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>
                 <TableCell>
-                  <FormControl variant="outlined" sx={{ minWidth: 130 }}>
-                    <InputLabel id="disabled-label" size="small">
+                  <FormControl variant='outlined' sx={{ minWidth: 130 }}>
+                    <InputLabel id='disabled-label' size='small'>
                       Status
                     </InputLabel>
                     <Select
-                      labelId="companyAccepted-label"
-                      id="companyAccepted-dropdown"
+                      labelId='companyAccepted-label'
+                      id='companyAccepted-dropdown'
                       value={values.companyAccepted}
                       onChange={handleFilterChange}
-                      label="Status"
-                      name="companyAccepted"
-                      size="small"
+                      label='Status'
+                      name='companyAccepted'
+                      size='small'
                     >
-                      <MenuItem value="">
+                      <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value="Accepted">
+                      <MenuItem value='Accepted'>
                         Accepted
                       </MenuItem>
-                      <MenuItem value="Denied">
+                      <MenuItem value='Denied'>
                         Denied
                       </MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>
-                <TableCell colSpan={2} align="center">
+                <TableCell colSpan={2} align='center'>
                   <Button
-                    size="large"
-                    variant="contained"
+                    size='large'
+                    variant='contained'
                     onClick={onFilterHandler}
                   >
                     Apply Filter
@@ -471,11 +517,11 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                   key={application.id}
                   selected={selectedApplicationIds.indexOf(application.id) !== -1}
                 >
-                  <TableCell padding="checkbox">
+                  <TableCell padding='checkbox'>
                     <Checkbox
                       checked={selectedApplicationIds.indexOf(application.id) !== -1}
                       onChange={(event) => handleSelectOne(event, application.id)}
-                      value="true"
+                      value='true'
                     />
                   </TableCell>
                   <TableCell sx={{ maxWidth: 405 }}>
@@ -488,54 +534,55 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       <Avatar src={application.avatarUrl} sx={{ mr: 2 }}>
                         {getInitials(application.major)}
                       </Avatar>
-                      <Typography color="textPrimary">
+                      <Typography color='textPrimary'>
                         {application.studentCode}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color="textPrimary">
+                  <TableCell sx={{ maxWidth: 160 }} align='center'>
+                    <Typography color='textPrimary'>
                       {application.major}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="center">
+                  <TableCell sx={{ maxWidth: 160 }} align='center'>
                     <Typography color='"textPrimary'>
                       {application.job}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color="textPrimary">
+                  <TableCell sx={{ maxWidth: 160 }} align='center'>
+                    <Typography color='textPrimary'>
                       {application.company}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={textColor(application.confirmedAt, application.studentConfirmed)} variant="button">
+                  <TableCell sx={{ maxWidth: 160 }} align='center'>
+                    <Typography color={textColor(application.confirmedAt, application.studentConfirmed)}
+                                variant='button'>
                       {isAccepted(application.confirmedAt, application.studentConfirmed)}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
+                  <TableCell sx={{ maxWidth: 160 }} align='center'>
+                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant='button'>
                       {application.schoolDenied ? 'Denied' : 'Accepted'}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={textColor(application.acceptedAt, application.companyAccepted)} variant="button">
+                  <TableCell sx={{ maxWidth: 160 }} align='center'>
+                    <Typography color={textColor(application.acceptedAt, application.companyAccepted)} variant='button'>
                       {isAccepted(application.acceptedAt, application.companyAccepted)}
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align='right'>
                     <Fab
-                      color="secondary"
-                      aria-label="edit"
-                      size="small"
+                      color='secondary'
+                      aria-label='edit'
+                      size='small'
                       onClick={(e) => handleUpdateFormOpen(e, application)}
                     >
                       <EditIcon />
                     </Fab>
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align='left'>
                     <Fab
-                      color="error"
+                      color='error'
                       sx={{
                         color: 'white',
                         backgroundColor: 'error.main',
@@ -544,8 +591,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                           backgroundColor: 'error.dark'
                         }
                       }}
-                      arial-label="remove"
-                      size="small"
+                      arial-label='remove'
+                      size='small'
                       onClick={(e) => handleDeleteFormOpen(e, application)}
                     >
                       <DeleteForeverIcon />
@@ -558,7 +605,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
         </Box>
       </PerfectScrollbar>
       <TablePagination
-        component="div"
+        component='div'
         count={totalElements}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
