@@ -34,6 +34,8 @@ import getInitials from '../../utils/getInitials';
 import ApplicationDeletionConfirmModal from './ApplicationDeletionConfirmModal';
 
 const applicationListResult = ({ applications, totalElements, ...rest }) => {
+  const role = useSelector((state) => state.account.role);
+  const studentId = role === 'STUDENT' ? useSelector((state) => state.account.account.student.id) : null;
   const token = useSelector((state) => state.account.token);
   const {
     limit, page, order, orderBy, sortedBy, search
@@ -49,8 +51,9 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   };
 
   const handleUpdateFormClose = (type, application) => {
+    const tmpSearch = role === 'STUDENT' ? `${search}student.id==${studentId}` : search;
     if (type === 'UPDATE') {
-      dispatch(updateApplication(token, application, page, limit, sortedBy, search));
+      dispatch(updateApplication(token, application, page, limit, sortedBy, tmpSearch));
     }
     setUpdateFormOpen(false);
   };
@@ -62,8 +65,9 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
   };
 
   const handleDeleteFormClose = (type, application) => {
+    const tmpSearch = role === 'STUDENT' ? `${search}student.id==${studentId}` : search;
     if (type === 'DELETE') {
-      dispatch(deleteApplication(token, application, page, limit, sortedBy, search));
+      dispatch(deleteApplication(token, application, page, limit, sortedBy, tmpSearch));
     }
     setDeleteFormOpen(false);
   };
@@ -204,18 +208,18 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
     dispatch(fetchApplicationData(token, newPage, limit, sortedBy, search));
   };
 
-  const isAccepted = (acceptedAt, companyAccepted) => {
-    if (!acceptedAt) {
+  const isAccepted = (time, status) => {
+    if (!time) {
       return 'Not yet';
     }
-    return companyAccepted ? 'Accepted' : 'Denied';
+    return status ? 'Accepted' : 'Denied';
   };
 
-  const textColor = (acceptedAt, companyAccepted) => {
-    if (!acceptedAt) {
+  const textColor = (time, status) => {
+    if (!time) {
       return 'primary.main';
     }
-    return companyAccepted ? 'success.main' : 'error.main';
+    return status ? 'success.main' : 'error.main';
   };
 
   const headerCells = [
@@ -505,8 +509,8 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={textColor(application.acceptedAt, application.studentConfirmed)} variant="button">
-                      {isAccepted(application.acceptedAt, application.studentConfirmed)}
+                    <Typography color={textColor(application.confirmedAt, application.studentConfirmed)} variant="button">
+                      {isAccepted(application.confirmedAt, application.studentConfirmed)}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">

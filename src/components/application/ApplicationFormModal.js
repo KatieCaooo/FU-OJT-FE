@@ -171,6 +171,7 @@ const ApplicationFormModal = (props) => {
                     <Select
                       labelId="studentConfirm-label"
                       id="studentConfirm-dropdown"
+                      disabled={!values.companyAccepted && !values.schoolDenied}
                       value={values.studentConfirmed}
                       onChange={handleChange}
                       label="Status"
@@ -222,6 +223,7 @@ const ApplicationFormModal = (props) => {
                       labelId="companyAccepted-label"
                       id="companyAccepted-dropdown"
                       value={values.companyAccepted}
+                      disabled={values.schoolDenied || values.studentConfirmed}
                       onChange={handleChange}
                       label="Status"
                       name="companyAccepted"

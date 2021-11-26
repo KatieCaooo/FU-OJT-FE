@@ -7,7 +7,7 @@ export const fetchApplicationData = (token, pageNo, pageSize, sortBy, search) =>
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+        search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
         pageSize,
         pageNo,
         sortBy
@@ -84,7 +84,7 @@ export const updateApplication = (token, application, pageNo, pageSize, sortBy, 
         const fetchUrl = `${BASE_URL}/applications`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -156,7 +156,7 @@ export const createApplication = (token, application, pageNo, pageSize, sortBy, 
         const fetchUrl = `${BASE_URL}/applications`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -223,7 +223,7 @@ export const deleteApplication = (token, application, pageNo, pageSize, sortBy, 
         const fetchUrl = `${BASE_URL}/applications`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy

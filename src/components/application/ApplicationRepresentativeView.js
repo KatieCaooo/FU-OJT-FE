@@ -259,6 +259,20 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
     }
   ];
 
+  const isAccepted = (time, status) => {
+    if (!time) {
+      return 'Not yet';
+    }
+    return status ? 'Accepted' : 'Denied';
+  };
+
+  const textColor = (time, status) => {
+    if (!time) {
+      return 'primary.main';
+    }
+    return status ? 'success.main' : 'error.main';
+  };
+
   return (
     <Card {...rest}>
       <ApplicationFormModal
@@ -482,18 +496,18 @@ const ApplicationRepresentativeView = ({ applications, totalElements, ...rest })
                     </List>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.studentConfirmed ? 'success.main' : 'error.main'} variant="button">
-                      {application.studentConfirmed ? 'Accepted' : 'Denied'}
+                    <Typography color={textColor(application.confirmedAt, application.studentConfirmed)} variant="button">
+                      {isAccepted(application.confirmedAt, application.studentConfirmed)}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.schoolDenied ? 'success.main' : 'error.main'} variant="button">
-                      {application.schoolDenied ? 'Accepted' : 'Denied'}
+                    <Typography color={textColor(application.acceptedAt, application.companyAccepted)} variant="button">
+                      {isAccepted(application.acceptedAt, application.companyAccepted)}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 160 }} align="center">
-                    <Typography color={application.companyAccepted ? 'success.main' : 'error.main'} variant="button">
-                      {application.companyAccepted ? 'Accepted' : 'Denied'}
+                    <Typography color={application.schoolDenied ? 'error.main' : 'success.main'} variant="button">
+                      {application.schoolDenied ? 'Denied' : 'Accepted'}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
