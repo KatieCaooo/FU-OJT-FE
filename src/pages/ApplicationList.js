@@ -29,7 +29,7 @@ const ApplicationList = () => {
   return (
     <>
       <Helmet>
-        <title> Majors | Material Kit </title>
+        <title> Applications | Material Kit </title>
       </Helmet>
       <Box
         sx={{

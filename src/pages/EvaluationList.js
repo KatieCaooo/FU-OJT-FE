@@ -18,7 +18,7 @@ const EvaluationsList = () => {
   return (
     <>
       <Helmet>
-        <title> Majors | Material Kit </title>
+        <title> Evaluations | Material Kit </title>
       </Helmet>
       <Box
         sx={{
