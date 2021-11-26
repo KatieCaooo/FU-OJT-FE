@@ -11,10 +11,22 @@ const JobsList = () => {
   const jobData = useSelector((state) => state.jobs);
   const token = useSelector((state) => state.account.token);
   const role = useSelector((state) => state.account.role);
+  const companyId = role === 'COMPANY_REPRESENTATIVE' ? useSelector((state) => state.account.account.company.id) : null;
+  const studentId = role === 'STUDENT' ? useSelector((state) => state.account.account.student.id) : null;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchJobsData(token, 0, 10));
+    if (role === 'STUDENT') {
+      dispatch(fetchJobsData(token, 0, 10, null, `student.id==${studentId}`));
+    }
+    if (role === 'COMPANY_REPRESENTATIVE') {
+      dispatch(
+        fetchJobsData(token, 0, 10, null, `company.id==${companyId}`)
+      );
+    }
+    if (role === 'SYS_ADMIN') {
+      dispatch(fetchJobsData(token, 0, 10));
+    }
   }, [dispatch]);
 
   return (
@@ -31,14 +43,13 @@ const JobsList = () => {
       >
         <Container maxWidth={false}>
           <Box sx={{ pt: 3 }}>
-            {/* <MajorListToolbar /> */}
-            <JobListResult
-              jobs={jobData.jobs}
-              totalElements={jobData.totalQuantity}
-            />
-            {role === 'STUDENT' && (
-              <JobStudentView />
+            {role !== 'STUDENT' && (
+              <JobListResult
+                jobs={jobData.jobs}
+                totalElements={jobData.totalQuantity}
+              />
             )}
+            {role === 'STUDENT' && <JobStudentView />}
           </Box>
         </Container>
       </Box>
