@@ -5,7 +5,6 @@ import { fetchJobsData } from 'src/store/job-actions';
 import { useEffect } from 'react';
 
 import JobStudentView from 'src/components/job/JobStudentView';
-import JobRepresentativeView from 'src/components/job/JobRepresentativeView';
 import JobListResult from '../components/job/JobListResult';
 
 const JobsList = () => {
@@ -33,17 +32,12 @@ const JobsList = () => {
         <Container maxWidth={false}>
           <Box sx={{ pt: 3 }}>
             {/* <MajorListToolbar /> */}
-            {role === 'SYS_ADMIN' && (
             <JobListResult
               jobs={jobData.jobs}
               totalElements={jobData.totalQuantity}
             />
-            )}
             {role === 'STUDENT' && (
               <JobStudentView />
-            )}
-            {role === 'COMPANY_REPRESENTATIVE' && (
-              <JobRepresentativeView />
             )}
           </Box>
         </Container>
