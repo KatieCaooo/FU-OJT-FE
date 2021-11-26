@@ -7,7 +7,7 @@ export const fetchJobsData = (token, pageNo, pageSize, sortBy, search) => async 
   const fetchData = async () => {
     const response = await axios.get(url, {
       params: {
-        search: `id > 0${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
+        search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`, pageSize, pageNo, sortBy
       },
       headers: getRequiredAuthenHeader(token)
     });
@@ -73,7 +73,7 @@ export const updateJob = (token, job, pageNo, pageSize, sortBy, search) => async
         const fetchUrl = `${BASE_URL}/jobs`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -141,7 +141,7 @@ export const deleteJob = (token, job, pageNo, pageSize, sortBy, search) => async
         const fetchUrl = `${BASE_URL}/jobs`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
