@@ -54,7 +54,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       href: '/app/companies',
       icon: CompassIcon,
       title: 'Companies',
-      roles: ['SYS_ADMIN']
+      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
       href: '/app/students',
