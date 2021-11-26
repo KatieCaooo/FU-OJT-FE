@@ -27,8 +27,8 @@ import { companyActions } from '../../store/company-slice';
 import getInitials from '../../utils/getInitials';
 import CompanyFormModal from './CompanyFormModal';
 
-const CompanyListResult = ({ companies, totalElements, ...rest }) => {
-  const companyId = useSelector((state) => state.account.account.id);
+const CompanyRepresentativeView = ({ companies, totalElements, ...rest }) => {
+  const companyId = useSelector((state) => state.account.account.company.id);
   const token = useSelector((state) => state.account.token);
   const {
     limit, page, order, orderBy, sortedBy, search
@@ -44,7 +44,8 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
 
   const handleUpdateFormClose = (type, company) => {
     if (type === 'UPDATE') {
-      dispatch(updateCompany(token, company, page, limit, sortedBy, search));
+      const tmpSearch = `id==${companyId}${search}`;
+      dispatch(updateCompany(token, company, page, limit, sortedBy, tmpSearch));
     }
     setUpdateFormOpen(false);
   };
@@ -358,9 +359,9 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
   );
 };
 
-CompanyListResult.propTypes = {
+CompanyRepresentativeView.propTypes = {
   companies: PropTypes.array.isRequired,
   totalElements: PropTypes.number.isRequired
 };
 
-export default CompanyListResult;
+export default CompanyRepresentativeView;

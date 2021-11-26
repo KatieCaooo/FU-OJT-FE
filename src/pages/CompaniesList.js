@@ -11,7 +11,8 @@ const CompanyList = () => {
   const companyData = useSelector((state) => state.companies);
   const token = useSelector((state) => state.account.token);
   const role = useSelector((state) => state.account.role);
-  const companyId = role === 'COMPANY_REPRESENTATIVE' ? useSelector((state) => state.account.account.id) : null;
+  const companyId = role === 'COMPANY_REPRESENTATIVE' ? useSelector((state) => state.account.account.company.id) : null;
+
   const studentId = role === 'STUDENT' ? useSelector((state) => state.account.account.student.id) : null;
   const dispatch = useDispatch();
 
