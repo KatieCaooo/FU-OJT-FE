@@ -533,6 +533,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       <EditIcon />
                     </Fab>
                   </TableCell>
+                  {role !== '' && (
                   <TableCell align="left">
                     <Fab
                       color="error"
@@ -551,6 +552,7 @@ const applicationListResult = ({ applications, totalElements, ...rest }) => {
                       <DeleteForeverIcon />
                     </Fab>
                   </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
