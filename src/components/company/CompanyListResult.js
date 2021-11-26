@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+// import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCompaniesData, updateCompany } from 'src/store/company-actions';
 import { companyActions } from '../../store/company-slice';
@@ -34,13 +34,6 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
   } = useSelector((state) => state.companies.filter);
   const dispatch = useDispatch();
   const [selectedCompanyIds, setSelectedCompanyIds] = useState([]);
-  // const [limit, setLimit] = useState(10);
-  // const [page, setPage] = useState(0);
-  // const [order, setOrder] = useState('asc');
-  // const [orderBy, setOrderBy] = useState('id');
-  // const [sortedBy, setSortedBy] = useState('id asc');
-  // const [search, setSearch] = useState('');
-
   const [currentCompany, setCurrentCompany] = useState({});
   const [updateFormOpen, setUpdateFormOpen] = useState(false);
   const handleUpdateFormOpen = (event, selectedCompany) => {
@@ -170,8 +163,8 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
 
   const headerCells = [
     {
-      name: 'Name',
-      label: 'Name',
+      name: 'Company Name',
+      label: 'Company Name',
       search: 'name',
       sort: 'name',
       align: 'left'
@@ -317,7 +310,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                   <TableCell sx={{ maxWidth: 120 }} align="left">
                     {company.address}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     <Fab
                       color="secondary"
                       aria-label="edit"
@@ -327,7 +320,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                       <EditIcon />
                     </Fab>
                   </TableCell>
-                  <TableCell align="left">
+                  {/* <TableCell align="left">
                     <Fab
                       color="error"
                       sx={{
@@ -343,7 +336,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                     >
                       <DeleteForeverIcon />
                     </Fab>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

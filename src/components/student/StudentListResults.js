@@ -199,8 +199,8 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
 
   const headerCells = [
     {
-      name: 'Name',
-      label: 'Name',
+      name: 'Full Name',
+      label: 'Full Name',
       search: 'name',
       sort: 'name',
       align: 'left'
@@ -292,7 +292,7 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                 <TableCell sx={{ maxWidth: 200 }}>
                   <TextField
                     fullWidth
-                    label="Full name"
+                    label="Full Name"
                     name="name"
                     onChange={handleFilterChange}
                     value={values.name}
@@ -363,9 +363,6 @@ const StudentListResults = ({ students, totalElements, ...rest }) => {
                       </MenuItem>
                       <MenuItem value="Software Engineering">
                         Software Engineering
-                      </MenuItem>
-                      <MenuItem value="Business Administration">
-                        Business Administration
                       </MenuItem>
                       <MenuItem value="Digital Art Design">
                         Digital Art Design

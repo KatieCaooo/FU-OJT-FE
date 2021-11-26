@@ -213,8 +213,8 @@ const SemesterListResult = ({ semesters, totalElements, ...rest }) => {
 
   const headerCells = [
     {
-      name: 'Name',
-      label: 'Name',
+      name: 'Semester Name',
+      label: 'Semester Name',
       search: 'name',
       sort: 'name',
       align: 'left'

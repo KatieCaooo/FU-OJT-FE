@@ -5,14 +5,31 @@ import { fetchCompaniesData } from 'src/store/company-actions';
 import { useEffect } from 'react';
 import CompanyListToolbar from '../components/company/CompanyListToolbar';
 import CompanyListResult from '../components/company/CompanyListResult';
+import CompanyRepresentativeView from '../components/company/CompanyRepresentativeView';
 
 const CompanyList = () => {
   const companyData = useSelector((state) => state.companies);
   const token = useSelector((state) => state.account.token);
+  const role = useSelector((state) => state.account.role);
+  const companyId = role === 'COMPANY_REPRESENTATIVE' ? useSelector((state) => state.account.account.company.id) : null;
+
+  const studentId = role === 'STUDENT' ? useSelector((state) => state.account.account.student.id) : null;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchCompaniesData(token, 0, 10));
+    if (role === 'STUDENT') {
+      dispatch(
+        fetchCompaniesData(token, 0, 10, null, `student.id==${studentId}`)
+      );
+    }
+    if (role === 'COMPANY_REPRESENTATIVE') {
+      dispatch(
+        fetchCompaniesData(token, 0, 10, null, `id==${companyId}`)
+      );
+    }
+    if (role === 'SYS_ADMIN') {
+      dispatch(fetchCompaniesData(token, 0, 10));
+    }
   }, [dispatch]);
 
   return (
@@ -28,13 +45,20 @@ const CompanyList = () => {
         }}
       >
         <Container maxWidth={false}>
-
           <Box sx={{ pt: 3 }}>
             <CompanyListToolbar />
-            <CompanyListResult
-              companies={companyData.companies}
-              totalElements={companyData.totalQuantity}
-            />
+            {role === 'SYS_ADMIN' && (
+              <CompanyListResult
+                companies={companyData.companies}
+                totalElements={companyData.totalQuantity}
+              />
+            )}
+            {role === 'COMPANY_REPRESENTATIVE' && (
+              <CompanyRepresentativeView
+                companies={companyData.companies}
+                totalElements={companyData.totalQuantity}
+              />
+            )}
           </Box>
         </Container>
       </Box>

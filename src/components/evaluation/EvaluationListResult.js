@@ -36,6 +36,7 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   const {
     limit, page, order, orderBy, sortedBy, search
   } = useSelector((state) => state.evaluations.filter);
+  const companyId = useSelector((state) => state.account.account.company.id);
   const dispatch = useDispatch();
   const [selectedEvaluationIds, setSelectedEvaluationIds] = useState([]);
   const [currentEvaluation, setCurrentEvaluation] = useState({});
@@ -84,7 +85,7 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
     job: '',
     grade: '',
     comment: '',
-    pass: ''
+    pass: '',
   });
 
   const handleFilterChange = (event) => {
@@ -101,6 +102,7 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
     const gradeFilter = `grade==${values.grade ? values.grade : ''}`;
     const statusFilter = `isPass==${values.pass === 'Passed' ? 'True' : 'False'}`;
     const filter = [];
+    if (filter.push(`job.company.id==${companyId}`));
     if (values.studentCode !== '') {
       filter.push(studentCodeFilter);
     }

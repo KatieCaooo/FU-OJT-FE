@@ -20,46 +20,36 @@ import {
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+// import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobsData, updateJob, deleteJob } from 'src/store/job-actions';
-import { jobActions } from '../../store/job-silce';
+import { fetchCompaniesData, updateCompany } from 'src/store/company-actions';
+import { companyActions } from '../../store/company-slice';
 import getInitials from '../../utils/getInitials';
-import JobFormModal from './JobFormModal';
-import JobDeletionConfirmModal from './JobDeletionConfirmModal';
+import CompanyFormModal from './CompanyFormModal';
 
-const JobListResult = ({ jobs, totalElements, ...rest }) => {
+const CompanyRepresentativeView = ({ companies, totalElements, ...rest }) => {
+  const companyId = useSelector((state) => state.account.account.company.id);
   const token = useSelector((state) => state.account.token);
   const {
     limit, page, order, orderBy, sortedBy, search
-  } = useSelector((state) => state.jobs.filter);
+  } = useSelector((state) => state.companies.filter);
   const dispatch = useDispatch();
-  const [selectedJobIds, setSelectedJobIds] = useState([]);
-  const [currentJob, setCurrentJob] = useState({});
+  const [selectedCompanyIds, setSelectedCompanyIds] = useState([]);
+  const [currentCompany, setCurrentCompany] = useState({});
   const [updateFormOpen, setUpdateFormOpen] = useState(false);
-  const handleUpdateFormOpen = (event, selectedJob) => {
+  const handleUpdateFormOpen = (event, selectedCompany) => {
     setUpdateFormOpen(true);
-    setCurrentJob(selectedJob);
+    setCurrentCompany(selectedCompany);
   };
 
-  const handleUpdateFormClose = (type, job) => {
+  const handleUpdateFormClose = (type, company) => {
     if (type === 'UPDATE') {
-      dispatch(updateJob(token, job, page, limit, sortedBy, search));
+      const tmpSearch = `id==${companyId}${search}`;
+      dispatch(updateCompany(token, company, page, limit, sortedBy, tmpSearch));
     }
     setUpdateFormOpen(false);
   };
-  const [deleteFormOpen, setDeleteFormOpen] = useState(false);
-  const handleDeleteFormOpen = (event, selectedJob) => {
-    setDeleteFormOpen(true);
-    setCurrentJob(selectedJob);
-  };
 
-  const handleDeleteFormClose = (type, job) => {
-    if (type === 'DELETE') {
-      dispatch(deleteJob(token, job, page, limit, sortedBy, search));
-    }
-    setDeleteFormOpen(false);
-  };
   const handleRequestSort = (event, property, sortField) => {
     const isSameProperty = orderBy === property;
     const isOldAsc = order === 'asc';
@@ -67,11 +57,11 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     const isSetDefault = isSameProperty && !isOldAsc;
     const orderValue = isAsc ? 'desc' : 'asc';
     const orderByValue = !isSetDefault ? property : 'id';
-    dispatch(jobActions.setOrder(orderValue));
-    dispatch(jobActions.setOrderBy(orderByValue));
-    dispatch(jobActions.setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
+    dispatch(companyActions.setOrder(orderValue));
+    dispatch(companyActions.setOrderBy(orderByValue));
+    dispatch(companyActions.setSortedBy(`${orderByValue !== 'id' ? sortField : 'id'} ${orderValue}`));
     dispatch(
-      fetchJobsData(
+      fetchCompaniesData(
         token,
         page,
         limit,
@@ -87,9 +77,8 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
 
   const [values, setValues] = useState({
     name: '',
-    title: '',
-    salary: '',
     description: '',
+    address: ''
   });
 
   const handleFilterChange = (event, dateValues, fieldName) => {
@@ -108,113 +97,102 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
 
   const onFilterHandler = () => {
     const nameFilter = `name=='*${values.name}*'`;
-    const titleFilter = `title=='*${values.title}*'`;
-    const salaryFilter = `salary=='*${values.salary}*'`;
     const descriptionFilter = `description=='*${values.description}*'`;
+    const addressFilter = `address=='*${values.address}*'`;
     const filter = [];
+    filter.push(`id==${companyId}`);
     if (values.name !== '') {
       filter.push(nameFilter);
-    }
-    if (values.title !== '') {
-      filter.push(titleFilter);
-    }
-    if (values.salary !== '') {
-      filter.push(salaryFilter);
     }
     if (values.description !== '') {
       filter.push(descriptionFilter);
     }
-    dispatch(jobActions.setSearch(filter.join(';')));
-    dispatch(jobActions.setPage(0));
-    dispatch(fetchJobsData(token, 0, limit, sortedBy, filter.join(';')));
+    if (values.address !== '') {
+      filter.push(addressFilter);
+    }
+    dispatch(companyActions.setSearch(filter.join(';')));
+    dispatch(companyActions.setPage(0));
+    dispatch(fetchCompaniesData(token, 0, limit, sortedBy, filter.join(';')));
   };
 
   const handleSelectAll = (event) => {
-    let newSelectedJobIds;
+    let newSelectedCompanyIds;
 
     if (event.target.checked) {
-      newSelectedJobIds = jobs.map((job) => job.id);
+      newSelectedCompanyIds = companies.map((company) => company.id);
     } else {
-      newSelectedJobIds = [];
+      newSelectedCompanyIds = [];
     }
 
-    setSelectedJobIds(newSelectedJobIds);
+    setSelectedCompanyIds(newSelectedCompanyIds);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedJobIds.indexOf(id);
-    let newSelectedJobIds = [];
+    const selectedIndex = selectedCompanyIds.indexOf(id);
+    let newselectedCompanyIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedJobIds = newSelectedJobIds.concat(
-        selectedJobIds,
+      newselectedCompanyIds = newselectedCompanyIds.concat(
+        selectedCompanyIds,
         id
       );
     } else if (selectedIndex === 0) {
-      newSelectedJobIds = newSelectedJobIds.concat(
-        selectedJobIds.slice(1)
+      newselectedCompanyIds = newselectedCompanyIds.concat(
+        selectedCompanyIds.slice(1)
       );
-    } else if (selectedIndex === selectedJobIds.length - 1) {
-      newSelectedJobIds = newSelectedJobIds.concat(
-        selectedJobIds.slice(0, -1)
+    } else if (selectedIndex === selectedCompanyIds.length - 1) {
+      newselectedCompanyIds = newselectedCompanyIds.concat(
+        selectedCompanyIds.slice(0, -1)
       );
     } else if (selectedIndex > 0) {
-      newSelectedJobIds = newSelectedJobIds.concat(
-        selectedJobIds.slice(0, selectedIndex),
-        selectedJobIds.slice(selectedIndex + 1)
+      newselectedCompanyIds = newselectedCompanyIds.concat(
+        selectedCompanyIds.slice(0, selectedIndex),
+        selectedCompanyIds.slice(selectedIndex + 1)
       );
     }
-    setSelectedJobIds(newSelectedJobIds);
+    setSelectedCompanyIds(newselectedCompanyIds);
   };
 
   const handleLimitChange = (event) => {
-    dispatch(jobActions.setLimit(event.target.value));
-    dispatch(jobActions.setPage(0));
-    dispatch(fetchJobsData(token, 0, event.target.value, sortedBy, search));
+    dispatch(companyActions.setLimit(event.target.value));
+    dispatch(companyActions.setPage(0));
+    dispatch(fetchCompaniesData(token, 0, event.target.value, sortedBy, search));
   };
 
   const handlePageChange = (event, newPage) => {
-    dispatch(jobActions.setPage(newPage));
-    dispatch(fetchJobsData(token, newPage, limit, sortedBy, search));
+    dispatch(companyActions.setPage(newPage));
+    dispatch(fetchCompaniesData(token, newPage, limit, sortedBy, search));
   };
 
   const headerCells = [
     {
-      name: 'Job Name',
-      label: 'Job Name',
+      name: 'Company Name',
+      label: 'Company Name',
       search: 'name',
       sort: 'name',
       align: 'left'
-    },
-    {
-      name: 'Title',
-      label: 'Title',
-      search: 'title',
-      sort: 'title',
-      align: 'center'
-    },
-    {
-      name: 'Salary',
-      label: 'Salary',
-      search: 'salary',
-      sort: 'salary',
-      align: 'center'
     },
     {
       name: 'Description',
       label: 'Description',
       search: 'description',
       sort: 'description',
-      align: 'center'
+      align: 'left'
     },
+    {
+      name: 'Address',
+      label: 'Address',
+      search: 'address',
+      sort: 'address',
+      align: 'left'
+    }
   ];
 
   return (
     <Card {...rest}>
-      <JobFormModal job={currentJob} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
-      <JobDeletionConfirmModal job={currentJob} open={deleteFormOpen} onClose={handleDeleteFormClose} operation="DELETE" />
+      <CompanyFormModal company={currentCompany} open={updateFormOpen} onClose={handleUpdateFormClose} type="UPDATE" />
       <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
+        <Box sx={{ minWidth: 700 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -247,19 +225,19 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedJobIds.length === jobs.length}
+                    checked={selectedCompanyIds.length === companies.length}
                     color="primary"
                     indeterminate={
-                      selectedJobIds.length > 0
-                      && selectedJobIds.length < jobs.length
+                      selectedCompanyIds.length > 0
+                      && selectedCompanyIds.length < companies.length
                     }
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell sx={{ maxWidth: 200 }}>
+                <TableCell sx={{ width: 250 }}>
                   <TextField
                     fullWidth
-                    label="Job Name"
+                    label="Company Name"
                     name="name"
                     onChange={handleFilterChange}
                     value={values.name}
@@ -267,35 +245,24 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                     size="small"
                   />
                 </TableCell>
-                <TableCell sx={{ maxWidth: 100 }}>
-                  <TextField
-                    fullWidth
-                    label="Title"
-                    name="title"
-                    onChange={handleFilterChange}
-                    value={values.title}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 100 }}>
-                  <TextField
-                    fullWidth
-                    label="Salary"
-                    name="salary"
-                    onChange={handleFilterChange}
-                    value={values.salary}
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell sx={{ maxWidth: 150 }}>
+                <TableCell sx={{ maxWidth: 300 }}>
                   <TextField
                     fullWidth
                     label="Description"
                     name="description"
                     onChange={handleFilterChange}
                     value={values.description}
+                    variant="outlined"
+                    size="small"
+                  />
+                </TableCell>
+                <TableCell sx={{ maxWidth: 300 }}>
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    name="address"
+                    onChange={handleFilterChange}
+                    value={values.address}
                     variant="outlined"
                     size="small"
                   />
@@ -312,16 +279,16 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {jobs.slice(0, limit).map((job) => (
+              {companies.slice(0, limit).map((company) => (
                 <TableRow
                   hover
-                  key={job.id}
-                  selected={selectedJobIds.indexOf(job.id) !== -1}
+                  key={company.id}
+                  selected={selectedCompanyIds.indexOf(company.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedJobIds.indexOf(job.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, job.id)}
+                      checked={selectedCompanyIds.indexOf(company.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, company.id)}
                       value="true"
                     />
                   </TableCell>
@@ -332,34 +299,31 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={job.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(job.name)}
+                      <Avatar src={company.avatarUrl} sx={{ mr: 3 }}>
+                        {getInitials(company.name)}
                       </Avatar>
-                      <Typography color="textPrimary" variant="body1">
-                        {job.name}
+                      <Typography color="textPrimary">
+                        {company.name}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">
-                    {job.title}
+                  <TableCell sx={{ maxWidth: 120 }} align="left">
+                    {company.description}
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 120 }} align="center">
-                    {job.salary}
+                  <TableCell sx={{ maxWidth: 120 }} align="left">
+                    {company.address}
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 150 }} align="center">
-                    {job.description}
-                  </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     <Fab
                       color="secondary"
                       aria-label="edit"
                       size="small"
-                      onClick={(e) => handleUpdateFormOpen(e, job)}
+                      onClick={(e) => handleUpdateFormOpen(e, company)}
                     >
                       <EditIcon />
                     </Fab>
                   </TableCell>
-                  <TableCell align="left">
+                  {/* <TableCell align="left">
                     <Fab
                       color="error"
                       sx={{
@@ -372,11 +336,10 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
                       }}
                       arial-label="remove"
                       size="small"
-                      onClick={(e) => handleDeleteFormOpen(e, job)}
                     >
                       <DeleteForeverIcon />
                     </Fab>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
@@ -390,15 +353,15 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
         onRowsPerPageChange={handleLimitChange}
         page={page}
         rowsPerPage={limit}
-        rowsPerPageOptions={[10, 20, 50]}
+        rowsPerPageOptions={[5, 10, 30]}
       />
     </Card>
   );
 };
 
-JobListResult.propTypes = {
-  jobs: PropTypes.array.isRequired,
+CompanyRepresentativeView.propTypes = {
+  companies: PropTypes.array.isRequired,
   totalElements: PropTypes.number.isRequired
 };
 
-export default JobListResult;
+export default CompanyRepresentativeView;
