@@ -27,7 +27,7 @@ export const fetchEvaluationData = (token, pageNo, pageSize, sortBy, search) => 
     let evaluations = response.data;
     evaluations = evaluations.map((evaluation) => ({
       id: evaluation.id,
-      studentCode: evaluation.application.student.studentCode,
+      studentCode: evaluation.application ? evaluation.application.student.studentCode : '',
       major: evaluation.application.student.major.name,
       job: evaluation.application.job.name,
       company: evaluation.application.job.company.name,

@@ -36,7 +36,8 @@ const EvaluationListResult = ({ evaluations, totalElements, ...rest }) => {
   const {
     limit, page, order, orderBy, sortedBy, search
   } = useSelector((state) => state.evaluations.filter);
-  const companyId = useSelector((state) => state.account.account.company.id);
+  const role = useSelector((state) => state.account.role);
+  const companyId = role === 'COMPANY_REPRESENTATIVE' ? useSelector((state) => state.account.account.company.id) : null;
   const dispatch = useDispatch();
   const [selectedEvaluationIds, setSelectedEvaluationIds] = useState([]);
   const [currentEvaluation, setCurrentEvaluation] = useState({});
