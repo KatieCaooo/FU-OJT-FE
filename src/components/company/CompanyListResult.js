@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+// import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCompaniesData, updateCompany } from 'src/store/company-actions';
 import { companyActions } from '../../store/company-slice';
@@ -310,7 +310,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                   <TableCell sx={{ maxWidth: 120 }} align="left">
                     {company.address}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     <Fab
                       color="secondary"
                       aria-label="edit"
@@ -320,7 +320,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                       <EditIcon />
                     </Fab>
                   </TableCell>
-                  <TableCell align="left">
+                  {/* <TableCell align="left">
                     <Fab
                       color="error"
                       sx={{
@@ -336,7 +336,7 @@ const CompanyListResult = ({ companies, totalElements, ...rest }) => {
                     >
                       <DeleteForeverIcon />
                     </Fab>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
