@@ -54,7 +54,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       href: '/app/companies',
       icon: CompassIcon,
       title: 'Companies',
-      roles: ['SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE']
+      roles: ['SYS_ADMIN']
     },
     {
       href: '/app/students',
@@ -77,7 +77,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
     {
       href: '/app/evaluations',
       icon: ClipboardIcon,
-      title: 'Evaluations Test',
+      title: 'Evaluations',
       roles: ['STUDENT', 'COMPANY_REPRESENTATIVE']
     },
     {
@@ -176,36 +176,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
-      {/* <Box
-        sx={{
-          backgroundColor: 'background.default',
-          m: 2,
-          p: 2
-        }}
-      >
-        <Typography align="center" gutterBottom variant="h4">
-          Need more?
-        </Typography>
-        <Typography align="center" variant="body2">
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            pt: 2
-          }}
-        >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
-        </Box>
-      </Box> */}
     </Box>
   );
 
