@@ -66,7 +66,7 @@ export const updateStudent = (token, student, pageNo, pageSize, sortBy, search) 
         const fetchUrl = `${BASE_URL}/users`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy
@@ -128,7 +128,7 @@ export const deleteStudent = (token, student, pageNo, pageSize, sortBy, search) 
         const fetchUrl = `${BASE_URL}/users`;
         const response = await axios.get(fetchUrl, {
           params: {
-            search: `id > 0${search && search !== '' ? `;${search}` : ''}`,
+            search: `id > 0;disabled==FALSE${search && search !== '' ? `;${search}` : ''}`,
             pageSize,
             pageNo,
             sortBy

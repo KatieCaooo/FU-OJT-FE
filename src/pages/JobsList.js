@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 
 import JobStudentView from 'src/components/job/JobStudentView';
 import JobListResult from '../components/job/JobListResult';
+import JobRepresentativeView from '../components/job/JobRepresentativeView';
 
 const JobsList = () => {
   const jobData = useSelector((state) => state.jobs);
@@ -43,7 +44,13 @@ const JobsList = () => {
       >
         <Container maxWidth={false}>
           <Box sx={{ pt: 3 }}>
-            {role !== 'STUDENT' && (
+            {role === 'COMPANY_REPRESENTATIVE' && (
+              <JobRepresentativeView
+                jobs={jobData.jobs}
+                totalElements={jobData.totalQuantity}
+              />
+            )}
+            {role === 'SYS_ADMIN' && (
               <JobListResult
                 jobs={jobData.jobs}
                 totalElements={jobData.totalQuantity}

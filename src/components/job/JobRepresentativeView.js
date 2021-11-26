@@ -29,6 +29,7 @@ import JobFormModal from './JobFormModal';
 import JobDeletionConfirmModal from './JobDeletionConfirmModal';
 
 const JobListResult = ({ jobs, totalElements, ...rest }) => {
+  const companyId = useSelector((state) => state.account.account.company.id);
   const token = useSelector((state) => state.account.token);
   const {
     limit, page, order, orderBy, sortedBy, search
@@ -112,6 +113,7 @@ const JobListResult = ({ jobs, totalElements, ...rest }) => {
     const salaryFilter = `salary=='*${values.salary}*'`;
     const descriptionFilter = `description=='*${values.description}*'`;
     const filter = [];
+    filter.push(`company.id==${companyId}`);
     if (values.name !== '') {
       filter.push(nameFilter);
     }
